@@ -69,11 +69,11 @@ bool SHOW_MAP_DETAILS;
 
 //--------------------------------------------------------------
 //copy maze (from LPA*) to map (of GridWorld)
-void copyMazeToDisplayMap(GridWorld &gWorld, LpaStar* lpa) 
+void copyMazeToDisplayMap(GridWorld &gWorld, LpaStar* lpa)
 {
-    for (int i = 0; i < gWorld.getGridWorldRows(); i++) 
+    for (int i = 0; i < gWorld.getGridWorldRows(); i++)
     {
-        for (int j = 0; j < gWorld.getGridWorldCols(); j++) 
+        for (int j = 0; j < gWorld.getGridWorldCols(); j++)
         {
             gWorld.map[i][j].type = lpa->maze[i][j].type;
             gWorld.map[i][j].h = lpa->maze[i][j].h;
@@ -82,7 +82,7 @@ void copyMazeToDisplayMap(GridWorld &gWorld, LpaStar* lpa)
             gWorld.map[i][j].row = lpa->maze[i][j].y;
             gWorld.map[i][j].col = lpa->maze[i][j].x;
 
-            for (int k = 0; k < 2; k++) 
+            for (int k = 0; k < 2; k++)
             {
                 gWorld.map[i][j].key[k] = lpa->maze[i][j].key[k];
             }
@@ -93,7 +93,7 @@ void copyMazeToDisplayMap(GridWorld &gWorld, LpaStar* lpa)
     gWorld.map[lpa->start->y][lpa->start->x].rhs = lpa->start->rhs;
     gWorld.map[lpa->start->y][lpa->start->x].row = lpa->start->y;
     gWorld.map[lpa->start->y][lpa->start->x].col = lpa->start->x;
-    for (int k = 0; k < 2; k++) 
+    for (int k = 0; k < 2; k++)
     {
         gWorld.map[lpa->start->y][lpa->start->x].key[k] = lpa->start->key[k];
     }
@@ -103,7 +103,7 @@ void copyMazeToDisplayMap(GridWorld &gWorld, LpaStar* lpa)
     gWorld.map[lpa->goal->y][lpa->goal->x].rhs = lpa->goal->rhs;
     gWorld.map[lpa->goal->y][lpa->goal->x].row = lpa->goal->y;
     gWorld.map[lpa->goal->y][lpa->goal->x].col = lpa->goal->x;
-    for (int k = 0; k < 2; k++) 
+    for (int k = 0; k < 2; k++)
     {
         gWorld.map[lpa->goal->y][lpa->goal->x].key[k] = lpa->goal->key[k];
     }
@@ -137,7 +137,7 @@ void copyDisplayMapToMaze(GridWorld &gWorld, LpaStar* lpa) {
     lpa->goal->y = gWorld.map[goalV.row][goalV.col].row;
 }
 
-void drawInformationPanel(int x, int y, char* info) 
+void drawInformationPanel(int x, int y, char* info)
 {
     ///////////////////////////////////////////////////////////////////////////////////////////
     settextstyle(SMALL_FONT, HORIZ_DIR, 4);
@@ -147,19 +147,19 @@ void drawInformationPanel(int x, int y, char* info)
     ///////////////////////////////////////////////////////////////////////////////////////////
 }
 
-int getKey() 
+int getKey()
 {
-    if (GetAsyncKeyState(VK_UP) < 0) 
+    if (GetAsyncKeyState(VK_UP) < 0)
     { //UP ARROW
         return 200;
     }
 
-    if (GetAsyncKeyState(VK_DOWN) < 0) 
+    if (GetAsyncKeyState(VK_DOWN) < 0)
     { //DOWN ARROW
         return 201;
     }
 
-    if (GetAsyncKeyState(VK_F4) < 0) 
+    if (GetAsyncKeyState(VK_F4) < 0)
     {
         SHOW_MAP_DETAILS = false;
         return 104;
@@ -244,7 +244,7 @@ int getKey()
     return -1;
 }
 
-void runSimulation(char *fileName) 
+void runSimulation(char *fileName)
 {
     WorldBoundaryType worldBoundary;    //duplicated in GridWorld
     DevBoundaryType deviceBoundary;     //duplicated in GridWorld
@@ -273,8 +273,8 @@ void runSimulation(char *fileName)
     vertex start = grid_world.getStartVertex();
     vertex goal = grid_world.getGoalVertex();
 
-    cout << "(start.col = " << start.col << ", start.row = " << start.row << ")" << endl;
-    cout << "(goal.col = " << goal.col << ", goal.row = " << goal.row << ")" << endl;
+    cout << "(start.col = " << start.col    << ", start.row = " << start.row    << ")"  << endl;
+    cout << "(goal.col = "  << goal.col     << ", goal.row = "  << goal.row     << ")"  << endl;
 
     lpa_star->initialise(start.col, start.row, goal.col, goal.row);
 
@@ -291,22 +291,21 @@ void runSimulation(char *fileName)
     //setvisualpage(page);
 
     // keep running the program until the ESC key is pressed   
-    while ((GetAsyncKeyState(VK_ESCAPE)) == 0) 
+    while ((GetAsyncKeyState(VK_ESCAPE)) == 0)
     {
         setactivepage(page);
         cleardevice();
-
-        int action = getKey();
+        auto action = getKey();
 
         if (SHOW_MAP_DETAILS)
             grid_world.displayMapWithDetails();
         else
             grid_world.displayMap();
 
-        switch (action) 
+        switch (action)
         {
         case 1: //Block selected cell
-            if (rowSelected != -1 && colSelected != -1) 
+            if (rowSelected != -1 && colSelected != -1)
             {
                 grid_world.setMapTypeValue(rowSelected - 1, colSelected - 1, '1');
                 grid_world.initialiseMapConnections();
@@ -322,30 +321,26 @@ void runSimulation(char *fileName)
             break;
 
         case 106:
-
             //~ algorithmSelection = ASTAR_ALGORITHM;
             break;
 
         case 107:
-
             //~ algorithmSelection = LPASTAR_ALGORITHM;
             break;
 
         case 108:
-
             //~ algorithmSelection = DSTAR_ALGORITHM;
             break;
 
         case 15:
-
-            if (rowSelected != -1 && colSelected != -1) 
+            if (rowSelected != -1 && colSelected != -1)
             {
                 grid_world.displayVertexConnections(colSelected - 1, rowSelected - 1);
                 //cout << "display connections" << endl;
                 rowSelected = -1;
                 colSelected = -1;
             }
-            else 
+            else
             {
                 cout << "invalid new START vertex, please select a new START vertex first." << endl;
                 break;
@@ -355,7 +350,6 @@ void runSimulation(char *fileName)
             break;
 
         case 16:
-
             if (grid_world.isGridMapInitialised())
             {
                 grid_world.displayMapConnections();
@@ -363,7 +357,8 @@ void runSimulation(char *fileName)
                 //~ rowSelected=-1;
                 //~ colSelected=-1;
             }
-            else {
+            else 
+            {
                 cout << "map has not been initialised yet." << endl;
                 break;
             }
@@ -374,23 +369,23 @@ void runSimulation(char *fileName)
         case 6: //set cell as new START vertex 
         {
             //--------------------------------------------
-           // retrieve current START vertex
+            // retrieve current START vertex
             vertex s = grid_world.getStartVertex();
-            if ((s.row != -1) && (s.col != -1)) 
+            if ((s.row != -1) && (s.col != -1))
             {
                 //set current START VERTEX to an ordinary TRAVERSABLE CELL
                 grid_world.setMapTypeValue(s.row, s.col, '0');
                 grid_world.initialiseMapConnections();
                 //ok, proceed
             }
-            else 
+            else
             {
                 cout << "invalid START vertex" << endl;
                 break;
             }
             //--------------------------------------------
-              //set selected cell as the NEW START VERTEX
-            if (rowSelected != -1 && colSelected != -1) 
+            //set selected cell as the NEW START VERTEX
+            if (rowSelected != -1 && colSelected != -1)
             {
                 grid_world.setMapTypeValue(rowSelected - 1, colSelected - 1, '6');
                 s.row = rowSelected - 1;
@@ -400,7 +395,8 @@ void runSimulation(char *fileName)
                 rowSelected = -1;
                 colSelected = -1;
             }
-            else {
+            else 
+            {
                 cout << "invalid new START vertex, please select a new START vertex first." << endl;
                 break;
             }
@@ -412,22 +408,24 @@ void runSimulation(char *fileName)
         case 7: //set cell as new GOAL vertex 
         {
             //--------------------------------------------
-           // retrieve current GOAL vertex
+            // retrieve current GOAL vertex
             vertex s = grid_world.getGoalVertex();
-            if ((s.row != -1) && (s.col != -1)) {
+            if ((s.row != -1) && (s.col != -1)) 
+            {
                 //set current GOAL VERTEX to an ordinary TRAVERSABLE CELL
                 grid_world.setMapTypeValue(s.row, s.col, '0');
-
                 //ok, proceed
             }
-            else {
+            else 
+            {
                 cout << "invalid GOAL vertex" << endl;
                 action = -1;
                 break;
             }
             //--------------------------------------------
-              //set selected cell as the NEW GOAL VERTEX
-            if (rowSelected != -1 && colSelected != -1) {
+            //set selected cell as the NEW GOAL VERTEX
+            if (rowSelected != -1 && colSelected != -1)
+            {
                 grid_world.setMapTypeValue(rowSelected - 1, colSelected - 1, '7');
                 s.row = rowSelected - 1;
                 s.col = colSelected - 1;
@@ -437,7 +435,8 @@ void runSimulation(char *fileName)
                 rowSelected = -1;
                 colSelected = -1;
             }
-            else {
+            else 
+            {
                 cout << "invalid new GOAL vertex, please select a new GOAL vertex first." << endl;
                 action = -1;
                 break;
@@ -464,10 +463,12 @@ void runSimulation(char *fileName)
             grid_world.displayMapWithSelectedDetails(true, false, false, false);  //(bool display_g, bool display_rhs, bool display_h, bool display_key) 
             action = -1;
             break;
+
         case 10: //display h-values only
             grid_world.displayMapWithSelectedDetails(false, false, true, false);  //(bool display_g, bool display_rhs, bool display_h, bool display_key) 
             action = -1;
             break;
+
         case 11: //display key-values only
             lpa_star->updateAllKeyValues();
             copyMazeToDisplayMap(grid_world, lpa_star);
@@ -476,10 +477,9 @@ void runSimulation(char *fileName)
             break;
 
         case 12: //make cell Traversable
-
-            if (rowSelected != -1 && colSelected != -1) {
+            if (rowSelected != -1 && colSelected != -1)
+            {
                 grid_world.setMapTypeValue(rowSelected - 1, colSelected - 1, '0');
-
                 rowSelected = -1;
                 colSelected = -1;
             }
@@ -496,9 +496,9 @@ void runSimulation(char *fileName)
         };
 
         //----------------------------------------------------------------------------------------------------------------	  
-         // Mouse handling
-         //
-        if (mousedown()) 
+        // Mouse handling
+        //
+        if (mousedown())
         {
             ANIMATE_MOUSE_FLAG = true;
 
@@ -506,11 +506,12 @@ void runSimulation(char *fileName)
             mY = mousecurrenty();
 
             //if the goal selected is within the playing field boundaries
-            if (mX >= grid_world.getFieldX1() && mX <= grid_world.getGridMaxX() && mY >= grid_world.getFieldY1() && mY <= grid_world.getGridMaxY()) {
+            if (mX >= grid_world.getFieldX1() && mX <= grid_world.getGridMaxX() && mY >= grid_world.getFieldY1() && mY <= grid_world.getGridMaxY())
+            {
                 circle(mX, mY, 3);
                 validCellSelected = true;
             }
-            else 
+            else
             {
                 validCellSelected = false;
             }
@@ -518,7 +519,7 @@ void runSimulation(char *fileName)
         //------------------------------------------------------------------------------------------------------------------
         /////////////////////////////////////////////////////////////////////////////
 
-        if (ANIMATE_MOUSE_FLAG) 
+        if (ANIMATE_MOUSE_FLAG)
         {
             //draw Cross-hair to mark Goal	    
             setcolor(RED);
@@ -530,20 +531,16 @@ void runSimulation(char *fileName)
             // special effect to display concentric circles locating the target
             setcolor(YELLOW);
 
-            if (mouseRadius < 40) {
-                mouseRadius += 1;
-            }
+            if (mouseRadius < 40) ++mouseRadius;
             circle(mX, mY, mouseRadius);
-            //Sleep(50);
 
-            if (mouseRadius >= 40) 
+            if (mouseRadius >= 40)
             {
                 ANIMATE_MOUSE_FLAG = false;
                 mouseRadius = 0;
             }
             //end of special effect
         }
-
 
         /////////////////////////////////////////////////////////////////////////////
         char info[80];
@@ -553,7 +550,6 @@ void runSimulation(char *fileName)
         wY = yWorld(worldBoundary, deviceBoundary, mY);
         sprintf(info, "x: %d, y: %d", mX, mY);
         drawInformationPanel(grid_world.getFieldX2(), grid_world.getFieldY1() + textheight("H") * 2, info);
-
 
         sprintf(info, "wX: %3.0f, wY: %3.0f", wX, wY);
         drawInformationPanel(grid_world.getFieldX2(), grid_world.getFieldY1() + textheight("H") * 5, info);
@@ -576,25 +572,25 @@ void runSimulation(char *fileName)
     }
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     char gridFileName[80];
-    if (argc == 3) 
+    if (argc == 3)
     {
         strcpy(gridFileName, argv[1]);
 
-        if (!strcmp(argv[2], "EUCLIDEAN")) 
+        if (!strcmp(argv[2], "EUCLIDEAN"))
         {
             HEURISTIC = EUCLIDEAN;
             cout << "Heuristics = EUCLIDEAN" << endl;
         }
-        else if (!strcmp(argv[2], "MANHATTAN")) 
+        else if (!strcmp(argv[2], "MANHATTAN"))
         {
             HEURISTIC = MANHATTAN;
             cout << "Heuristics = MANHATTAN" << endl;
         }
     }
-    else 
+    else
     {
         cout << "missing parameters:  gridworld heuristic" << endl;
     }
@@ -605,7 +601,7 @@ int main(int argc, char *argv[])
     //initgraph(&graphDriver, &graphMode, "", 1280, 1024); // Start Window
 
     initgraph(&graphDriver, &graphMode, "", 1360, 768); // Start Window - LAPTOP SCREEN
-     //initgraph(&graphDriver, &graphMode, "", 1920, 1080); // Start Window - Full-HD
+    //initgraph(&graphDriver, &graphMode, "", 1920, 1080); // Start Window - Full-HD
 
     BACKGROUND_COLOUR = WHITE;
     LINE_COLOUR = GREEN;
@@ -614,11 +610,11 @@ int main(int argc, char *argv[])
     GRIDWORLD_COLS = 0; //15;//13; //duplicated in GridWorld
     SHOW_MAP_DETAILS = false;
 
-    try 
+    try
     {
         runSimulation(gridFileName);
     }
-    catch (...) 
+    catch (...)
     {
         cout << "Exception caught!\n";
     }

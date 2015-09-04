@@ -1,7 +1,7 @@
 #include "gridworld.h"
 
-
-void GridWorld::displayHeader() {
+void GridWorld::displayHeader() 
+{
     int x, y;
     x = getmaxx() / 2;
     y = textheight("H") * 1;
@@ -37,7 +37,9 @@ void GridWorld::displayHeader() {
     //outtextxy(x ,y, "fileName: ");
     outtextxy(x, y, info);
 }
-void GridWorld::displayRLHeader(long maxEpoch) {
+
+void GridWorld::displayRLHeader(long maxEpoch) 
+{
     int x, y;
     x = getmaxx() / 2;
     y = textheight("H") * 1;
@@ -1390,5 +1392,3 @@ void GridWorld::markCell_col_row_details(int col, int row, int fillColour, int o
     setbkcolor(fillColour);
     outtextxy(x, y, info);
 }
-
-

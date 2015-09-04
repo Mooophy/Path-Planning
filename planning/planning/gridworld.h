@@ -10,17 +10,18 @@
 #include "graphics.h"
 #include "LpaStar.h"
 
-
-class GridWorld {
-
+class GridWorld 
+{
 public:
-    GridWorld() {
+    GridWorld() 
+    {
         xInc = 0;
         yInc = 0;
         strcpy(fileName, "");
     }
 
-    bool isGridMapInitialised() {
+    bool isGridMapInitialised() 
+    {
         return MAP_INITIALISED;
     }
 
@@ -54,14 +55,17 @@ public:
     int getGridMaxX();
     int getGridMaxY();
 
-    WorldBoundaryType getWorldBoundary() {
+    WorldBoundaryType getWorldBoundary() 
+    {
         return worldBoundary;
     }
-    DevBoundaryType getDeviceBoundary() {
+    DevBoundaryType getDeviceBoundary() 
+    {
         return deviceBoundary;
     }
 
-    int getCellWidth() {
+    int getCellWidth() 
+    {
         return cellWidth;
     }
 
@@ -200,7 +204,7 @@ private:
     float WORLD_MAXX;
     float WORLD_MAXY;
     int fieldX1, fieldY1, fieldX2, fieldY2;
-    vector<vector<vertex> > map;
+    vector<vector<vertex>> map;
 
     vertex startVertex;
     vertex goalVertex;
@@ -212,5 +216,4 @@ private:
 
     vector<loc_t> shortestPath; //RL - shortest path
 };
-
 #endif
