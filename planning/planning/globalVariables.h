@@ -26,50 +26,50 @@
 
 //-------------------------------------------------------------------------------
 #ifdef FOUR_CONNECTED_GRIDWORLD
- 
-	//4-connected gridworld
-	#define DIRECTIONS 4
-	const struct {
-	  int x;
-	  int y;
-	} neighbours[4]={{0, -1}, {-1, 0}, {1, 0}, {0, 1}};
 
-	/////////////////////////////////////////////////////
+    //4-connected gridworld
+#define DIRECTIONS 4
+const struct {
+    int x;
+    int y;
+} neighbours[4] = { {0, -1}, {-1, 0}, {1, 0}, {0, 1} };
+
+/////////////////////////////////////////////////////
 
 #endif
 
-const double SQRT_2 =  1.4142135623731;
+const double SQRT_2 = 1.4142135623731;
 
 //-------------------------------------------------------------------------------
 #ifdef EIGHT_CONNECTED_GRIDWORLD
 
-	//8-connected gridworld
-	#define DIRECTIONS 8
-	
-	//movement sequence, used in the journal
-	const struct {
-	  int x;
-	  int y;
-	} neighbours[8]={ {-1,-1}, {0, -1}, {1, -1}, 
-					{-1, 0}, {1, 0}, 
-					{-1, 1}, {0, 1}, {1, 1} };
-			
-	//clockwise, starting at 3 o'clock			
-	//~ const struct {
-	  //~ int x;
-	  //~ int y;
-	//~ } succ[8]={ {1,0}, {1, 1}, {0,1}, {-1, 1}, {-1, 0}, {-1,-1}, {0, -1}, {1, -1} };
-		
+    //8-connected gridworld
+#define DIRECTIONS 8
+
+//movement sequence, used in the journal
+const struct {
+    int x;
+    int y;
+} neighbours[8] = { {-1,-1}, {0, -1}, {1, -1},
+                {-1, 0}, {1, 0},
+                {-1, 1}, {0, 1}, {1, 1} };
+
+//clockwise, starting at 3 o'clock			
+//~ const struct {
+  //~ int x;
+  //~ int y;
+//~ } succ[8]={ {1,0}, {1, 1}, {0,1}, {-1, 1}, {-1, 0}, {-1,-1}, {0, -1}, {1, -1} };
+
 #endif
 //-------------------------------------------------------------------------------
 
 //------------------------------------------
-	
+
 extern int numberOfExpandedStates;
 extern int numberOfVertexAccesses;
-extern int maxQLength;	
+extern int maxQLength;
 extern int qLengthAfterSearch;
-	
+
 extern bool MAP_INITIALISED;
 extern bool PRECALCULATED_GRIDWORLD_READY;
 
@@ -77,7 +77,7 @@ extern bool PRECALCULATED_GRIDWORLD_READY;
 extern unsigned int HEURISTIC;
 
 //Robot soccer dimensions	
-extern int GRIDWORLD_ROWS; 
+extern int GRIDWORLD_ROWS;
 extern int GRIDWORLD_COLS;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -89,70 +89,70 @@ extern int GRIDWORLD_COLS;
 //////////////////////////////////////////////////////////////////////////////
 using namespace std;
 
-enum cellType{TRAVERSABLE=0, BLOCKED=1, UNKNOWN=9};
-enum vertexStatus{UNEXPLORED=0, EXPANDED=1, ACCESSED=2};
+enum cellType { TRAVERSABLE = 0, BLOCKED = 1, UNKNOWN = 9 };
+enum vertexStatus { UNEXPLORED = 0, EXPANDED = 1, ACCESSED = 2 };
 
- struct CellPosition
+struct CellPosition
 {
-	int row;
-	int col;
+    int row;
+    int col;
 };
 
- struct Coordinates
+struct Coordinates
 {
-	int x, y;
+    int x, y;
 };
 
 
 typedef struct {
-  int y;
-  int x;
+    int y;
+    int x;
 } loc_t;
 
 
 struct vertex
 {
-	
+
 #ifdef INCREMENTAL_SEARCH_ALGORITHM	
     double rhs;
     double g;
-	 int c;
-	 double h;
-	 double f;
-	 double key[2];
-	 vertex* move[DIRECTIONS]; 
-    double linkCost[DIRECTIONS];	
+    int c;
+    double h;
+    double f;
+    double key[2];
+    vertex* move[DIRECTIONS];
+    double linkCost[DIRECTIONS];
 #endif	
-	
-	
-	
-	
+
+
+
+
 #ifdef RL_ALGORITHM
-	
-	#ifdef EIGHT_CONNECTED_GRIDWORLD
+
+#ifdef EIGHT_CONNECTED_GRIDWORLD
     double Q[8];
-		
-	#elif FOUR_CONNECTED_GRIDWORLD
+
+#elif FOUR_CONNECTED_GRIDWORLD
     double Q[4];
-	#endif
-	
-	 double sumQ;
-	 double maxQ;
-	
-	 int reward;
+#endif
+
+    double sumQ;
+    double maxQ;
+
+    int reward;
 #endif	
-	
-	 //--------------------------------------------------------------------------------- 
-	 //TYPE: 0 - traversable, 1 - blocked, 9 - unknown, 6 - start vertex, 7 - goal vertex
-    char type; 
-	 //---------------------------------------------------------------------------------
-	 int row;
-	 int col;
-	 char status; 
-	 
-	 int x1,y1,x2,y2;
-	 Coordinates centre; //centre x, centre y
-}; 
+
+    //--------------------------------------------------------------------------------- 
+    //TYPE: 0 - traversable, 1 - blocked, 9 - unknown, 6 - start vertex, 7 - goal vertex
+    char type;
+    //---------------------------------------------------------------------------------
+    int row;
+    int col;
+    char status;
+
+    int x1, y1, x2, y2;
+    Coordinates centre; //centre x, centre y
+};
 
 extern int MAX_MOVES;
 
@@ -162,7 +162,8 @@ extern vertex goalVertex;
 
 
 
-typedef struct vector<CellPosition> PathType;
+//typedef struct vector<CellPosition> PathType;
+using PathType = vector<CellPosition>;
 
 /*******************************************************************************************************************/
 extern int fieldX1, fieldY1, fieldX2, fieldY2; //playing field boundaries
@@ -185,29 +186,29 @@ struct LpaStarCell
 {
     LpaStarCell* move[DIRECTIONS];
     LpaStarCell* predecessor[DIRECTIONS];
-	 double linkCost[DIRECTIONS];
+    double linkCost[DIRECTIONS];
     LpaStarCell* parent;
     LpaStarCell* trace;
     short obstacle;
     int x, y;
 
-	 double g;
+    double g;
     double rhs;
-	 double h;
+    double h;
     double key[2];
-	
-	 //~ int g;
-    //~ int rhs;
-    //~ int key[2];
-	
-	
-	 //---------------------
-	 //TYPE: 0 - traversable, 1 - blocked, 9 - unknown, 6 - start vertex, 7 - goal vertex
-	 char type;
-	 //----------------------
-	
 
-	
+    //~ int g;
+   //~ int rhs;
+   //~ int key[2];
+
+
+    //---------------------
+    //TYPE: 0 - traversable, 1 - blocked, 9 - unknown, 6 - start vertex, 7 - goal vertex
+    char type;
+    //----------------------
+
+
+
     int generated;
     int heapindex;
 };

@@ -21,8 +21,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma comment(lib, "user32")
-
 #include <windows.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -151,7 +149,8 @@ void copyDisplayMapToMaze(GridWorld &gWorld, LpaStar* lpa) {
 
 
 
-void drawInformationPanel(int x, int y, char* info) {
+void drawInformationPanel(int x, int y, char* info) 
+{
     ///////////////////////////////////////////////////////////////////////////////////////////
     settextstyle(SMALL_FONT, HORIZ_DIR, 4);
     settextjustify(LEFT_TEXT, CENTER_TEXT);
@@ -162,7 +161,6 @@ void drawInformationPanel(int x, int y, char* info) {
 
 int getKey() 
 {
-
     if (GetAsyncKeyState(VK_UP) < 0) 
     { //UP ARROW
         return 200;
@@ -255,12 +253,13 @@ int getKey()
         return 18;
     }
 
+    return -1;
 }
 
 void runSimulation(char *fileName) 
 {
-    WorldBoundaryType worldBoundary; //duplicated in GridWorld
-    DevBoundaryType deviceBoundary; //duplicated in GridWorld
+    WorldBoundaryType worldBoundary;    //duplicated in GridWorld
+    DevBoundaryType deviceBoundary;     //duplicated in GridWorld
     bool ANIMATE_MOUSE_FLAG = false;
     bool validCellSelected = false;
     static BOOL page = false;
@@ -269,7 +268,6 @@ void runSimulation(char *fileName)
     worldX = 0.0f;
     worldY = 0.0f;
 
-    int action = -1;
     //-----------------------
     CellPosition p;
     int rowSelected, colSelected;
@@ -279,7 +277,7 @@ void runSimulation(char *fileName)
 
     int mouseRadius = 1;
 
-    srand(time(NULL));  // Seed the random number generator
+    srand(static_cast<unsigned>(time(NULL)));  // Seed the random number generator
 
     //Initialise the world boundaries
     grid_world.initSystemOfCoordinates();
@@ -315,7 +313,7 @@ void runSimulation(char *fileName)
         setactivepage(page);
         cleardevice();
 
-        action = getKey();
+        auto action = getKey();
 
         if (SHOW_MAP_DETAILS)
             grid_world.displayMapWithDetails();
