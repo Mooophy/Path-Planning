@@ -137,18 +137,6 @@ void copyDisplayMapToMaze(GridWorld &gWorld, LpaStar* lpa) {
     lpa->goal->y = gWorld.map[goalV.row][goalV.col].row;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION PROTOTYPES
-
-
-///////////////////////////////////////////////////////////////////////////////
-// IMPLEMENTATION
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-
 void drawInformationPanel(int x, int y, char* info) 
 {
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -262,19 +250,14 @@ void runSimulation(char *fileName)
     DevBoundaryType deviceBoundary;     //duplicated in GridWorld
     bool ANIMATE_MOUSE_FLAG = false;
     bool validCellSelected = false;
-    static BOOL page = false;
+    static bool page = false;
     int mX, mY;
     float worldX, worldY;
     worldX = 0.0f;
     worldY = 0.0f;
 
-    //-----------------------
     CellPosition p;
-    int rowSelected, colSelected;
-    //-----------------------
-    rowSelected = -1;
-    colSelected = -1;
-
+    int rowSelected = -1, colSelected = 1;
     int mouseRadius = 1;
 
     srand(static_cast<unsigned>(time(NULL)));  // Seed the random number generator
@@ -313,7 +296,7 @@ void runSimulation(char *fileName)
         setactivepage(page);
         cleardevice();
 
-        auto action = getKey();
+        int action = getKey();
 
         if (SHOW_MAP_DETAILS)
             grid_world.displayMapWithDetails();
@@ -323,7 +306,8 @@ void runSimulation(char *fileName)
         switch (action) 
         {
         case 1: //Block selected cell
-            if (rowSelected != -1 && colSelected != -1) {
+            if (rowSelected != -1 && colSelected != -1) 
+            {
                 grid_world.setMapTypeValue(rowSelected - 1, colSelected - 1, '1');
                 grid_world.initialiseMapConnections();
 
@@ -354,13 +338,15 @@ void runSimulation(char *fileName)
 
         case 15:
 
-            if (rowSelected != -1 && colSelected != -1) {
+            if (rowSelected != -1 && colSelected != -1) 
+            {
                 grid_world.displayVertexConnections(colSelected - 1, rowSelected - 1);
                 //cout << "display connections" << endl;
                 rowSelected = -1;
                 colSelected = -1;
             }
-            else {
+            else 
+            {
                 cout << "invalid new START vertex, please select a new START vertex first." << endl;
                 break;
             }
@@ -370,7 +356,8 @@ void runSimulation(char *fileName)
 
         case 16:
 
-            if (grid_world.isGridMapInitialised()) {
+            if (grid_world.isGridMapInitialised())
+            {
                 grid_world.displayMapConnections();
                 //cout << "display connections" << endl;
                 //~ rowSelected=-1;
