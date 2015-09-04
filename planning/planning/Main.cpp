@@ -44,8 +44,6 @@
 #include "LPAstar.h"
 #include "gridworld.h"
 
-
-
 // colour constants
 int BACKGROUND_COLOUR;
 int LINE_COLOUR;
@@ -102,7 +100,6 @@ void copyMazeToDisplayMap(GridWorld &gWorld, LpaStar* lpa)
         gWorld.map[lpa->start->y][lpa->start->x].key[k] = lpa->start->key[k];
     }
 
-
     gWorld.map[lpa->goal->y][lpa->goal->x].h = lpa->goal->h;
     gWorld.map[lpa->goal->y][lpa->goal->x].g = lpa->goal->g;
     gWorld.map[lpa->goal->y][lpa->goal->x].rhs = lpa->goal->rhs;
@@ -112,7 +109,6 @@ void copyMazeToDisplayMap(GridWorld &gWorld, LpaStar* lpa)
     {
         gWorld.map[lpa->goal->y][lpa->goal->x].key[k] = lpa->goal->key[k];
     }
-
 }
 
 //--------------------------------------------------------------
@@ -261,7 +257,8 @@ int getKey()
 
 }
 
-void runSimulation(char *fileName) {
+void runSimulation(char *fileName) 
+{
     WorldBoundaryType worldBoundary; //duplicated in GridWorld
     DevBoundaryType deviceBoundary; //duplicated in GridWorld
     bool ANIMATE_MOUSE_FLAG = false;
@@ -313,7 +310,8 @@ void runSimulation(char *fileName) {
     //setvisualpage(page);
 
     // keep running the program until the ESC key is pressed   
-    while ((GetAsyncKeyState(VK_ESCAPE)) == 0) {
+    while ((GetAsyncKeyState(VK_ESCAPE)) == 0) 
+    {
         setactivepage(page);
         cleardevice();
 
@@ -324,7 +322,8 @@ void runSimulation(char *fileName) {
         else
             grid_world.displayMap();
 
-        switch (action) {
+        switch (action) 
+        {
         case 1: //Block selected cell
             if (rowSelected != -1 && colSelected != -1) {
                 grid_world.setMapTypeValue(rowSelected - 1, colSelected - 1, '1');
@@ -392,19 +391,22 @@ void runSimulation(char *fileName) {
             //--------------------------------------------
            // retrieve current START vertex
             vertex s = grid_world.getStartVertex();
-            if ((s.row != -1) && (s.col != -1)) {
+            if ((s.row != -1) && (s.col != -1)) 
+            {
                 //set current START VERTEX to an ordinary TRAVERSABLE CELL
                 grid_world.setMapTypeValue(s.row, s.col, '0');
                 grid_world.initialiseMapConnections();
                 //ok, proceed
             }
-            else {
+            else 
+            {
                 cout << "invalid START vertex" << endl;
                 break;
             }
             //--------------------------------------------
               //set selected cell as the NEW START VERTEX
-            if (rowSelected != -1 && colSelected != -1) {
+            if (rowSelected != -1 && colSelected != -1) 
+            {
                 grid_world.setMapTypeValue(rowSelected - 1, colSelected - 1, '6');
                 s.row = rowSelected - 1;
                 s.col = colSelected - 1;
@@ -505,17 +507,14 @@ void runSimulation(char *fileName) {
             break;
 
             //~ default: //Display grid without details
-                  //~ grid_world.displayMap();
-
-
-
+            //~ grid_world.displayMap();
         };
 
         //----------------------------------------------------------------------------------------------------------------	  
          // Mouse handling
          //
-        if (mousedown()) {
-
+        if (mousedown()) 
+        {
             ANIMATE_MOUSE_FLAG = true;
 
             mX = mousecurrentx();
@@ -523,20 +522,19 @@ void runSimulation(char *fileName) {
 
             //if the goal selected is within the playing field boundaries
             if (mX >= grid_world.getFieldX1() && mX <= grid_world.getGridMaxX() && mY >= grid_world.getFieldY1() && mY <= grid_world.getGridMaxY()) {
-
                 circle(mX, mY, 3);
                 validCellSelected = true;
-
             }
-            else {
+            else 
+            {
                 validCellSelected = false;
             }
         } //end of mousedown()
         //------------------------------------------------------------------------------------------------------------------
         /////////////////////////////////////////////////////////////////////////////
 
-        if (ANIMATE_MOUSE_FLAG) {
-
+        if (ANIMATE_MOUSE_FLAG) 
+        {
             //draw Cross-hair to mark Goal	    
             setcolor(RED);
             circle(mX, mY, 20);
@@ -553,7 +551,8 @@ void runSimulation(char *fileName) {
             circle(mX, mY, mouseRadius);
             //Sleep(50);
 
-            if (mouseRadius >= 40) {
+            if (mouseRadius >= 40) 
+            {
                 ANIMATE_MOUSE_FLAG = false;
                 mouseRadius = 0;
             }
@@ -578,40 +577,40 @@ void runSimulation(char *fileName) {
          //~ CellPosition p;
          //~ int rowSelected, colSelected;
 
-        if (validCellSelected) {
+        if (validCellSelected)
+        {
             p = grid_world.getCellPosition_markCell(mX, mY);
             rowSelected = p.row;
             colSelected = p.col;
 
             sprintf(info, "row: %d, col: %d", rowSelected, colSelected);
             drawInformationPanel(grid_world.getFieldX2(), grid_world.getFieldY1() + textheight("H") * 6, info);
-
         }
         setvisualpage(page);
         page = !page;  //switch to another page
     }
 }
 
-
-
-
-
 int main(int argc, char *argv[]) 
 {
     char gridFileName[80];
-    if (argc == 3) {
+    if (argc == 3) 
+    {
         strcpy(gridFileName, argv[1]);
 
-        if (!strcmp(argv[2], "EUCLIDEAN")) {
+        if (!strcmp(argv[2], "EUCLIDEAN")) 
+        {
             HEURISTIC = EUCLIDEAN;
             cout << "Heuristics = EUCLIDEAN" << endl;
         }
-        else if (!strcmp(argv[2], "MANHATTAN")) {
+        else if (!strcmp(argv[2], "MANHATTAN")) 
+        {
             HEURISTIC = MANHATTAN;
             cout << "Heuristics = MANHATTAN" << endl;
         }
     }
-    else {
+    else 
+    {
         cout << "missing parameters:  gridworld heuristic" << endl;
     }
 
@@ -630,15 +629,15 @@ int main(int argc, char *argv[])
     GRIDWORLD_COLS = 0; //15;//13; //duplicated in GridWorld
     SHOW_MAP_DETAILS = false;
 
-    try {
+    try 
+    {
         runSimulation(gridFileName);
     }
-    catch (...) {
+    catch (...) 
+    {
         cout << "Exception caught!\n";
     }
 
     cout << "----<< The End.>>----" << endl;
-
     return 0;
 }
-
