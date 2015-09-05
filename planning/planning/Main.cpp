@@ -163,79 +163,99 @@ int getKey()
         return 104;
     }
 
-    if (GetAsyncKeyState(VK_F5) < 0) {
+    if (GetAsyncKeyState(VK_F5) < 0) 
+    {
         SHOW_MAP_DETAILS = true;
         return 105;
     }
 
-    if (GetAsyncKeyState(VK_F6) < 0) {
+    if (GetAsyncKeyState(VK_F6) < 0) 
+    {
         //execute A* with strict expanded list
         return 106;
     }
-    if (GetAsyncKeyState(VK_F7) < 0) {
+    
+    if (GetAsyncKeyState(VK_F7) < 0) 
+    {
         //execute LPA*
         return 107;
     }
-    if (GetAsyncKeyState(VK_F8) < 0) {
+    
+    if (GetAsyncKeyState(VK_F8) < 0) 
+    {
         //execute D*Lite
         return 108;
     }
 
     //copy display map to algorithm's maze
-    if (GetAsyncKeyState(VK_F9) < 0) {
+    if (GetAsyncKeyState(VK_F9) < 0) 
+    {
         return 109;
     }
 
     //copy algorithm's maze to display map
-    if (GetAsyncKeyState(VK_F10) < 0) {
+    if (GetAsyncKeyState(VK_F10) < 0) 
+    {
         return 110;
     }
 
-    if (GetAsyncKeyState(0x53) < 0) { //S-key (start cell)
+    if (GetAsyncKeyState(0x53) < 0) 
+    { //S-key (start cell)
         return 6;
     }
 
-    if (GetAsyncKeyState(0x58) < 0) { //X-key (goal cell)
+    if (GetAsyncKeyState(0x58) < 0) 
+    { //X-key (goal cell)
         return 7;
     }
 
-    if (GetAsyncKeyState(0x42) < 0) { //B-key (block cell)
+    if (GetAsyncKeyState(0x42) < 0) 
+    { //B-key (block cell)
         return 1;
     }
 
-    if (GetAsyncKeyState(0x47) < 0) {  //G-key
+    if (GetAsyncKeyState(0x47) < 0) 
+    {  //G-key
         return 9;
     }
 
-    if (GetAsyncKeyState(0x48) < 0) {  //H-key
+    if (GetAsyncKeyState(0x48) < 0) 
+    {  //H-key
         return 10;
     }
 
-    if (GetAsyncKeyState(0x4B) < 0) {  //K-key
+    if (GetAsyncKeyState(0x4B) < 0) 
+    {  //K-key
         return 11;
     }
 
-    if (GetAsyncKeyState(0x55) < 0) { //U-key (Unblock cell)
+    if (GetAsyncKeyState(0x55) < 0) 
+    { //U-key (Unblock cell)
         return 12;
     }
 
-    if (GetAsyncKeyState(0x50) < 0) { //P-key (position of cells)
+    if (GetAsyncKeyState(0x50) < 0) 
+    { //P-key (position of cells)
         return 14;
     }
 
-    if (GetAsyncKeyState(0x43) < 0) { //C-key (connections of cells)
+    if (GetAsyncKeyState(0x43) < 0) 
+    { //C-key (connections of cells)
         return 15;
     }
 
-    if (GetAsyncKeyState(0x4D) < 0) { //M-key (entire map connections)
+    if (GetAsyncKeyState(0x4D) < 0) 
+    { //M-key (entire map connections)
         return 16;
     }
 
-    if (GetAsyncKeyState(0x52) < 0) { //R-key (REINFORCEMENT LEARNING - reward values)
+    if (GetAsyncKeyState(0x52) < 0) 
+    { //R-key (REINFORCEMENT LEARNING - reward values)
         return 17;
     }
 
-    if (GetAsyncKeyState(0x51) < 0) { //Q-key (REINFORCEMENT LEARNING - maxQ-values)
+    if (GetAsyncKeyState(0x51) < 0) 
+    { //Q-key (REINFORCEMENT LEARNING - maxQ-values)
         return 18;
     }
 
@@ -313,9 +333,9 @@ void runSimulation(char *fileName)
         std::cout << "---------------zzz----------\n" << action << std::endl;
         switch (action)
         {
-        case -1:
-            std::cout << "dummy case\n";
-            break;
+        //case -1:
+        //    std::cout << "dummy case\n";
+        //    break;
 
         case 1: //Block selected cell
             if (rowSelected != -1 && colSelected != -1)

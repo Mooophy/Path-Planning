@@ -42,7 +42,7 @@ const double SQRT_2 = 1.4142135623731;
 //-------------------------------------------------------------------------------
 #ifdef EIGHT_CONNECTED_GRIDWORLD
 
-    //8-connected gridworld
+//8-connected gridworld
 #define DIRECTIONS 8
 
 //movement sequence, used in the journal
@@ -88,8 +88,8 @@ extern int GRIDWORLD_COLS;
 //////////////////////////////////////////////////////////////////////////////
 using namespace std;
 
-enum cellType { TRAVERSABLE = 0, BLOCKED = 1, UNKNOWN = 9 };
-enum vertexStatus { UNEXPLORED = 0, EXPANDED = 1, ACCESSED = 2 };
+enum cellType       { TRAVERSABLE = 0, BLOCKED = 1, UNKNOWN = 9 };
+enum vertexStatus   { UNEXPLORED = 0, EXPANDED = 1, ACCESSED = 2 };
 
 struct CellPosition
 {
