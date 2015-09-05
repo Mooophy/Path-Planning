@@ -82,8 +82,6 @@ void GridWorld::loadMapAndDisplay(const char* fn) //,int totalRows, int totalCol
     i_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
     try {
-
-
         i_file.open(fn, std::ifstream::in);
         cout << "file opened." << endl;
         strcpy(fileName, fn);
@@ -161,7 +159,6 @@ void GridWorld::loadMapAndDisplay(const char* fn) //,int totalRows, int totalCol
                     map[j][i].centre = markCell_col_row(i, j, CYAN, WHITE);
                     //drawCell_RowCol(BLUE, j,i, totalRows, totalColumns, "G");
                 }
-
             }
         }
 

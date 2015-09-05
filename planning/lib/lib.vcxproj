@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E56600A6-4016-4BC8-9729-3B17DB0EA2AD}</ProjectGuid>
-    <RootNamespace>planning</RootNamespace>
+    <ProjectGuid>{DB0755F8-70F8-4460-9B4C-B3D2D12679B3}</ProjectGuid>
+    <RootNamespace>lib</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,7 +74,6 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -85,7 +84,6 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,22 +118,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="globalVariables.h" />
-    <ClInclude Include="graphics.h" />
-    <ClInclude Include="gridworld.h" />
-    <ClInclude Include="LPAstar.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="transform.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="planning.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="graphics.cpp" />
-    <ClCompile Include="gridworld.cpp" />
-    <ClCompile Include="LPAstar.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

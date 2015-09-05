@@ -1,7 +1,6 @@
 #ifndef __GLOBALVARIABLES_H__
 #define __GLOBALVARIABLES_H__
 
-
 #include <vector>
 
 /*******************************************************************************************************************/
@@ -198,22 +197,18 @@ struct LpaStarCell
     double key[2];
 
     //~ int g;
-   //~ int rhs;
-   //~ int key[2];
-
+    //~ int rhs;
+    //~ int key[2];
 
     //---------------------
     //TYPE: 0 - traversable, 1 - blocked, 9 - unknown, 6 - start vertex, 7 - goal vertex
     char type;
     //----------------------
 
-
-
     int generated;
     int heapindex;
 };
 
 extern bool SHOW_MAP_DETAILS;
-
 /********************************************************************************************************************/
 #endif
