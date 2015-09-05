@@ -50,7 +50,6 @@ int robotWidth;
 int GRIDWORLD_ROWS; //duplicated in GridWorld
 int GRIDWORLD_COLS; //duplicated in GridWorld
 
-
 //----------------------------
 unsigned int HEURISTIC;
 //~ bool USE_EUCLIDEAN_DISTANCE_HEURISTIC;
@@ -251,7 +250,7 @@ void runSimulation(char *fileName)
     bool ANIMATE_MOUSE_FLAG = false;
     bool validCellSelected = false;
     static bool page = false;
-    int mX, mY;
+    auto mX = 0, mY = 0;              //must be initialized, otherwise will crash when compiled with vs2015.
     float worldX, worldY;
     worldX = 0.0f;
     worldY = 0.0f;
@@ -264,6 +263,7 @@ void runSimulation(char *fileName)
 
     //Initialise the world boundaries
     grid_world.initSystemOfCoordinates();
+
     grid_world.loadMapAndDisplay(fileName);
     grid_world.initialiseMapConnections();
 
@@ -290,9 +290,19 @@ void runSimulation(char *fileName)
 
     //setvisualpage(page);
 
+    //grid_world.setMapTypeValue(5, 4 , '1');
+    //grid_world.setMapTypeValue(5, 5 , '2');
+    //grid_world.setMapTypeValue(5, 6 , '3');
+    //grid_world.setMapTypeValue(5, 7 , '4');
+    //grid_world.setMapTypeValue(5, 8 , '5');
+    //grid_world.setMapTypeValue(5, 9 , '7');
+    //grid_world.setMapTypeValue(5, 10, '8');
+    //grid_world.setMapTypeValue(5, 11, '9');
+
     // keep running the program until the ESC key is pressed   
     while ((GetAsyncKeyState(VK_ESCAPE)) == 0)
     {
+        std::cout << "---------------zzz----------\n";
         setactivepage(page);
         cleardevice();
         auto action = getKey();
@@ -301,9 +311,13 @@ void runSimulation(char *fileName)
             grid_world.displayMapWithDetails();
         else
             grid_world.displayMap();
-
+        std::cout << "---------------zzz----------\n" << action << std::endl;
         switch (action)
         {
+        case -1:
+            std::cout << "dummy case\n";
+            break;
+
         case 1: //Block selected cell
             if (rowSelected != -1 && colSelected != -1)
             {
@@ -495,6 +509,8 @@ void runSimulation(char *fileName)
             //~ grid_world.displayMap();
         };
 
+        std::cout << "---------------zzz----------\n";
+
         //----------------------------------------------------------------------------------------------------------------	  
         // Mouse handling
         //
@@ -541,13 +557,16 @@ void runSimulation(char *fileName)
             }
             //end of special effect
         }
-
+        std::cout << "---------------zzz----------561\n";
+        std::cout << mX << std::endl;
         /////////////////////////////////////////////////////////////////////////////
         char info[80];
-        float wX, wY;
-
-        wX = xWorld(worldBoundary, deviceBoundary, mX);
-        wY = yWorld(worldBoundary, deviceBoundary, mY);
+        //float wX, wY;
+        std::cout << "---------------zzz----------565\n";
+        auto wX = xWorld(worldBoundary, deviceBoundary, mX);
+        std::cout << "---------------zzz----------567\n";
+        auto wY = yWorld(worldBoundary, deviceBoundary, mY);
+        std::cout << "---------------zzz----------568\n";
         sprintf(info, "x: %d, y: %d", mX, mY);
         drawInformationPanel(grid_world.getFieldX2(), grid_world.getFieldY1() + textheight("H") * 2, info);
 
@@ -557,7 +576,7 @@ void runSimulation(char *fileName)
 
          //~ CellPosition p;
          //~ int rowSelected, colSelected;
-
+        std::cout << "---------------zzz----------577\n";
         if (validCellSelected)
         {
             p = grid_world.getCellPosition_markCell(mX, mY);
