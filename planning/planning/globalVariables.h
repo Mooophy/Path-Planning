@@ -88,8 +88,8 @@ extern int GRIDWORLD_COLS;
 //////////////////////////////////////////////////////////////////////////////
 using namespace std;
 
-enum cellType       { TRAVERSABLE   = 0, BLOCKED    = 1, UNKNOWN    = 9 };
-enum vertexStatus   { UNEXPLORED    = 0, EXPANDED   = 1, ACCESSED   = 2 };
+enum cellType { TRAVERSABLE = 0, BLOCKED = 1, UNKNOWN = 9 };
+enum vertexStatus { UNEXPLORED = 0, EXPANDED = 1, ACCESSED = 2 };
 
 struct CellPosition
 {

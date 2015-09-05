@@ -9,9 +9,9 @@
 //                        - implements a gridworld that can be loaded from file, and 
 //                          modified through a user-interface 
 //
-//        Run Parameters: 
+//          Run Parameters: 
 //
-//    Keys for Operation: 
+//      Keys for Operation: 
 //
 //	 		        History:  date of revision
 //                         28/July/2015  
@@ -64,7 +64,6 @@ GridWorld grid_world;
 
 bool SHOW_MAP_DETAILS;
 ///////////////////////////////////////////////////////////////////////////////
-
 
 //--------------------------------------------------------------
 //copy maze (from LPA*) to map (of GridWorld)
@@ -250,7 +249,7 @@ void runSimulation(char *fileName)
     bool ANIMATE_MOUSE_FLAG = false;
     bool validCellSelected = false;
     static bool page = false;
-    auto mX = 0, mY = 0;              //must be initialized, otherwise will crash when compiled with vs2015.
+    auto mX = 0, mY = 0;                //must be initialized, otherwise will crash when compiled with vs2015.
     float worldX, worldY;
     worldX = 0.0f;
     worldY = 0.0f;
