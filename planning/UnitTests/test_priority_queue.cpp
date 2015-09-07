@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-//#include "../lib/priority_queue.hpp"
-//#include "../lib/node.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace search;
+using std::max;
+using std::abs;
 
 namespace UnitTests
 {
@@ -67,7 +67,26 @@ namespace UnitTests
 
             //test with node
             {
-                using Compare = std::function<bool(Node, Node)>;
+                struct Less
+                {
+                    auto operator()(Node const& lhs, Node const& rhs) const -> bool
+                    {
+                        return cost(lhs) + manhattan(lhs) < cost(lhs) + manhattan(rhs);
+                    }
+
+                    auto cost(Node const& node) const -> std::size_t
+                    {
+                        return node.path().size();
+                    }
+
+                    auto manhattan(Node const& node) const -> std::size_t
+                    {
+                        auto diff_of_y = abs(node.goal().y - node.start().y);
+                        auto diff_of_x = abs(node.goal().x - node.start().x);
+                        return max(diff_of_y, diff_of_y);
+                    }
+                };
+                auto pq = PriorityQueue<Node, Less>{ {}, Less{} };
             }
         }
     };
