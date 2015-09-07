@@ -7,7 +7,7 @@
 
 namespace search
 {
-    using Size = std::size_t;
+    using Size = long;
     //
     //  Struct Coordinate
     //
@@ -51,9 +51,19 @@ namespace search
             : _path{ path }, _start{ start }, _goal{ goal }
         { }
 
-        auto path() const -> Path const& 
+        auto path() const& -> Path const& 
         {
             return _path; 
+        }
+
+        auto start() const& -> Coordinate
+        {
+            return _start;
+        }
+
+        auto goal() const& -> Coordinate
+        {
+            return _goal;
         }
 
         auto coordinate() const -> Coordinate
