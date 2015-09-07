@@ -16,17 +16,17 @@ namespace search
         struct Coordinate
         {
             Coordinate(Size x, Size y)
-                : x{ x }, y{ y }
+                :  y{ y }, x{ x }
             {}
 
             Coordinate& operator = (Coordinate const& other)
             {
-                x = other.x;
                 y = other.y;
+                x = other.x;
                 return *this;
             }
 
-            Size x, y;
+            Size y, x;
         };
         using Functions = std::map< char, std::function< Coordinate(Coordinate) >>;
 
@@ -73,15 +73,18 @@ namespace search
         return lhs.x == rhs.x && lhs.y == rhs.y;
     }
 
+    //  0,0     0,1     0,2     ||  1   2   3
+    //  1,0     1,1     1,2     ||  4       5
+    //  2,0     2,1     2,2     ||  6   7   8
     Node::Functions const Node::goes 
     {
-        { '1', [](Coordinate c) -> Coordinate{ return{ c.x - 1, c.y - 1 }; } },
-        { '2', [](Coordinate c) -> Coordinate{ return{ c.x - 0, c.y - 1 }; } },
-        { '3', [](Coordinate c) -> Coordinate{ return{ c.x + 1, c.y + 1 }; } },
-        { '4', [](Coordinate c) -> Coordinate{ return{ c.x - 1, c.y + 0 }; } },
-        { '5', [](Coordinate c) -> Coordinate{ return{ c.x + 1, c.y + 0 }; } },
-        { '6', [](Coordinate c) -> Coordinate{ return{ c.x - 1, c.y - 1 }; } },
-        { '7', [](Coordinate c) -> Coordinate{ return{ c.x - 0, c.y - 1 }; } },
-        { '8', [](Coordinate c) -> Coordinate{ return{ c.x + 1, c.y - 1 }; } }
+        { '1', [](Coordinate c) -> Coordinate{ return{ c.y - 1, c.x - 1 }; } },
+        { '2', [](Coordinate c) -> Coordinate{ return{ c.y - 1, c.x - 0 }; } },
+        { '3', [](Coordinate c) -> Coordinate{ return{ c.y - 1, c.x + 1 }; } },
+        { '4', [](Coordinate c) -> Coordinate{ return{ c.y - 0, c.x - 1 }; } },
+        { '5', [](Coordinate c) -> Coordinate{ return{ c.y + 0, c.x + 1 }; } },
+        { '6', [](Coordinate c) -> Coordinate{ return{ c.y + 1, c.x - 1 }; } },
+        { '7', [](Coordinate c) -> Coordinate{ return{ c.y + 1, c.x - 0 }; } },
+        { '8', [](Coordinate c) -> Coordinate{ return{ c.y + 1, c.x + 1 }; } }
     };
 }
