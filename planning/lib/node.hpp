@@ -39,7 +39,7 @@ namespace search
     //
     class Node
     {
-        friend auto operator==(Node lhs, Node rhs) -> bool
+        friend auto operator==(Node const& lhs, Node const& rhs) -> bool
         {
             return lhs._path == rhs._path && lhs._start == rhs._start && lhs._goal == rhs._goal;
         }
