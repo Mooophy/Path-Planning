@@ -69,7 +69,8 @@ namespace search
         Path const  _path;
     };
 
-    Node::Functions const Node::goes {
+    Node::Functions const Node::goes 
+    {
         { '1', [](Coordinate c) -> Coordinate{ return{ c.x - 1, c.y - 1 }; } },
         { '2', [](Coordinate c) -> Coordinate{ return{ c.x - 0, c.y - 1 }; } },
         { '3', [](Coordinate c) -> Coordinate{ return{ c.x + 1, c.y + 1 }; } },
