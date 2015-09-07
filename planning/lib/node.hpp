@@ -69,6 +69,11 @@ namespace search
         Path const  _path;
     };
 
+    auto operator==(Node::Coordinate lhs, Node::Coordinate rhs) -> bool
+    {
+        return lhs.x == rhs.x && lhs.y == rhs.y;
+    }
+
     Node::Functions const Node::goes 
     {
         { '1', [](Coordinate c) -> Coordinate{ return{ c.x - 1, c.y - 1 }; } },
