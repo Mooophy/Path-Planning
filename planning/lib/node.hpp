@@ -70,13 +70,13 @@ namespace search
     };
 
     Node::Functions const Node::goes {
-        { '1', [](Coordinate c) ->Coordinate{ return{ c.x - 1, c.y - 1 }; } },
-        { '2', [](Coordinate c) ->Coordinate{ return{ c.x - 0, c.y - 1 }; } },
-        { '3', [](Coordinate c) ->Coordinate{ return{ c.x + 1, c.y + 1 }; } },
-        { '4', [](Coordinate c) ->Coordinate{ return{ c.x - 1, c.y + 0 }; } },
-        { '5', [](Coordinate c) ->Coordinate{ return{ c.x + 1, c.y + 0 }; } },
-        { '6', [](Coordinate c) ->Coordinate{ return{ c.x - 1, c.y - 1 }; } },
-        { '7', [](Coordinate c) ->Coordinate{ return{ c.x - 0, c.y - 1 }; } },
-        { '8', [](Coordinate c) ->Coordinate{ return{ c.x + 1, c.y - 1 }; } }
+        { '1', [](Coordinate c) -> Coordinate{ return{ c.x - 1, c.y - 1 }; } },
+        { '2', [](Coordinate c) -> Coordinate{ return{ c.x - 0, c.y - 1 }; } },
+        { '3', [](Coordinate c) -> Coordinate{ return{ c.x + 1, c.y + 1 }; } },
+        { '4', [](Coordinate c) -> Coordinate{ return{ c.x - 1, c.y + 0 }; } },
+        { '5', [](Coordinate c) -> Coordinate{ return{ c.x + 1, c.y + 0 }; } },
+        { '6', [](Coordinate c) -> Coordinate{ return{ c.x - 1, c.y - 1 }; } },
+        { '7', [](Coordinate c) -> Coordinate{ return{ c.x - 0, c.y - 1 }; } },
+        { '8', [](Coordinate c) -> Coordinate{ return{ c.x + 1, c.y - 1 }; } }
     };
 }
