@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../lib/node.hpp"
+//#include "../lib/node.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace search;
 
 namespace UnitTests
 {
-    using namespace search;
+    //using namespace search;
     TEST_CLASS(test_node)
     {
     public:
@@ -15,38 +16,38 @@ namespace UnitTests
         //  2,0     2,1     2,2     ||  6   7   8
         TEST_METHOD(goes)
         {
-            auto const c = Node::Coordinate{ 1u, 1u };
+            auto const c = Coordinate{ 1u, 1u };
 
-            Assert::IsTrue(Node::Coordinate{ 0u, 0u } == Node::goes.at('1')(c));
-            Assert::IsTrue(Node::Coordinate{ 0u, 1u } == Node::goes.at('2')(c));
-            Assert::IsTrue(Node::Coordinate{ 0u, 2u } == Node::goes.at('3')(c));
-            Assert::IsTrue(Node::Coordinate{ 1u, 0u } == Node::goes.at('4')(c));
-            Assert::IsTrue(Node::Coordinate{ 1u, 2u } == Node::goes.at('5')(c));
-            Assert::IsTrue(Node::Coordinate{ 2u, 0u } == Node::goes.at('6')(c));
-            Assert::IsTrue(Node::Coordinate{ 2u, 1u } == Node::goes.at('7')(c));
-            Assert::IsTrue(Node::Coordinate{ 2u, 2u } == Node::goes.at('8')(c));
+            Assert::IsTrue(Coordinate{ 0u, 0u } == GOES.at('1')(c));
+            Assert::IsTrue(Coordinate{ 0u, 1u } == GOES.at('2')(c));
+            Assert::IsTrue(Coordinate{ 0u, 2u } == GOES.at('3')(c));
+            Assert::IsTrue(Coordinate{ 1u, 0u } == GOES.at('4')(c));
+            Assert::IsTrue(Coordinate{ 1u, 2u } == GOES.at('5')(c));
+            Assert::IsTrue(Coordinate{ 2u, 0u } == GOES.at('6')(c));
+            Assert::IsTrue(Coordinate{ 2u, 1u } == GOES.at('7')(c));
+            Assert::IsTrue(Coordinate{ 2u, 2u } == GOES.at('8')(c));
         }
 
         TEST_METHOD(node_ctor)
         {
-            auto start = Node::Coordinate{ 1u, 1u };
-            auto goal = Node::Coordinate{ 2u, 2u };
+            auto start = Coordinate{ 1u, 1u };
+            auto goal = Coordinate{ 2u, 2u };
             Node node{ "1123", start, goal };
             Assert::AreEqual(std::string{ "1123" }, node.path());
         }
 
         TEST_METHOD(coordinate)
         {
-            auto start = Node::Coordinate{ 1u, 1u };
-            auto goal = Node::Coordinate{ 2u, 2u };
+            auto start = Coordinate{ 1u, 1u };
+            auto goal = Coordinate{ 2u, 2u };
             Node node{ "45782316", start, goal };
-            Assert::IsTrue(Node::Coordinate{ 1u, 1u } == node.coordinate());
+            Assert::IsTrue(Coordinate{ 1u, 1u } == node.coordinate());
         }
 
         TEST_METHOD(children)
         {
-            auto start = Node::Coordinate{ 1u, 1u };
-            auto goal = Node::Coordinate{ 2u, 2u };
+            auto start = Coordinate{ 1u, 1u };
+            auto goal = Coordinate{ 2u, 2u };
             Node node{ "", start, goal };
 
             struct Validate

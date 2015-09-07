@@ -11,3 +11,5 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
+#include "../lib/node.hpp"
+#include "../lib/priority_queue.hpp"

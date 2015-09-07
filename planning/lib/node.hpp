@@ -7,19 +7,47 @@
 
 namespace search
 {
+    using Size = std::size_t;
+    //
+    //  Struct Coordinate
+    //
+    struct Coordinate { Size y, x; };
+    inline auto operator==(Coordinate lhs, Coordinate rhs) -> bool
+    {
+        return lhs.x == rhs.x && lhs.y == rhs.y;
+    }
+    //
+    //  Function map for 8 directions
+    //
+    using Functions = std::map< char, std::function< Coordinate(Coordinate) >>;
+    struct Goes : public Functions
+    {
+        explicit Goes()
+        {
+            (*this)['1'] = [](Coordinate c) -> Coordinate { return{ c.y - 1, c.x - 1 }; };
+            (*this)['2'] = [](Coordinate c) -> Coordinate { return{ c.y - 1, c.x - 0 }; };
+            (*this)['3'] = [](Coordinate c) -> Coordinate { return{ c.y - 1, c.x + 1 }; };
+            (*this)['4'] = [](Coordinate c) -> Coordinate { return{ c.y - 0, c.x - 1 }; };
+            (*this)['5'] = [](Coordinate c) -> Coordinate { return{ c.y + 0, c.x + 1 }; };
+            (*this)['6'] = [](Coordinate c) -> Coordinate { return{ c.y + 1, c.x - 1 }; };
+            (*this)['7'] = [](Coordinate c) -> Coordinate { return{ c.y + 1, c.x - 0 }; };
+            (*this)['8'] = [](Coordinate c) -> Coordinate { return{ c.y + 1, c.x + 1 }; };
+        }
+    } const GOES;
+    //
+    //  Class Node
+    //
     class Node
     {
-        friend auto operator==(Node, Node) -> bool;
+        friend auto operator==(Node lhs, Node rhs) -> bool
+        {
+            return (lhs._path == rhs._path) && (lhs._start == rhs._start) && (lhs._goal == rhs._goal);
+        }
+
     public:
-        using Size = std::size_t;
         using Path = std::string;
         using Children = std::vector<Node>;
-        struct Coordinate { Size y, x; };
-        using Functions = std::map< char, std::function< Coordinate(Coordinate) >>;
-        //
-        //  ctor
-        //
-        Node(Path const& path, Coordinate start, Coordinate goal) 
+        Node(Path const& path, Coordinate start, Coordinate goal)
             : _path{ path }, _start{ start }, _goal{ goal }
         { }
 
@@ -32,7 +60,7 @@ namespace search
         {
             Coordinate c = _start;
             for (auto direction : _path)
-                c = Node::goes.at(direction)(c);
+                c = GOES.at(direction)(c);
             return c;
         }
 
@@ -50,39 +78,9 @@ namespace search
             return children;
         }
 
-        const static Functions goes;
     private:
         Path const  _path;
         Coordinate const _start;
         Coordinate const _goal;
     };
-    //
-    //  for Cooridinate
-    //
-    auto operator==(Node::Coordinate lhs, Node::Coordinate rhs) -> bool
-    {
-        return lhs.x == rhs.x && lhs.y == rhs.y;
-    }
-    //
-    //  for Node
-    //
-    auto operator==(Node lhs, Node rhs) -> bool
-    {
-        return (lhs._path == rhs._path) && (lhs._start == rhs._start) && (lhs._goal == rhs._goal);
-    }
-
-    //  0,0     0,1     0,2     ||  1   2   3
-    //  1,0     1,1     1,2     ||  4       5
-    //  2,0     2,1     2,2     ||  6   7   8
-    Node::Functions const Node::goes 
-    {
-        { '1', [](Coordinate c) -> Coordinate{ return{ c.y - 1, c.x - 1 }; } },
-        { '2', [](Coordinate c) -> Coordinate{ return{ c.y - 1, c.x - 0 }; } },
-        { '3', [](Coordinate c) -> Coordinate{ return{ c.y - 1, c.x + 1 }; } },
-        { '4', [](Coordinate c) -> Coordinate{ return{ c.y - 0, c.x - 1 }; } },
-        { '5', [](Coordinate c) -> Coordinate{ return{ c.y + 0, c.x + 1 }; } },
-        { '6', [](Coordinate c) -> Coordinate{ return{ c.y + 1, c.x - 1 }; } },
-        { '7', [](Coordinate c) -> Coordinate{ return{ c.y + 1, c.x - 0 }; } },
-        { '8', [](Coordinate c) -> Coordinate{ return{ c.y + 1, c.x + 1 }; } }
-    };
-}
+}//end of namespace

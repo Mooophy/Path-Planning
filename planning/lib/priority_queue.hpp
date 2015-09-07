@@ -50,8 +50,8 @@ namespace search
     {
         while (true)
         {
-            auto left = mai::container::left_child(first, last, curr);
-            auto right = mai::container::right_child(first, last, curr);
+            auto left = left_child(first, last, curr);
+            auto right = right_child(first, last, curr);
 
             //! find max or min amoung curr, left and right children, depending on the CommpareFunc passed in.
             auto max_min = (left != last && compare(*left, *curr)) ? left : curr;
@@ -79,7 +79,7 @@ namespace search
         auto size = last - first;
         for (auto curr = first + size / 2 - 1; /* */; --curr)
         {
-            mai::container::heapify(first, last, curr, compare);
+            heapify(first, last, curr, compare);
             if (curr == first) return;
         }
     }
@@ -87,7 +87,7 @@ namespace search
     //
     //  PriorityQueue
     //
-    template<typename T>
+    template<typename T, typename CompareFunc>
     class PriorityQueue
     {
     public:
@@ -95,37 +95,32 @@ namespace search
         using Vector = std::vector < T > ;
         using SizeType = typename Vector::size_type;
         using Iterator = typename Vector::iterator;
-        using CompareFunc = std::function < bool(ValueType const&, ValueType const&) > ;
-
-        explicit PriorityQueue(CompareFunc && c)
-            : seq_{}, compare_{ std::move(c) }
-        {}
 
         explicit PriorityQueue(std::initializer_list<ValueType>&& list, CompareFunc&& c)
-            : seq_(std::move(list)), compare_{ std::move(c) }
+            : _seq(std::move(list)), _compare{ std::move(c) }
         {
-            mai::container::build_heap(seq_.begin(), seq_.end(), compare_);
+            build_heap(_seq.begin(), _seq.end(), _compare);
         }
 
         template<typename Iterator>
         PriorityQueue(Iterator first, Iterator last, CompareFunc&& c)
-            : seq_(first, last), compare_{ std::move(c) }
+            : _seq(first, last), _compare{ std::move(c) }
         {
-            mai::container::build_heap(seq_.begin(), seq_.end(), compare_);
+            build_heap(_seq.begin(), _seq.end(), _compare);
         }
 
-        auto data() -> Vector& { return seq_; }
-        auto top() const -> ValueType const&{ return seq_.front(); }
-        auto size() const -> SizeType { return seq_.size(); }
-        auto empty() const -> bool{ return seq_.empty(); }
+        auto data() -> Vector& { return _seq; }
+        auto top() const -> ValueType const&{ return _seq.front(); }
+        auto size() const -> SizeType { return _seq.size(); }
+        auto empty() const -> bool{ return _seq.empty(); }
 
         auto push(ValueType const& new_val) -> void
         {
             //! find the right place for added
-            seq_.resize(size() + 1);
-            auto curr = seq_.end() - 1;
-            for (; curr > seq_.begin() && compare_(new_val, *parent(seq_.begin(), curr)); curr = parent(seq_.begin(), curr))
-                *curr = *parent(seq_.begin(), curr);
+            _seq.resize(size() + 1);
+            auto curr = _seq.end() - 1;
+            for (; curr > _seq.begin() && _compare(new_val, *parent(_seq.begin(), curr)); curr = parent(_seq.begin(), curr))
+                *curr = *parent(_seq.begin(), curr);
 
             //! insert
             *curr = new_val;
@@ -135,14 +130,13 @@ namespace search
         {
             if (empty())
                 throw std::underflow_error{ "underflow." };
-
-            seq_.front() = seq_.back();
-            seq_.resize(seq_.size() - 1);
-            mai::container::heapify(seq_.begin(), seq_.end(), seq_.begin(), compare_);
+            _seq.front() = _seq.back();
+            _seq.resize(_seq.size() - 1);
+            heapify(_seq.begin(), _seq.end(), _seq.begin(), _compare);
         }
 
     private:
-        Vector seq_;
-        CompareFunc compare_;
+        Vector _seq;
+        CompareFunc _compare;
     };
 }
