@@ -25,7 +25,7 @@ namespace search
                 y = other.y;
                 return *this;
             }
-            
+
             Size x, y;
         };
         using Functions = std::map< char, std::function< Coordinate(Coordinate) >>;
@@ -36,9 +36,9 @@ namespace search
         Node(Path const& path) 
             : _path{ path }
         { }
-        
+
         auto path() const -> Path const& 
-        { 
+        {
             return _path; 
         }
 
@@ -53,15 +53,14 @@ namespace search
         template<typename ValidateFunc>
         auto children(ValidateFunc validate) const -> Children
         {
-            Chidlren result;
-            auto curr = coordinate();
-            for (auto go_from : goes)
+            Children children;
+            for(auto direction = '1'; direction <= '8'; ++direction)
             {
-                auto child = go_from(curr);
-                if (validate(child)) 
-                    result.push_back(child);
+                auto child = Node{_path + direction};
+                if(validate(child))
+                    children.push_back(child);
             }
-            return result;
+            return children;
         }
 
         const static Functions goes;
