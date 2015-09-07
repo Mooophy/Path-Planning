@@ -41,7 +41,7 @@ namespace search
     {
         friend auto operator==(Node lhs, Node rhs) -> bool
         {
-            return (lhs._path == rhs._path) && (lhs._start == rhs._start) && (lhs._goal == rhs._goal);
+            return lhs._path == rhs._path && lhs._start == rhs._start && lhs._goal == rhs._goal;
         }
 
     public:
