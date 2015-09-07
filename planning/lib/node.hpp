@@ -51,6 +51,10 @@ namespace search
             : _path{ path }, _start{ start }, _goal{ goal }
         { }
 
+        Node(Node const& other)
+            : _path{ other._path }, _start{ other._start }, _goal{ other._goal }
+        {   }
+
         auto path() const& -> Path const& 
         {
             return _path; 
@@ -89,8 +93,8 @@ namespace search
         }
 
     private:
-        Path const  _path;
-        Coordinate const _start;
-        Coordinate const _goal;
+        Path _path;
+        Coordinate _start;
+        Coordinate _goal;
     };
 }//end of namespace
