@@ -16,7 +16,6 @@ namespace UnitTests
             auto const c = Node::Coordinate{ 1u, 1u };
             Assert::IsTrue(Node::Coordinate{ 0u, 0u } == Node::goes.at('1')(c));
             //
-
             //  not finish yet
             //
         }
