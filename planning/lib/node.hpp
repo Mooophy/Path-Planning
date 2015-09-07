@@ -28,7 +28,7 @@ namespace search
             
             Size x, y;
         };
-        using Functions = std::map<char, std::function< Coordinate(Coordinate) >>;
+        using Functions = std::map< char, std::function< Coordinate(Coordinate) >>;
 
         //
         //  ctor
@@ -50,8 +50,8 @@ namespace search
             return c;
         }
 
-        template<typename Validate>
-        auto children(Validate validate) const -> Children
+        template<typename ValidateFunc>
+        auto children(ValidateFunc validate) const -> Children
         {
             Chidlren result;
             auto curr = coordinate();
