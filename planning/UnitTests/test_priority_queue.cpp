@@ -67,11 +67,11 @@ namespace UnitTests
 
             //test with node
             {
-                struct Less
+                struct F
                 {
-                    auto operator()(Node const& lhs, Node const& rhs) const -> bool
+                    auto operator()(Node const& node) const-> std::size_t
                     {
-                        return cost(lhs) + manhattan(lhs) < cost(lhs) + manhattan(rhs);
+                        return cost(node) + manhattan(node);
                     }
 
                     auto cost(Node const& node) const -> std::size_t
@@ -81,20 +81,46 @@ namespace UnitTests
 
                     auto manhattan(Node const& node) const -> std::size_t
                     {
-                        auto diff_of_y = abs(node.goal().y - node.start().y);
-                        auto diff_of_x = abs(node.goal().x - node.start().x);
-                        return max(diff_of_y, diff_of_y);
+                        auto dy = abs(node.goal().y - node.coordinate().y);
+                        auto dx = abs(node.goal().x - node.coordinate().x);
+                        return max(dy, dx);
                     }
                 };
 
+                struct Less
+                {
+                    F f;
+                    auto operator()(Node const& lhs, Node const& rhs) const -> bool
+                    {
+                        return f(lhs) < f(rhs);
+                    }
+                };
+
+                //  [start] -> (goal)
+                // [1,1] 1,2  1,3       1   2   3
+                //  2,1 {2,2} 2,3       4       5 
+                //  3,1  3,2 (3,3)      6   7   8
                 auto start = Coordinate{ 1, 1 };
-                auto goal = Coordinate{ 10, 10 };
-                auto path = std::string{ "11" };
+                auto goal = Coordinate{ 3, 3 };
+                auto path = std::string{ "8" };
                 auto nodes = std::vector<Node>{};
                 for (auto i = '1'; i != '9'; ++i)
                     nodes.emplace_back(path + i, start, goal);
 
+                F f;
+                auto fvalues = std::vector<std::size_t>{ 4, 4, 4, 4, 3, 4, 3, 2 };
+                for (auto i = 0u; i != fvalues.size(); ++i)
+                    Assert::AreEqual(fvalues[i], f(nodes[i]));
+
                 auto pq = PriorityQueue<Node, Less>{ nodes.cbegin(), nodes.cend(), Less{} };
+                Assert::AreEqual(std::string{ "88" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "85" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "87" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "86" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "81" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "82" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "83" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "84" }, pq.top().path()); pq.pop();
             }
         }
     };

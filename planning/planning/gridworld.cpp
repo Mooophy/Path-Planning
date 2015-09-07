@@ -1143,7 +1143,6 @@ void GridWorld::markCell_col_row_details(int col, int row, int fillColour, int o
     //--------------------------------------------
     std::cout << "---------------1144\n";
     std::cout << display_key << std::endl;
-    if (display_key);   std::cout << "---------------1146\n";
     if (display_key) {                      
         std::cout << "---------------1148" << std::endl;
         char info1[6];

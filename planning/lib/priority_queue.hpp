@@ -5,6 +5,7 @@
 #pragma once
 #include <vector>
 #include <functional>
+#include <stdexcept>
 #include <algorithm>
 
 namespace search

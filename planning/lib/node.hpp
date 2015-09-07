@@ -6,7 +6,7 @@
 
 namespace search
 {
-    using Size = long;
+    using Size = int;
     //
     //  Struct Coordinate
     //
@@ -45,6 +45,9 @@ namespace search
     public:
         using Path = std::string;
         using Children = std::vector<Node>;
+
+        Node() = default;
+
         Node(Path const& path, Coordinate start, Coordinate goal)
             : _path{ path }, _start{ start }, _goal{ goal }
         { }
