@@ -321,7 +321,6 @@ void runSimulation(char *fileName)
     // keep running the program until the ESC key is pressed   
     while ((GetAsyncKeyState(VK_ESCAPE)) == 0)
     {
-        std::cout << "---------------zzz----------\n";
         setactivepage(page);
         cleardevice();
         auto action = getKey();
@@ -330,7 +329,6 @@ void runSimulation(char *fileName)
             grid_world.displayMapWithDetails();
         else
             grid_world.displayMap();
-        std::cout << "---------------zzz----------\n" << action << std::endl;
         switch (action)
         {
         //case -1:
@@ -498,7 +496,9 @@ void runSimulation(char *fileName)
             break;
 
         case 10: //display h-values only
+            std::cout << "---------------zzz----------\n";
             grid_world.displayMapWithSelectedDetails(false, false, true, false);  //(bool display_g, bool display_rhs, bool display_h, bool display_key) 
+            std::cout << "---------------zzz----------\n";
             action = -1;
             break;
 
@@ -527,8 +527,6 @@ void runSimulation(char *fileName)
             //~ default: //Display grid without details
             //~ grid_world.displayMap();
         };
-
-        std::cout << "---------------zzz----------\n";
 
         //----------------------------------------------------------------------------------------------------------------	  
         // Mouse handling
@@ -576,16 +574,11 @@ void runSimulation(char *fileName)
             }
             //end of special effect
         }
-        std::cout << "---------------zzz----------561\n";
-        std::cout << mX << std::endl;
         /////////////////////////////////////////////////////////////////////////////
         char info[80];
         //float wX, wY;
-        std::cout << "---------------zzz----------565\n";
         auto wX = xWorld(worldBoundary, deviceBoundary, mX);
-        std::cout << "---------------zzz----------567\n";
         auto wY = yWorld(worldBoundary, deviceBoundary, mY);
-        std::cout << "---------------zzz----------568\n";
         sprintf(info, "x: %d, y: %d", mX, mY);
         drawInformationPanel(grid_world.getFieldX2(), grid_world.getFieldY1() + textheight("H") * 2, info);
 
@@ -595,7 +588,6 @@ void runSimulation(char *fileName)
 
          //~ CellPosition p;
          //~ int rowSelected, colSelected;
-        std::cout << "---------------zzz----------577\n";
         if (validCellSelected)
         {
             p = grid_world.getCellPosition_markCell(mX, mY);

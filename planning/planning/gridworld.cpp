@@ -218,9 +218,7 @@ void GridWorld::initialiseMapConnections()
                             originVertex->move[m] = neighbour; //THIS IS ONLY A TEST
                             originVertex->linkCost[m] = INF;
                         }
-
                     }
-
                 }
 
 
@@ -840,29 +838,31 @@ void GridWorld::displayMapWithKeyDetails()
 
 void GridWorld::displayMapWithSelectedDetails(bool display_g, bool display_rhs, bool display_h, bool display_key)
 {
-    int cellX, cellY;
-
-
+    //int cellX, cellY;
     try {
         //---------------------------------------
         displayHeader();
         //---------------------------------------		
         for (int j = 0; j < GRIDWORLD_ROWS; j++) //row
         {
-
             for (int i = 0; i < GRIDWORLD_COLS; i++) //col
             {
+                std::cout << "j = " << j << "    i = " << i << std::endl;
 
                 if (map[j][i].type == '0') //traversable cell
                 {
                     markCell_col_row_details(i, j, LIGHTGRAY, WHITE, display_g, display_rhs, display_h, display_key);
                 }
 
+                std::cout << "------------------------857\n";
+
                 if (map[j][i].type == '1') //'B' - blocked cell
                 {
                     markCell_col_row_details(i, j, BLACK, WHITE, display_g, display_rhs, display_h, display_key);
-
                 }
+
+                std::cout << "------------------------863\n";
+
                 if (map[j][i].type == '9') //unknown
                 {
                     markCell_col_row_details(i, j, DARKGRAY, WHITE, display_g, display_rhs, display_h, display_key);
@@ -875,15 +875,20 @@ void GridWorld::displayMapWithSelectedDetails(bool display_g, bool display_rhs, 
                     markCell_col_row_details(i, j, GREEN, WHITE, display_g, display_rhs, display_h, display_key);
 
                 }
+
+                std::cout << "---------------zzz----------877 gridworld.cpp\n";
+
                 if (map[j][i].type == '7') //'G' - goal vertex
                 {
                     goalVertex.row = j;
                     goalVertex.col = i;
                     markCell_col_row_details(i, j, BLUE, WHITE, display_g, display_rhs, display_h, display_key);
                 }
+
+                std::cout << "---------------zzz----------882 gridworld.cpp\n";
+
             }
         }
-
     }
     catch (std::ifstream::failure e) {
         std::cerr << "Exception dispaying Map\n";
@@ -1067,6 +1072,7 @@ void GridWorld::markCell_col_row_details(int col, int row, int fillColour, int o
         cellY = deviceBoundary.y1 + ((row)* cellHeight);
     }
 
+    std::cout << "---------------1075\n";
 
     setcolor(fillColour);
     setfillstyle(SOLID_FILL, fillColour);
@@ -1099,7 +1105,7 @@ void GridWorld::markCell_col_row_details(int col, int row, int fillColour, int o
         setbkcolor(fillColour);
         outtextxy(x, y, info);
     }
-
+    std::cout << "---------------1108\n";
     //--------------------------------------------
 
     if (display_rhs) {
@@ -1118,7 +1124,7 @@ void GridWorld::markCell_col_row_details(int col, int row, int fillColour, int o
         outtextxy(x, y, info);
     }
     //--------------------------------------------
-
+    std::cout << "---------------1127\n";
     if (display_h) {
         x = cellX + textwidth("I");
         y = y + textheight(";");
@@ -1135,15 +1141,18 @@ void GridWorld::markCell_col_row_details(int col, int row, int fillColour, int o
     }
 
     //--------------------------------------------
-
-    if (display_key) {
+    std::cout << "---------------1144\n";
+    std::cout << display_key << std::endl;
+    if (display_key);   std::cout << "---------------1146\n";
+    if (display_key) {                      
+        std::cout << "---------------1148" << std::endl;
         char info1[6];
-        char info2[6];
+        char info2[6];                      std::cout << "---------------1147\n";
         x = cellX + textwidth("I");
-        y = y + textheight(";");
+        y = y + textheight(";");            std::cout << "---------------1149\n";
         double k1 = map[row][col].key[0];
-        double k2 = map[row][col].key[1];
-
+        double k2 = map[row][col].key[1];   
+        std::cout << "---------------1152\n";
         if (k1 > (INF - 0.0001)) 
         { //tolerance = 0.0001
             //sprintf(info1,"k1 = INF");
@@ -1154,7 +1163,7 @@ void GridWorld::markCell_col_row_details(int col, int row, int fillColour, int o
             //sprintf(info1,"k1 = %3.1f",k1);
             sprintf(info1, "%3.1f", k1);
         }
-
+        std::cout << "---------------1163\n";
         if (k2 > (INF - 0.0001)) 
         { //tolerance = 0.0001
             //sprintf(info2,"k2 = INF");
