@@ -31,6 +31,14 @@ namespace UnitTests
         TEST_METHOD(node_ctor)
         {
             Node node{ "1123" };
+            Assert::AreEqual(std::string{ "1123" }, node.path());
+        }
+
+        TEST_METHOD(coordinate)
+        {
+            Node node{ "45782316" };
+            auto start = Node::Coordinate{ 1u, 1u };
+            Assert::IsTrue(Node::Coordinate{ 1u, 1u } == node.coordinate(start));
         }
 
     };

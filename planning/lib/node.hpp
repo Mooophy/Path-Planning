@@ -15,7 +15,7 @@ namespace search
         using Children = std::vector<Node>;
         struct Coordinate
         {
-            Coordinate(Size x, Size y)
+            Coordinate(Size y, Size x)
                 :  y{ y }, x{ x }
             {}
 
