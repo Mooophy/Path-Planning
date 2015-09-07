@@ -12,7 +12,7 @@ namespace search
     public:
         using Size = std::size_t;
         using Path = std::string;
-        using Chidlren = std::vector<Node>;
+        using Children = std::vector<Node>;
         struct Coordinate
         {
             Coordinate(Size x, Size y)
@@ -61,7 +61,7 @@ namespace search
                 if (validate(child)) 
                     result.push_back(child);
             }
-            return children;
+            return result;
         }
 
         const static Functions goes;
