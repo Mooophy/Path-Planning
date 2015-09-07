@@ -8,6 +8,35 @@ using std::abs;
 
 namespace UnitTests
 {
+    struct F
+    {
+        auto operator()(Node const& node) const-> std::size_t
+        {
+            return cost(node) + manhattan(node);
+        }
+
+        auto cost(Node const& node) const -> std::size_t
+        {
+            return node.path().size();
+        }
+
+        auto manhattan(Node const& node) const -> std::size_t
+        {
+            auto dy = abs(node.goal().y - node.coordinate().y);
+            auto dx = abs(node.goal().x - node.coordinate().x);
+            return max(dy, dx);
+        }
+    };
+
+    struct Less
+    {
+        F f;
+        auto operator()(Node const& lhs, Node const& rhs) const -> bool
+        {
+            return f(lhs) < f(rhs);
+        }
+    };
+
     TEST_CLASS(test_priority_queue)
     {
     public:
@@ -67,35 +96,6 @@ namespace UnitTests
 
             //test with node
             {
-                struct F
-                {
-                    auto operator()(Node const& node) const-> std::size_t
-                    {
-                        return cost(node) + manhattan(node);
-                    }
-
-                    auto cost(Node const& node) const -> std::size_t
-                    {
-                        return node.path().size();
-                    }
-
-                    auto manhattan(Node const& node) const -> std::size_t
-                    {
-                        auto dy = abs(node.goal().y - node.coordinate().y);
-                        auto dx = abs(node.goal().x - node.coordinate().x);
-                        return max(dy, dx);
-                    }
-                };
-
-                struct Less
-                {
-                    F f;
-                    auto operator()(Node const& lhs, Node const& rhs) const -> bool
-                    {
-                        return f(lhs) < f(rhs);
-                    }
-                };
-
                 //  [start] -> (goal)
                 // [1,1] 1,2  1,3       1   2   3
                 //  2,1 {2,2} 2,3       4       5 
@@ -122,6 +122,34 @@ namespace UnitTests
                 Assert::AreEqual(std::string{ "83" }, pq.top().path()); pq.pop();
                 Assert::AreEqual(std::string{ "84" }, pq.top().path()); pq.pop();
             }
+        }
+
+        TEST_METHOD(pq_push)
+        {
+            auto start = Coordinate{ 1, 1 };
+            auto goal = Coordinate{ 3, 3 };
+            auto path = std::string{ "8" };
+            auto nodes = std::vector<Node>{};
+            for (auto i = '1'; i != '9'; ++i)
+                nodes.emplace_back(path + i, start, goal);
+
+            auto pq = PriorityQueue<Node, Less>{ Less{} };
+            for (auto const& n : nodes)
+                pq.push(n);
+
+            F f;
+            auto fvalues = std::vector<std::size_t>{ 4, 4, 4, 4, 3, 4, 3, 2 };
+            for (auto i = 0u; i != fvalues.size(); ++i)
+                Assert::AreEqual(fvalues[i], f(nodes[i]));
+
+            Assert::AreEqual(std::string{ "88" }, pq.top().path()); pq.pop();
+            Assert::AreEqual(std::string{ "85" }, pq.top().path()); pq.pop();
+            Assert::AreEqual(std::string{ "87" }, pq.top().path()); pq.pop();
+            Assert::AreEqual(std::string{ "86" }, pq.top().path()); pq.pop();
+            Assert::AreEqual(std::string{ "82" }, pq.top().path()); pq.pop();
+            Assert::AreEqual(std::string{ "81" }, pq.top().path()); pq.pop();
+            Assert::AreEqual(std::string{ "83" }, pq.top().path()); pq.pop();
+            Assert::AreEqual(std::string{ "84" }, pq.top().path()); pq.pop();
         }
     };
 }
