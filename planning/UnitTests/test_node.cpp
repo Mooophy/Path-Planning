@@ -10,7 +10,6 @@ namespace UnitTests
     TEST_CLASS(test_node)
     {
     public:
-
         //  0,0     0,1     0,2     ||  1   2   3
         //  1,0     1,1     1,2     ||  4       5
         //  2,0     2,1     2,2     ||  6   7   8

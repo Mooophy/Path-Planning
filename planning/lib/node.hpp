@@ -16,7 +16,6 @@ namespace search
         using Children = std::vector<Node>;
         struct Coordinate { Size y, x; };
         using Functions = std::map< char, std::function< Coordinate(Coordinate) >>;
-
         //
         //  ctor
         //
@@ -57,12 +56,16 @@ namespace search
         Coordinate const _start;
         Coordinate const _goal;
     };
-
+    //
+    //  for Cooridinate
+    //
     auto operator==(Node::Coordinate lhs, Node::Coordinate rhs) -> bool
     {
         return lhs.x == rhs.x && lhs.y == rhs.y;
     }
-
+    //
+    //  for Node
+    //
     auto operator==(Node lhs, Node rhs) -> bool
     {
         return (lhs._path == rhs._path) && (lhs._start == rhs._start) && (lhs._goal == rhs._goal);
