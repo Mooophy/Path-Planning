@@ -37,7 +37,7 @@ namespace search
             : _path{ path }
         { }
         
-        auto path() -> Path const& 
+        auto path() const -> Path const& 
         { 
             return _path; 
         }
