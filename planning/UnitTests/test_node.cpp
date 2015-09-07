@@ -30,16 +30,51 @@ namespace UnitTests
 
         TEST_METHOD(node_ctor)
         {
-            Node node{ "1123" };
+            auto start = Node::Coordinate{ 1u, 1u };
+            auto goal = Node::Coordinate{ 2u, 2u };
+            Node node{ "1123", start, goal };
             Assert::AreEqual(std::string{ "1123" }, node.path());
         }
 
         TEST_METHOD(coordinate)
         {
-            Node node{ "45782316" };
             auto start = Node::Coordinate{ 1u, 1u };
-            Assert::IsTrue(Node::Coordinate{ 1u, 1u } == node.coordinate(start));
+            auto goal = Node::Coordinate{ 2u, 2u };
+            Node node{ "45782316", start, goal };
+            Assert::IsTrue(Node::Coordinate{ 1u, 1u } == node.coordinate());
         }
 
+        TEST_METHOD(children)
+        {
+            auto start = Node::Coordinate{ 1u, 1u };
+            auto goal = Node::Coordinate{ 2u, 2u };
+            Node node{ "", start, goal };
+
+            struct Validate
+            {
+                auto operator()(Node node) const -> bool
+                {
+                    auto y = node.coordinate().y;
+                    auto x = node.coordinate().x;
+                    return y >= 0 && y <= 39 && x >= 0 && x <= 39;
+                }
+            };
+
+            auto actual = node.children<Validate>();
+            auto expect = Node::Children
+            {
+                Node{ "1", start, goal },
+                Node{ "2", start, goal },
+                Node{ "3", start, goal },
+                Node{ "4", start, goal },
+                Node{ "5", start, goal },
+                Node{ "6", start, goal },
+                Node{ "7", start, goal },
+                Node{ "8", start, goal },
+            };
+
+            for (auto i = 0u; i != 1u; ++i)
+                Assert::IsTrue(expect[i] == expect[i]);
+        }
     };
 }
