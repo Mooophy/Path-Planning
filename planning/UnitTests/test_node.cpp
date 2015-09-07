@@ -5,11 +5,11 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
-{		
+{
     using namespace search;
-	TEST_CLASS(test_node)
-	{
-	public:
+    TEST_CLASS(test_node)
+    {
+    public:
 
         TEST_METHOD(goes)
         {
@@ -21,10 +21,10 @@ namespace UnitTests
             //
         }
 
-		TEST_METHOD(node_ctor)
-		{
+        TEST_METHOD(node_ctor)
+        {
             Node node{ "1123" };
-		}
+        }
 
-	};
+    };
 }
