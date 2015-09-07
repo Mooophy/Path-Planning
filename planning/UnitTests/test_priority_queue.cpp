@@ -86,6 +86,14 @@ namespace UnitTests
                         return max(diff_of_y, diff_of_y);
                     }
                 };
+
+                auto start = Coordinate{ 1,1  };
+                auto goal = Coordinate{ 10, 10 };
+                auto nodes = std::vector<Node>{};
+                auto path = std::string{ "11" };
+                for (auto i = '1'; i != '9'; ++i)
+                    nodes.emplace_back(path + i, start, goal );
+
                 auto pq = PriorityQueue<Node, Less>{ {}, Less{} };
             }
         }
