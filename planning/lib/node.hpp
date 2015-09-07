@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 #include <map>
 #include <functional>
@@ -43,7 +42,6 @@ namespace search
         {
             return lhs._path == rhs._path && lhs._start == rhs._start && lhs._goal == rhs._goal;
         }
-
     public:
         using Path = std::string;
         using Children = std::vector<Node>;

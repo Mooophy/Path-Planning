@@ -5,7 +5,6 @@
 #pragma once
 #include <vector>
 #include <functional>
-#include <stdexcept>
 #include <algorithm>
 
 namespace search
@@ -83,7 +82,6 @@ namespace search
             if (curr == first) return;
         }
     }
-
     //
     //  PriorityQueue
     //
@@ -122,13 +120,13 @@ namespace search
 
         auto push(ValueType const& new_val) -> void
         {
-            //! find the right place for added
+            // find the right place for added
             _seq.resize(size() + 1);
             auto curr = _seq.end() - 1;
             for (; curr > _seq.begin() && _compare(new_val, *parent(_seq.begin(), curr)); curr = parent(_seq.begin(), curr))
                 *curr = *parent(_seq.begin(), curr);
 
-            //! insert
+            // insert
             *curr = new_val;
         }
 

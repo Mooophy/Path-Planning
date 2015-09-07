@@ -51,7 +51,7 @@ namespace UnitTests
                 Assert::AreEqual(expect[i], seq[i]);
         }
 
-        TEST_METHOD(pq_default_ctor)
+        TEST_METHOD(pq_ctors)
         {
             //test with int
             {
@@ -87,14 +87,14 @@ namespace UnitTests
                     }
                 };
 
-                auto start = Coordinate{ 1,1  };
+                auto start = Coordinate{ 1, 1 };
                 auto goal = Coordinate{ 10, 10 };
-                auto nodes = std::vector<Node>{};
                 auto path = std::string{ "11" };
+                auto nodes = std::vector<Node>{};
                 for (auto i = '1'; i != '9'; ++i)
-                    nodes.emplace_back(path + i, start, goal );
+                    nodes.emplace_back(path + i, start, goal);
 
-                auto pq = PriorityQueue<Node, Less>{ {}, Less{} };
+                auto pq = PriorityQueue<Node, Less>{ nodes.cbegin(), nodes.cend(), Less{} };
             }
         }
     };
