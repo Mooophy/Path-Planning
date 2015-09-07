@@ -121,7 +121,7 @@ namespace search
 
         auto push(ValueType const& new_val) -> void
         {
-            // find the right place for added
+            // find the right place for new_val
             _seq.resize(size() + 1);
             auto curr = _seq.end() - 1;
             for (; curr > _seq.begin() && _compare(new_val, *parent(_seq.begin(), curr)); curr = parent(_seq.begin(), curr))
