@@ -96,17 +96,23 @@ namespace search
         using SizeType = typename Vector::size_type;
         using Iterator = typename Vector::iterator;
 
-        explicit PriorityQueue(std::initializer_list<ValueType>&& list, CompareFunc&& c)
+        PriorityQueue(CompareFunc c)
+            : _seq{ }, _compare{ c }
+        {   }
+
+        PriorityQueue(std::initializer_list<ValueType>&& list, CompareFunc&& c)
             : _seq(std::move(list)), _compare{ std::move(c) }
         {
-            build_heap(_seq.begin(), _seq.end(), _compare);
+            if(!empty())
+                build_heap(_seq.begin(), _seq.end(), _compare);
         }
 
         template<typename Iterator>
         PriorityQueue(Iterator first, Iterator last, CompareFunc&& c)
             : _seq(first, last), _compare{ std::move(c) }
         {
-            build_heap(_seq.begin(), _seq.end(), _compare);
+            if (!empty())
+                build_heap(_seq.begin(), _seq.end(), _compare);
         }
 
         auto data() -> Vector& { return _seq; }
