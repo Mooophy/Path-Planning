@@ -164,11 +164,10 @@ namespace search
         //
         //  O(lg n)
         //
-        template<typename Iterator, typename Value>
-        auto substitue(Iterator at, Value value) -> void
+        auto substitue(Value old_value, Value new_value) -> void
         {
-            remove(at);
-            push(value);
+            remove(old_value);
+            push(new_value);
         }
 
     private:
