@@ -24,9 +24,9 @@ namespace UnitTests
         TEST_METHOD(ManhattanDistance)
         {
             auto start = Coordinate{ 0u, 0u };
-            auto goal = Coordinate{ 2u, 2u };
+            auto goal = Coordinate{ 60u, 80u };
             Node node{ "8", start, goal };
-            Assert::AreEqual(1, search::ManhattanDistance<Node>{}(node));
+            Assert::AreEqual(79, search::ManhattanDistance<Node>{}(node));
         }
 
         TEST_METHOD(EuclideanDinstance)
