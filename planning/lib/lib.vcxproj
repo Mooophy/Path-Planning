@@ -120,6 +120,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="func.hpp" />
     <ClInclude Include="node.hpp" />
     <ClInclude Include="priority_queue.hpp" />
   </ItemGroup>

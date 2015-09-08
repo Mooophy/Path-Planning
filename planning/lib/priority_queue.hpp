@@ -14,7 +14,7 @@ namespace search
     //  parent
     //  O(1)
     //
-    template<typename Iterator> 
+    template<typename Iterator>
     auto inline parent(Iterator first, Iterator it) -> Iterator
     {
         return first + (it - first - 1) / 2;
@@ -84,38 +84,37 @@ namespace search
         }
     }
 
-    template<template Iterator, typename CompareFunc>
+    template<typename Iterator, typename CompareFunc>
     auto inline sift_up(Iterator first, Iterator curr, CompareFunc && compare) -> bool
     {
         auto c = curr;
-        auto p = [&]{ return parent(first, c); };
-        auto is_needed = [&]{ return c != first && !compare(*p(), *c); };
+        auto p = [&] { return parent(first, c); };
+        auto is_needed = [&] { return c != first && !compare(*p(), *c); };
 
-        if(! is_needed()) return false;
-        for( ; is_needed(); c = p())  std::swap(*p(), *c);
+        if (!is_needed()) return false;
+        for (; is_needed(); c = p())  std::swap(*p(), *c);
         return true;
     }
 
     //
     //  PriorityQueue
     //
-    template<typename T, typename CompareFunc>
+    template<typename Value, typename CompareFunc>
     class PriorityQueue
     {
     public:
-        using ValueType = T;
-        using Vector = std::vector < T > ;
+        using Vector = std::vector < Value >;
         using SizeType = typename Vector::size_type;
         using Iterator = typename Vector::iterator;
 
         PriorityQueue(CompareFunc c)
-            : _seq{ }, _compare{ c }
+            : _seq{}, _compare{ c }
         {   }
 
-        PriorityQueue(std::initializer_list<ValueType>&& list, CompareFunc&& c)
+        PriorityQueue(std::initializer_list<Value>&& list, CompareFunc&& c)
             : _seq(std::move(list)), _compare{ std::move(c) }
         {
-            if(!empty())
+            if (!empty())
                 build_heap(_seq.begin(), _seq.end(), _compare);
         }
 
@@ -127,12 +126,16 @@ namespace search
                 build_heap(_seq.begin(), _seq.end(), _compare);
         }
 
-        auto data() -> Vector const& { return _seq; }
-        auto top() const -> ValueType const&{ return _seq.front(); }
+        auto top() const -> Value const& { return _seq.front(); }
         auto size() const -> SizeType { return _seq.size(); }
-        auto empty() const -> bool{ return _seq.empty(); }
+        auto empty() const -> bool { return _seq.empty(); }
 
-        auto push(ValueType const& new_val) -> void
+        auto contains(Value const& value) const -> bool
+        {
+            return _seq.cend() != std::find(_seq.cbegin(), _seq.cend(), value);
+        }
+
+        auto push(Value const& new_val) -> void
         {
             // find the right place for new_val
             _seq.resize(size() + 1);
@@ -160,15 +163,15 @@ namespace search
         auto remove(Iterator at) -> void
         {
             std::wap(*at, *(_seq.end() - 1));
-            if(! sift_up(_seq.begin(), at, _compare))
-              heapify(_seq,begin(), _seq.end() - 1, at, _compare);//avoid involving the last item.
+            if (!sift_up(_seq.begin(), at, _compare))
+                heapify(_seq, begin(), _seq.end() - 1, at, _compare);//avoid involving the last item.
             _seq.resize(size() - 1);
         }
         //
         //  O(lg n)
         //
-        template<typename Iterator, typename ValueType>
-        auto substitue(Iterator at, ValueType value) -> void
+        template<typename Iterator, typename Value>
+        auto substitue(Iterator at, Value value) -> void
         {
             remove(at);
             push(value);
