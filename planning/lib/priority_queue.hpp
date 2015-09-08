@@ -73,7 +73,7 @@ namespace search
     //  build_heap
     //  O(n)
     //
-    template< typename Iterator, typename CompareFunc >
+    template<typename Iterator, typename CompareFunc>
     auto inline build_heap(Iterator first, Iterator last, CompareFunc && compare) -> void
     {
         auto size = last - first;
@@ -83,6 +83,20 @@ namespace search
             if (curr == first) return;
         }
     }
+
+    template<template Iterator, typename CompareFunc>
+    auto inline sift_up(Iterator first, Iterator curr, CompareFunc && compare) -> void
+    {
+        auto c = [&]{ return curr; };
+        auto p = [&]{ return parent(first, c); };
+        auto is_needed = [&]{ return c != first && !compare(*p(), *c()); };
+        for( ; is_needed(); curr = parent(first, curr))
+        {
+            std::swap(*)
+            
+        }
+    }
+
     //
     //  PriorityQueue
     //
@@ -147,8 +161,7 @@ namespace search
         auto remove(Iterator at) -> void
         {
             std::wap(*at, *(_seq.end() - 1));
-            _seq.resize(size() - 1);
-            heapify(_seq.begin(), _seq.end(), at, _comapre);
+            //not finished.
         }
         //
         //  O(lg n)
