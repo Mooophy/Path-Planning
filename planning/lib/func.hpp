@@ -1,7 +1,6 @@
 #pragma once
 #include <cmath>
 
-using std::max;
 using std::abs;
 using std::hypot;
 
@@ -28,7 +27,7 @@ namespace search
         {
             return max(dy(node), dx(node));
         }
-    }
+    };
 
     template<typename Node>
     struct EuclideanDinstance : public Heuristc<Node>
@@ -37,7 +36,7 @@ namespace search
         {
             return static_cast<Size>(hypot(dy(node), dx(node)));
         }
-    }
+    };
     
     template<typename Node>
     struct Cost
@@ -46,18 +45,18 @@ namespace search
         {
             return node.path().size();
         }
-    }
+    };
     
     template<typename Node, typename Hfunc, typename Cfunc>
     struct Less
     {
         Hfunc h;
         Cfunc c;
-        auto operator(Node const& lhs, Node const& rhs) const -> Size
+        auto operator()(Node const& lhs, Node const& rhs) const -> Size
         {
             return h(lhs) + c(lhs) < h(rhs) + c(rhs);
         }
-    }
+    };
 
     template<typename Container, typename Node>
     struct Validate
@@ -75,5 +74,5 @@ namespace search
         }
 
         Container const valids;
-    }
+    };
 }//end of namespace
