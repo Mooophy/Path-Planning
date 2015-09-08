@@ -159,8 +159,7 @@ namespace search
         auto remove(Value item) -> void
         {
             auto it = std::find(_seq.begin(), _seq.end(), item);
-            if (_seq.end() != it)
-                remove(it);
+            if (_seq.end() != it)   remove(it);
         }
         //
         //  O(lg n)

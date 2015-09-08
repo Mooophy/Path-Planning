@@ -176,5 +176,53 @@ namespace UnitTests
             Assert::AreEqual(std::string{ "83" }, pq.top().path()); pq.pop();
             Assert::AreEqual(std::string{ "84" }, pq.top().path()); pq.pop();
         }
+
+        TEST_METHOD(pq_remove)
+        {
+            //test with int
+            {
+                using Less = decltype(std::less<int>{});
+                auto pq = PriorityQueue<int, Less>{ { 4, 6, 7, 1 }, Less{} };
+                pq.remove(1);
+
+                Assert::AreEqual(3u, pq.size());
+                Assert::AreEqual(4, pq.top());  pq.pop();
+                Assert::AreEqual(6, pq.top());  pq.pop();
+                Assert::AreEqual(7, pq.top());  pq.pop();
+                Assert::AreEqual(0u, pq.size());
+            }
+
+            //test with node
+            {
+                //  [start] -> (goal)
+                // [1,1] 1,2  1,3       1   2   3
+                //  2,1 {2,2} 2,3       4       5 
+                //  3,1  3,2 (3,3)      6   7   8
+                auto start = Coordinate{ 1, 1 };
+                auto goal = Coordinate{ 3, 3 };
+                auto path = std::string{ "8" };
+                auto nodes = std::vector<Node>{};
+                for (auto i = '1'; i != '9'; ++i)
+                    nodes.emplace_back(path + i, start, goal);
+
+                F f;
+                auto fvalues = std::vector<std::size_t>{ 4, 4, 4, 4, 3, 4, 3, 2 };
+                for (auto i = 0u; i != fvalues.size(); ++i)
+                    Assert::AreEqual(fvalues[i], f(nodes[i]));
+
+                auto pq = PriorityQueue<Node, Less>{ nodes.cbegin(), nodes.cend(), Less{} };
+
+                pq.remove(Node{ "85", start, goal });
+                pq.remove(Node{ "83", start, goal });
+                Assert::AreEqual(6u, pq.size());
+                Assert::AreEqual(std::string{ "88" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "87" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "81" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "82" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "86" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(std::string{ "84" }, pq.top().path()); pq.pop();
+                Assert::AreEqual(0u, pq.size());
+            }
+        }
     };
 }
