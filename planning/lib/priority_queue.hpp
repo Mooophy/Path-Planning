@@ -164,7 +164,7 @@ namespace search
         //
         //  O(lg n)
         //
-        auto substitue(Value old_value, Value new_value) -> void
+        auto substitute(Value old_value, Value new_value) -> void
         {
             remove(old_value);
             push(new_value);
