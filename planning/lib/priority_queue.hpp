@@ -161,7 +161,8 @@ namespace search
         {
             std::wap(*at, *(_seq.end() - 1));
             if(! sift_up(_seq.begin(), at, _compare))
-              heapify(_seq,begin(), _seq.end(), at, _compare);
+              heapify(_seq,begin(), _seq.end() - 1, at, _compare);//avoid involving the last item.
+            _seq.resize(size() - 1);
         }
         //
         //  O(lg n)
