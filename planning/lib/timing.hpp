@@ -19,7 +19,8 @@ namespace search
 
         ~Timing()
         {
-            recording = std::chrono::duration<Milisecond>(Time::now() - start).count();
+            using std::chrono::duration;
+            recording = duration<Milisecond>(Time::now() - start).count();
         }
 
         Milisecond& recording;
