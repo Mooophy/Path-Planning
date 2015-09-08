@@ -80,6 +80,31 @@ namespace UnitTests
                 Assert::AreEqual(expect[i], seq[i]);
         }
 
+        TEST_METHOD(sift_up)
+        {
+            using Less = decltype(std::less<int>{});
+
+            {
+                auto seq = std::vector<int>{ 4, 2, 1, 0 };
+                Assert::AreEqual(true, search::sift_up(seq.begin(), seq.begin() + 3, Less{}));
+                auto expect = std::vector<int>{ 0, 4, 1, 2 };
+                for (auto i = 0; i != expect.size(); ++i)
+                    Assert::AreEqual(expect[i], seq[i]);
+            }
+
+            {
+                auto seq = std::vector<int>{ 1, 4, 3, 6 };
+                auto actual = search::sift_up(seq.begin(), seq.begin() + 3, Less{});
+                Assert::AreEqual(false, actual);
+            }
+
+            {
+                auto seq = std::vector<int>{ 1, 4, 3, 6 };
+                auto actual = search::sift_up(seq.begin(), seq.begin(), Less{});
+                Assert::AreEqual(false, actual);
+            }
+        }
+
         TEST_METHOD(pq_ctors)
         {
             //test with int
