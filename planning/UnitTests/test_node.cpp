@@ -59,7 +59,7 @@ namespace UnitTests
                 }
             };
 
-            auto actual = node.children<Validate>();
+            auto actual = node.children<Validate>(Validate{});
             auto expect = Node::Children
             {
                 Node{ "1", start, goal },

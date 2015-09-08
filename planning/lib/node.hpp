@@ -79,11 +79,13 @@ namespace search
             return c;
         }
 
+        //
+        //  require ValidateFunc has interface operator()(Node)
+        //
         template<typename ValidateFunc>
-        auto children() const -> Children
+        auto children(ValidateFunc validate) const -> Children
         {
             Children children;
-            ValidateFunc validate;
             for(auto direction = '1'; direction <= '8'; ++direction)
             {
                 auto child = Node{ _path + direction, _start, _goal };
