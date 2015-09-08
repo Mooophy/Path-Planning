@@ -85,16 +85,12 @@ namespace search
     }
 
     template<template Iterator, typename CompareFunc>
-    auto inline sift_up(Iterator first, Iterator curr, CompareFunc && compare) -> void
+    auto inline sift_up(Iterator const first, Iterator curr, CompareFunc && compare) -> void
     {
-        auto c = [&]{ return curr; };
+        auto c = curr;
         auto p = [&]{ return parent(first, c); };
-        auto is_needed = [&]{ return c != first && !compare(*p(), *c()); };
-        for( ; is_needed(); curr = parent(first, curr))
-        {
-            std::swap(*)
-            
-        }
+        for( ; c != first && !compare(*p(), *c); c = p())
+            std::swap(*p(), *c);
     }
 
     //
