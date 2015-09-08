@@ -60,5 +60,4 @@ namespace search
             return h(lhs) + c(lhs) < h(rhs) + c(rhs);
         }
     };
-
 }//end of namespace
