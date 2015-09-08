@@ -85,7 +85,7 @@ namespace search
     }
 
     template<template Iterator, typename CompareFunc>
-    auto inline sift_up(Iterator const first, Iterator curr, CompareFunc && compare) -> void
+    auto inline sift_up(Iterator first, Iterator curr, CompareFunc && compare) -> void
     {
         auto c = curr;
         auto p = [&]{ return parent(first, c); };
