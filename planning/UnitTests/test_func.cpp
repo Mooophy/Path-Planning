@@ -36,5 +36,13 @@ namespace UnitTests
             Node node{ "8", start, goal };
             Assert::AreEqual(99, search::EuclideanDinstance<Node>{}(node));
         }
+
+        TEST_METHOD(Cost)
+        {
+            auto start = Coordinate{ 0u, 0u };
+            auto goal = Coordinate{ 60u, 80u };
+            Node node{ "854617", start, goal };
+            Assert::AreEqual(6, search::Cost<Node>{}(node));
+        }
     };
 }
