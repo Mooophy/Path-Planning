@@ -43,7 +43,7 @@ namespace search
     //
     //  heapify
     //  O(lg n)
-    //  maintain heap's peroperties with a bottom up way
+    //  maintain heap's peroperties with a float down way
     //
     template<typename Iterator, typename CompareFunc>
     auto heapify(Iterator first, Iterator last, Iterator curr, CompareFunc && compare) -> void
@@ -114,7 +114,7 @@ namespace search
                 build_heap(_seq.begin(), _seq.end(), _compare);
         }
 
-        auto data() -> Vector& { return _seq; }
+        auto data() -> Vector const& { return _seq; }
         auto top() const -> ValueType const&{ return _seq.front(); }
         auto size() const -> SizeType { return _seq.size(); }
         auto empty() const -> bool{ return _seq.empty(); }
@@ -138,6 +138,26 @@ namespace search
             _seq.front() = _seq.back();
             _seq.resize(_seq.size() - 1);
             heapify(_seq.begin(), _seq.end(), _seq.begin(), _compare);
+        }
+        //
+        //  Make sure vector is not empty.
+        //  O(lg n)
+        //
+        template<typename Iterator>
+        auto remove(Iterator at) -> void
+        {
+            std::wap(*at, *(_seq.end() - 1));
+            _seq.resize(size() - 1);
+            heapify(_seq.begin(), _seq.end(), at, _comapre);
+        }
+        //
+        //  O(lg n)
+        //
+        template<typename Iterator, typename ValueType>
+        auto substitue(Iterator at, ValueType value) -> void
+        {
+            remove(at);
+            push(value);
         }
 
     private:
