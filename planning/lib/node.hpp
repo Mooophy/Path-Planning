@@ -21,7 +21,7 @@ namespace search
     using Functions = std::map< char, std::function< Coordinate(Coordinate) >>;
     struct Goes : public Functions
     {
-        explicit Goes()
+        Goes()
         {
             (*this)['1'] = [](Coordinate c) -> Coordinate { return{ c.y - 1, c.x - 1 }; };
             (*this)['2'] = [](Coordinate c) -> Coordinate { return{ c.y - 1, c.x - 0 }; };
