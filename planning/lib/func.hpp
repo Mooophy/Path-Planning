@@ -47,4 +47,15 @@ namespace search
             return node.path().size();
         }
     }
+    
+    template<typename Node, typename Hfunc, typename Cfunc>
+    struct Less
+    {
+        Hfunc h;
+        Cfunc c;
+        auto operator(Node const& lhs, Node const& rhs) const -> Size
+        {
+            return h(lhs) + c(lhs) < h(rhs) + c(rhs);
+        }
+    }
 }//end of namespace
