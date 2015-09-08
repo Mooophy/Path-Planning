@@ -58,4 +58,22 @@ namespace search
             return h(lhs) + c(lhs) < h(rhs) + c(rhs);
         }
     }
+
+    template<typename Container, typename Node>
+    struct Validate
+    {
+        Validate() = default;
+
+        template<typename Container>
+        explicit Validate(Container const& valids)
+          : valids{ valids }
+        { }
+
+        auto operator()(Node const& node) -> bool
+        {
+            
+        }
+
+        Container const valids;
+    }
 }//end of namespace
