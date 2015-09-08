@@ -155,17 +155,12 @@ namespace search
             _seq.resize(_seq.size() - 1);
             heapify(_seq.begin(), _seq.end(), _seq.begin(), _compare);
         }
-        //
-        //  Make sure vector is not empty.
-        //  O(lg n)
-        //
-        template<typename Iterator>
-        auto remove(Iterator at) -> void
+
+        auto remove(Value item) -> void
         {
-            std::wap(*at, *(_seq.end() - 1));
-            if (!sift_up(_seq.begin(), at, _compare))
-                heapify(_seq, begin(), _seq.end() - 1, at, _compare);//avoid involving the last item.
-            _seq.resize(size() - 1);
+            auto it = std::find(_seq.begin(), _seq.end(), item);
+            if (_seq.end() != it)
+                remove(it);
         }
         //
         //  O(lg n)
@@ -180,5 +175,18 @@ namespace search
     private:
         Vector _seq;
         CompareFunc _compare;
+
+        //
+        //  Make sure vector is not empty.
+        //  O(lg n)
+        //
+        template<typename Iterator>
+        auto remove(Iterator at) -> void
+        {
+            std::swap(*at, *(_seq.end() - 1));
+            if (!sift_up(_seq.begin(), at, _compare))
+                heapify(_seq.begin(), _seq.end() - 1, at, _compare);//avoid involving the last item.
+            _seq.resize(size() - 1);
+        }
     };
 }
