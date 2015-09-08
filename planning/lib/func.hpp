@@ -1,5 +1,4 @@
 #pragma once
-#include "node.hpp"
 #include <cmath>
 
 using std::max;
