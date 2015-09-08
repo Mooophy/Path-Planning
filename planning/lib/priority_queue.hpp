@@ -85,12 +85,15 @@ namespace search
     }
 
     template<template Iterator, typename CompareFunc>
-    auto inline sift_up(Iterator first, Iterator curr, CompareFunc && compare) -> void
+    auto inline sift_up(Iterator first, Iterator curr, CompareFunc && compare) -> bool
     {
         auto c = curr;
         auto p = [&]{ return parent(first, c); };
-        for( ; c != first && !compare(*p(), *c); c = p())
-            std::swap(*p(), *c);
+        auto is_needed = [&]{ return c != first && !compare(*p(), *c); };
+
+        if(! is_needed()) return false;
+        for( ; is_needed(); c = p())  std::swap(*p(), *c);
+        return true;
     }
 
     //
@@ -157,7 +160,8 @@ namespace search
         auto remove(Iterator at) -> void
         {
             std::wap(*at, *(_seq.end() - 1));
-            //not finished.
+            if(! sift_up(_seq.begin(), at, _compare))
+              heapify(_seq,begin(), _seq.end(), at, _compare);
         }
         //
         //  O(lg n)
