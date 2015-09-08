@@ -5,6 +5,7 @@
 using std::max;
 using std::abs;
 using std::hypot;
+using std::find;
 
 namespace search
 {
@@ -60,21 +61,4 @@ namespace search
         }
     };
 
-    template<typename Container, typename Node>
-    struct Validate
-    {
-        Validate() = default;
-
-        template<typename Container>
-        explicit Validate(Container const& valids)
-          : valids{ valids }
-        { }
-
-        auto operator()(Node const& node) -> bool
-        {
-            
-        }
-
-        Container const valids;
-    };
 }//end of namespace
