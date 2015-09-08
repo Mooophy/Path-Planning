@@ -35,7 +35,7 @@ namespace search
     {
         auto operator()(Node const& node) const -> Size
         {
-            return static_cast<int>(hypot(dy(node), dx(node)));
+            return static_cast<Size>(hypot(dy(node), dx(node)));
         }
     }
 }//end of namespace
