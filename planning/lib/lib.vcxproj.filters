@@ -24,5 +24,8 @@
     <ClInclude Include="func.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="timing.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

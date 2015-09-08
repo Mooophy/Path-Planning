@@ -14,3 +14,4 @@
 #include "../lib/node.hpp"
 #include "../lib/priority_queue.hpp"
 #include "../lib/func.hpp"
+#include "../lib/timing.hpp"

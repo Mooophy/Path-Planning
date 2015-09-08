@@ -123,6 +123,7 @@
     <ClInclude Include="func.hpp" />
     <ClInclude Include="node.hpp" />
     <ClInclude Include="priority_queue.hpp" />
+    <ClInclude Include="timing.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
