@@ -1,6 +1,8 @@
 #pragma once
 #include <cmath>
+#include <algorithm>
 
+using std::max;
 using std::abs;
 using std::hypot;
 
@@ -34,7 +36,7 @@ namespace search
     {
         auto operator()(Node const& node) const -> Size
         {
-            return static_cast<Size>(hypot(dy(node), dx(node)));
+            return static_cast<Size>(round(hypot(dy(node), dx(node))));
         }
     };
     
