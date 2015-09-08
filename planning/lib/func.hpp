@@ -38,4 +38,13 @@ namespace search
             return static_cast<Size>(hypot(dy(node), dx(node)));
         }
     }
+    
+    template<typename Node>
+    struct Cost
+    {
+        auto operator()(Node const& node) const -> Size
+        {
+            return node.path().size();
+        }
+    }
 }//end of namespace
