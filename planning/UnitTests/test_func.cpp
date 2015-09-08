@@ -44,5 +44,15 @@ namespace UnitTests
             Node node{ "854617", start, goal };
             Assert::AreEqual(6, search::Cost<Node>{}(node));
         }
+
+        TEST_METHOD(Less)
+        {
+            auto start = Coordinate{ 0u, 0u };
+            auto goal = Coordinate{ 60u, 80u };
+            Node lhs{ "88", start, goal };
+            Node rhs{ "81", start, goal };
+            
+            Assert::IsTrue(search::Less<Node, search::ManhattanDistance<Node>>{}(lhs, rhs));
+        }
     };
 }

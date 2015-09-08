@@ -49,7 +49,7 @@ namespace search
         }
     };
     
-    template<typename Node, typename Hfunc, typename Cfunc>
+    template<typename Node, typename Hfunc, typename Cfunc = Cost<Node>>
     struct Less
     {
         Hfunc h;
