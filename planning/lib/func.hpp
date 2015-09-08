@@ -8,12 +8,12 @@ using std::hypot;
 namespace search
 {
     template<typename Node>
-    auto dy(Node const& node) -> Size
+    inline auto dy(Node const& node) -> Size
     {
         return abs(node.goal().y - node.coordinate().y);
     }
     template<typename Node>
-    auto dx(Node const& node) -> Size
+    inline auto dx(Node const& node) -> Size
     {
         return abs(node.goal().x - node.coordinate().x);
     }
