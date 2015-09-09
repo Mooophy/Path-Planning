@@ -15,7 +15,7 @@ using std::move;
 
 namespace search
 {
-    template<typename Hfunc, typename Validate, typename Cfunc = Cost<Node>>
+    template<typename Hfunc, typename ValidateFunc, typename Cfunc = Cost<Node>>
     class AStarSEL
     {
     public:
@@ -23,21 +23,38 @@ namespace search
         using Q = PriorityQueue<Node, Less<Node, Hfunc>>;
         using Expansions = std::unordered_set<Node>;
 
-        struct Result
+        AStarSEL()
+            :   latest_results{ _max_q_size, _expansions, _final_path, _run_time, _is_found }
+        {
+            reset();
+        }
+
+        struct Results
         {
             size_t max_q_size;
-            Expansions const& expansions;
-            string const& final_path;
+            Expansions expansions;
+            string final_path;
             long long run_time;
             bool is_found;
         };
 
-        auto operator()(Validate validate) -> Result
+        struct Reference
+        {
+            size_t const& max_q_size;
+            Expansions const& expansions;
+            string const& final_path;
+            long long const& run_time;
+            bool const& is_found;
+        };
+
+        auto operator()(ValidateFunc validate) -> Results
         {
             reset();
             search(move(validate));
-            return { _q, _max_q_size, _expansions, _final_path, _run_time, _is_found };
+            return{ _q, _max_q_size, _expansions, _final_path, _run_time, _is_found };
         }
+
+        Reference latest_results;
 
     private:
 
@@ -48,14 +65,14 @@ namespace search
         long long _run_time;
         bool _is_found;
 
-        auto search(Validate && validate) -> void
+        auto search(ValidateFunc && validate) -> void
         {
 
         }
 
         auto reset() -> void
         {
-            _q.clear();
+            _q.reset();
             _max_q_size = 0;
             _expansions.clear();
             _final_path.clear();

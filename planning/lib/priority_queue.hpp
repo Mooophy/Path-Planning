@@ -8,6 +8,8 @@
 #include <stdexcept>
 #include <algorithm>
 
+using std::move;
+
 namespace search
 {
     //
@@ -181,6 +183,17 @@ namespace search
         {
             remove(old_value);
             push(new_value);
+        }
+
+        void reset()
+        {
+            _seq.clear();
+        }
+
+        void reset(CompareFunc && c)
+        {
+            _compare = move(c);
+            reset();
         }
 
     private:
