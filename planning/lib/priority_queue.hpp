@@ -1,8 +1,8 @@
 //
 //  Reference : Chapter 6, "Introduction to Algorithms 3rd ed", aka CLRS.
 //
-
 #pragma once
+
 #include <vector>
 #include <functional>
 #include <stdexcept>

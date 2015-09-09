@@ -33,7 +33,7 @@ namespace UnitTests
             auto start = Coordinate{ 0u, 0u };
             auto goal = Coordinate{ 60u, 80u };
             Node node{ "8", start, goal };
-            Assert::AreEqual(99, search::EuclideanDinstance<Node>{}(node));
+            Assert::AreEqual(99, search::EuclideanDistance<Node>{}(node));
         }
 
         TEST_METHOD(Cost)

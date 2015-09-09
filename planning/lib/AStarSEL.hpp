@@ -1,3 +1,6 @@
+//
+//  A* with strict expanded list
+//
 #pragma once
 
 #include <unordered_set>

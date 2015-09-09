@@ -1,4 +1,8 @@
+//
+//  Time recording
+//
 #pragma once
+
 #include <chrono>
 
 namespace search

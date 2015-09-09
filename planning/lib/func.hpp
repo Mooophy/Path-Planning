@@ -1,4 +1,8 @@
+//
+//  Functors
+//
 #pragma once
+
 #include <cmath>
 #include <algorithm>
 
@@ -33,7 +37,7 @@ namespace search
     };
 
     template<typename Node>
-    struct EuclideanDinstance : public Heuristc<Node>
+    struct EuclideanDistance : public Heuristc<Node>
     {
         auto operator()(Node const& node) const -> Size
         {
