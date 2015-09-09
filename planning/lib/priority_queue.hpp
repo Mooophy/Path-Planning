@@ -128,9 +128,20 @@ namespace search
                 build_heap(_seq.begin(), _seq.end(), _compare);
         }
 
-        auto top() const -> Value const& { return _seq.front(); }
-        auto size() const -> SizeType { return _seq.size(); }
-        auto empty() const -> bool { return _seq.empty(); }
+        auto top() const -> Value const& 
+        { 
+            return _seq.front(); 
+        }
+        
+        auto size() const -> SizeType 
+        { 
+            return _seq.size(); 
+        }
+        
+        auto empty() const -> bool 
+        { 
+            return _seq.empty(); 
+        }
 
         auto contains(Value const& value) const -> bool
         {

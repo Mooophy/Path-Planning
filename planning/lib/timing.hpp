@@ -13,8 +13,8 @@ namespace search
         using Time = std::chrono::high_resolution_clock;
         using TimePoint = std::chrono::high_resolution_clock::time_point;
 
-        explicit Timing(T& record) :
-            recording{ record }, start{ Time::now() }
+        explicit Timing(T& record) 
+            :   recording{ record }, start{ Time::now() }
         { }
 
         ~Timing()
