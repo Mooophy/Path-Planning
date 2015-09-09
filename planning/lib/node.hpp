@@ -11,9 +11,7 @@ using std::function;
 namespace search
 {
     using Size = int;
-    //
-    //  Coordinate used in Node
-    //
+
     struct Coordinate 
     { 
         Size y, x;
@@ -22,7 +20,6 @@ namespace search
             return "[" + std::to_string(y) + "," + std::to_string(x) + "]";
         }
     };
-
     inline auto operator==(Coordinate lhs, Coordinate rhs) -> bool
     {
         return lhs.x == rhs.x && lhs.y == rhs.y;
@@ -77,7 +74,7 @@ namespace search
             : _path{ other._path }, _start{ other._start }, _goal{ other._goal }
         {   }
         //
-        //  Return path has moved so far
+        //  Return the path this node has traveled.
         //
         auto path() const& -> Path const& 
         {
@@ -116,7 +113,7 @@ namespace search
             return _start.to_string() +  "[" + _path + "]" + _goal.to_string();
         }
         //
-        //  Implementing hash function with std::hash<string>
+        //  Implementing hash function using std::hash<string>
         //
         auto hash() const -> size_t
         {
