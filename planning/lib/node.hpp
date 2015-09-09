@@ -6,21 +6,23 @@
 
 using std::string;
 using std::to_string;
+using std::function;
 
 namespace search
 {
     using Size = int;
     //
-    //  Struct Coordinate
+    //  Coordinate used in Node
     //
     struct Coordinate 
     { 
         Size y, x;
-        auto to_string() -> string
+        auto to_string() const -> string
         {
             return "[" + std::to_string(y) + "," + std::to_string(x) + "]";
         }
     };
+
     inline auto operator==(Coordinate lhs, Coordinate rhs) -> bool
     {
         return lhs.x == rhs.x && lhs.y == rhs.y;
@@ -28,7 +30,7 @@ namespace search
     //
     //  Function map for 8 directions
     //
-    using Functions = std::map< char, std::function< Coordinate(Coordinate) >>;
+    using Functions = std::map< char, function< Coordinate(Coordinate) >>;
     struct Goes : public Functions
     {
         Goes()
@@ -45,6 +47,7 @@ namespace search
     } const GOES;
     //
     //  Class Node
+    //  Storing start, goal coordinate and path moved so far as well as a few methods.    
     //
     class Node
     {
@@ -52,35 +55,51 @@ namespace search
         {
             return lhs._path == rhs._path && lhs._start == rhs._start && lhs._goal == rhs._goal;
         }
+
     public:
+
         using Path = std::string;
         using Children = std::vector<Node>;
-
+        //
+        //  Defualt Ctor
+        //
         Node() = default;
-
+        //
+        //  Ctor
+        //
         Node(Path const& path, Coordinate start, Coordinate goal)
             : _path{ path }, _start{ start }, _goal{ goal }
-        { }
-
+        {   }
+        //
+        //  Copy Ctor
+        //
         Node(Node const& other)
             : _path{ other._path }, _start{ other._start }, _goal{ other._goal }
         {   }
-
+        //
+        //  Return path has moved so far
+        //
         auto path() const& -> Path const& 
         {
             return _path; 
         }
-
+        //
+        //  Return start coordinate
+        //
         auto start() const& -> Coordinate
         {
             return _start;
         }
-
+        //
+        //  Return goal coordinate
+        //
         auto goal() const& -> Coordinate
         {
             return _goal;
         }
-
+        //
+        //  Return current coordinate for this node
+        //
         auto coordinate() const -> Coordinate
         {
             Coordinate c = _start;
@@ -88,17 +107,23 @@ namespace search
                 c = GOES.at(direction)(c);
             return c;
         }
-
+        //  
+        //  Format:
+        //      [start.to_string][path][goal.to_string]
+        //
         auto to_string() const -> string
         {
-            using std::to_string;
-            auto y = [](Coordinate const& c) { return to_string(c.y); };
-            auto x = [](Coordinate const& c) { return to_string(c.x); };
-            return "[" + y(_start) + "," + x(_start) + "][" + _path + "][" + y(_goal) + "," + x(_goal) + "]";
+            return _start.to_string() +  "[" + _path + "]" + _goal.to_string();
         }
-
         //
-        //  require ValidateFunc has interface operator()(Node)
+        //  Implementing hash function with std::hash<string>
+        //
+        auto hash() const -> size_t
+        {
+            return std::hash<string>{}(to_string());
+        }
+        //
+        //  Require ValidateFunc implements interface operator()(Node)
         //
         template<typename ValidateFunc>
         auto children(ValidateFunc validate) const -> Children
@@ -114,28 +139,27 @@ namespace search
         }
 
     private:
+
         Path _path;
         Coordinate _start;
         Coordinate _goal;
     };
-}//end of namespace
+}//end of search namespace
 
-using namespace search;
-
+//
+//  Openning std to implement std::hash<Node> specialization
+//
 namespace std
 {
+    using namespace search;
+
     template<>
     struct hash<Node>
     {
         //[start.to_string][path][goal.to_string]
         auto operator()(Node const& node) const -> size_t
         {
-            auto const& n = node;
-            using C = Coordinate;
-            auto x = [](C const& c) { return to_string(c.x); };
-            auto y = [](C const& c) { return to_string(c.y); };
-            auto s = y(n.start()) + x(n.start()) + n.path() + y(n.goal()) + x(n.goal());
-            return std::hash<string>{}(s);
+            return node.hash();
         }
     };
-}
+}//end of std namespace
