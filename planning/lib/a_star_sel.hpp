@@ -9,35 +9,58 @@
 #include "node.hpp"
 #include "timing.hpp"
 
-using std::unordered_set;
 using std::size_t;
 using std::string;
+using std::move;
 
 namespace search
 {
-    template<typename Hfunc, typename Cfunc, typename Validate>
+    template<typename Hfunc, typename Validate, typename Cfunc = Cost<Node>>
     class AStarSEL
     {
     public:
 
-        AStarSEL()
-            : _q{}, _max_q_size{ 0u }, _expansion{}, _final_path{}, _run_time{ 0 }, _is_found{ false }
-        {   }
+        using Q = PriorityQueue<Node, Less<Node, Hfunc>>;
+        using Expansions = std::unordered_set<Node>;
+
+        struct Result
+        {
+            size_t max_q_size;
+            Expansions const& expansions;
+            string const& final_path;
+            long long run_time;
+            bool is_found;
+        };
+
+        auto operator()(Validate validate) -> Result
+        {
+            reset();
+            search(move(validate));
+            return { _q, _max_q_size, _expansions, _final_path, _run_time, _is_found };
+        }
 
     private:
 
-        using Q = PriorityQueue<Node, Less<Node, Hfunc>>;
-
         Q _q;
         size_t _max_q_size;
-        unordered_set<Node> _expansion;
+        Expansions _expansions;
         string _final_path;
         long long _run_time;
         bool _is_found;
 
-        auto search() -> bool
+        auto search(Validate && validate) -> void
         {
 
+        }
+
+        auto reset() -> void
+        {
+            _q.clear();
+            _max_q_size = 0;
+            _expansions.clear();
+            _final_path.clear();
+            _run_time = 0;
+            _is_found = false;
         }
     };
 }
