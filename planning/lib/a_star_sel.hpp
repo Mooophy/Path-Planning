@@ -23,15 +23,6 @@ namespace search
         using Q = PriorityQueue<Node, Less<Node, Hfunc>>;
         using Expansions = std::unordered_set<Node>;
 
-        struct Results
-        {
-            size_t max_q_size;
-            Expansions expansions;
-            string final_path;
-            long long run_time;
-            bool is_found;
-        };
-
         struct Get
         {
             size_t const& max_q_size;
@@ -47,11 +38,10 @@ namespace search
             reset();
         }
 
-        auto operator()(ValidateFunc validate) -> Results
+        auto operator()(ValidateFunc validate) -> void
         {
             reset();
             search(move(validate));
-            return{ _max_q_size, _expansions, _final_path, _run_time, _is_found };
         }
 
         Get const get;
