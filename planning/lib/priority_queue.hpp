@@ -199,7 +199,6 @@ namespace search
     private:
         Vector _seq;
         CompareFunc _compare;
-
         //
         //  Make sure vector is not empty.
         //  O(lg n)

@@ -40,6 +40,7 @@ namespace UnitTests
     TEST_CLASS(test_priority_queue)
     {
     public:
+
         TEST_METHOD(pq_parent)
         {
             auto seq = { 5, 6, 9, 3, 2, 7 };
@@ -222,6 +223,56 @@ namespace UnitTests
                 Assert::AreEqual(std::string{ "86" }, pq.top().path()); pq.pop();
                 Assert::AreEqual(std::string{ "84" }, pq.top().path()); pq.pop();
                 Assert::AreEqual(0u, pq.size());
+            }
+        }
+
+        TEST_METHOD(pq_reset)
+        {
+            //test with int
+            {
+                using Less = decltype(std::less<int>{});
+                auto pq = PriorityQueue<int, Less>{ { 4, 6, 7, 1 }, Less{} };
+                Assert::AreEqual(4u, pq.size());
+                pq.reset();
+                Assert::AreEqual(0u, pq.size());
+                
+                for (auto i : { 1, 2, 3 }) 
+                    pq.push(i);
+                Assert::AreEqual(3u, pq.size());
+                pq.reset(Less{});
+                Assert::AreEqual(0u, pq.size());
+            }
+
+            //test with node
+            {
+                //  [start] -> (goal)
+                // [1,1] 1,2  1,3       1   2   3
+                //  2,1 {2,2} 2,3       4       5 
+                //  3,1  3,2 (3,3)      6   7   8
+                auto start = Coordinate{ 1, 1 };
+                auto goal = Coordinate{ 3, 3 };
+                auto path = std::string{ "8" };
+                auto nodes = std::vector<Node>{};
+                for (auto i = '1'; i != '9'; ++i)
+                    nodes.emplace_back(path + i, start, goal);
+
+                {//without arguments
+                    using Less = search::Less<Node, EuclideanDistance<Node>>;
+
+                    auto pq = PriorityQueue<Node, Less>{ nodes.cbegin(), nodes.cend(), Less{} };
+                    Assert::AreEqual(8u, pq.size());
+                    pq.reset();
+                    Assert::AreEqual(0u, pq.size());
+                }
+
+                {//with arguments
+                    using Less = search::Less<Node, EuclideanDistance<Node>>;
+
+                    auto pq = PriorityQueue<Node, Less>{ nodes.cbegin(), nodes.cend(), Less{} };
+                    Assert::AreEqual(8u, pq.size());
+                    pq.reset(Less{});
+                    Assert::AreEqual(0u, pq.size());
+                }
             }
         }
     };
