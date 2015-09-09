@@ -5,7 +5,7 @@ namespace search
 {
     //
     //  class Timing
-    //  an RAII style timer using std::chrono in c++ 11
+    //  an RAII style timer with std::chrono from c++ 11
     //
     template<typename T>
     struct Timing
