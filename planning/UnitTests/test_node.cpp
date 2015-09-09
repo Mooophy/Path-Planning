@@ -6,7 +6,6 @@ using namespace search;
 
 namespace UnitTests
 {
-    //using namespace search;
     TEST_CLASS(test_node)
     {
     public:

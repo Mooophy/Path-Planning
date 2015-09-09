@@ -35,5 +35,8 @@
     <ClCompile Include="test_func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_timing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

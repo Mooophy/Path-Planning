@@ -7,23 +7,24 @@ namespace search
     //  class Timing
     //  an RAII style timer using std::chrono in c++ 11
     //
-    template<typename Milisecond>
+    template<typename T>
     struct Timing
     {
         using Time = std::chrono::high_resolution_clock;
         using TimePoint = std::chrono::high_resolution_clock::time_point;
 
-        explicit Timing(Milisecond& record) :
+        explicit Timing(T& record) :
             recording{ record }, start{ Time::now() }
         { }
 
         ~Timing()
         {
             using std::chrono::duration;
-            recording = duration<Milisecond>(Time::now() - start).count();
+            using std::chrono::duration_cast;
+            recording = duration_cast<std::chrono::milliseconds>(Time::now() - start).count();
         }
 
-        Milisecond& recording;
+        T& recording;
         TimePoint start;
     };
 }

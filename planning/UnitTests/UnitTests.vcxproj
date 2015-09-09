@@ -167,6 +167,7 @@
     <ClCompile Include="test_func.cpp" />
     <ClCompile Include="test_node.cpp" />
     <ClCompile Include="test_priority_queue.cpp" />
+    <ClCompile Include="test_timing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\lib.vcxproj">
