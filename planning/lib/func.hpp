@@ -59,7 +59,7 @@ namespace search
     {
         Hfunc h;
         Cfunc c;
-        auto operator()(Node const& lhs, Node const& rhs) const -> Size
+        auto operator()(Node const& lhs, Node const& rhs) const -> bool
         {
             return h(lhs) + c(lhs) < h(rhs) + c(rhs);
         }

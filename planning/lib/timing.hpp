@@ -11,13 +11,12 @@ namespace search
     //  class Timing
     //  an RAII style timer with std::chrono from c++ 11
     //
-    template<typename T>
     struct Timing
     {
         using Time = std::chrono::high_resolution_clock;
         using TimePoint = std::chrono::high_resolution_clock::time_point;
 
-        explicit Timing(T& record) 
+        explicit Timing(long long& record) 
             :   recording{ record }, start{ Time::now() }
         { }
 
@@ -28,7 +27,7 @@ namespace search
             recording = duration_cast<std::chrono::milliseconds>(Time::now() - start).count();
         }
 
-        T& recording;
+        long long& recording;
         TimePoint const start;
     };
 }

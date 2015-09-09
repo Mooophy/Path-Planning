@@ -12,36 +12,36 @@ namespace UnitTests
         TEST_METHOD(timing_ctor)
         {
             {//0ms
-                int record = 0;
+                long long record = 0;
                 {
-                    Timing<int> recording{ record };
+                    Timing recording{ record };
                     for (auto i = 0; i--;);
                 }
-                Assert::AreEqual(0, record);
+                Assert::IsTrue(record < 1ll);
             }
 
             {//0ms
-                int record = 0;
+                long long record = 0;
                 {
-                    Timing<int> recording{ record };
+                    Timing recording{ record };
                     for (auto i = 9999; i--;);
                 }
-                Assert::AreEqual(0, record);
+                Assert::IsTrue(record < 1ll);
             }
 
             {//2ms
-                int record = 0;
+                long long record = 0;
                 {
-                    Timing<int> recording{ record };
+                    Timing recording{ record };
                     for (auto i = 999999; --i;);
                 }
                 Assert::IsTrue(record > 0);
             }
 
             {//24ms
-                int record = 0;
+                long long record = 0;
                 {
-                    Timing<int> recording{ record };
+                    Timing recording{ record };
                     for (auto i = 9999999; --i;);
                 }
                 Assert::IsTrue(record > 9);
