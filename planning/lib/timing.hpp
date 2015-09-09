@@ -29,6 +29,6 @@ namespace search
         }
 
         T& recording;
-        TimePoint start;
+        TimePoint const start;
     };
 }
