@@ -23,12 +23,6 @@ namespace search
         using Q = PriorityQueue<Node, Less<Node, Hfunc>>;
         using Expansions = std::unordered_set<Node>;
 
-        AStarSEL()
-            :   latest_results{ _max_q_size, _expansions, _final_path, _run_time, _is_found }
-        {
-            reset();
-        }
-
         struct Results
         {
             size_t max_q_size;
@@ -38,7 +32,7 @@ namespace search
             bool is_found;
         };
 
-        struct Reference
+        struct Get
         {
             size_t const& max_q_size;
             Expansions const& expansions;
@@ -47,14 +41,20 @@ namespace search
             bool const& is_found;
         };
 
+        AStarSEL()
+            :   get{ _max_q_size, _expansions, _final_path, _run_time, _is_found }
+        {
+            reset();
+        }
+
         auto operator()(ValidateFunc validate) -> Results
         {
             reset();
             search(move(validate));
-            return{ _q, _max_q_size, _expansions, _final_path, _run_time, _is_found };
+            return{ _max_q_size, _expansions, _final_path, _run_time, _is_found };
         }
 
-        Reference latest_results;
+        Get const get;
 
     private:
 
