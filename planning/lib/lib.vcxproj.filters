@@ -27,5 +27,8 @@
     <ClInclude Include="timing.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AStarSEL.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
