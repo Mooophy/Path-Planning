@@ -5,6 +5,7 @@
 #include <vector>
 
 using std::string;
+using std::to_string;
 
 namespace search
 {
@@ -12,7 +13,14 @@ namespace search
     //
     //  Struct Coordinate
     //
-    struct Coordinate { Size y, x; };
+    struct Coordinate 
+    { 
+        Size y, x;
+        auto to_string() -> string
+        {
+            return "[" + std::to_string(y) + "," + std::to_string(x) + "]";
+        }
+    };
     inline auto operator==(Coordinate lhs, Coordinate rhs) -> bool
     {
         return lhs.x == rhs.x && lhs.y == rhs.y;
@@ -113,7 +121,7 @@ namespace search
 }//end of namespace
 
 using namespace search;
-using std::to_string;
+
 namespace std
 {
     template<>
