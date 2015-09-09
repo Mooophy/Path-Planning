@@ -25,15 +25,16 @@ namespace search
 
         struct Get
         {
+            Q q;
             size_t const& max_q_size;
             Expansions const& expansions;
             string const& final_path;
             long long const& run_time;
             bool const& is_found;
-        };
+        } const data;
 
         AStarSEL()
-            :   get{ _max_q_size, _expansions, _final_path, _run_time, _is_found }
+            : data{ _q, _max_q_size, _expansions, _final_path, _run_time, _is_found }
         {
             reset();
         }
@@ -43,8 +44,6 @@ namespace search
             reset();
             search(move(validate));
         }
-
-        Get const get;
 
     private:
 

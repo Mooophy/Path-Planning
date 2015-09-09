@@ -24,8 +24,8 @@ namespace search
         return abs(node.goal().x - node.coordinate().x);
     }
 
-    template<typename Node> 
-    struct Heuristc{};
+    template<typename Node>
+    struct Heuristc {};
 
     template<typename Node>
     struct ManhattanDistance : public Heuristc<Node>
@@ -44,7 +44,7 @@ namespace search
             return static_cast<Size>(round(hypot(dy(node), dx(node))));
         }
     };
-    
+
     template<typename Node>
     struct Cost
     {
@@ -53,7 +53,7 @@ namespace search
             return node.path().size();
         }
     };
-    
+
     template<typename Node, typename Hfunc, typename Cfunc = Cost<Node>>
     struct Less
     {

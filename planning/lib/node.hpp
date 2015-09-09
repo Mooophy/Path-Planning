@@ -16,8 +16,8 @@ namespace search
 {
     using Size = int;
 
-    struct Coordinate 
-    { 
+    struct Coordinate
+    {
         Size y, x;
         auto to_string() const -> string
         {
@@ -80,9 +80,9 @@ namespace search
         //
         //  Return the path this node has traveled.
         //
-        auto path() const& -> Path const& 
+        auto path() const& -> Path const&
         {
-            return _path; 
+            return _path;
         }
         //
         //  Return start coordinate
@@ -114,7 +114,7 @@ namespace search
         //
         auto to_string() const -> string
         {
-            return _start.to_string() +  "[" + _path + "]" + _goal.to_string();
+            return _start.to_string() + "[" + _path + "]" + _goal.to_string();
         }
         //
         //  Implementing hash function using std::hash<string>
@@ -130,10 +130,10 @@ namespace search
         auto children(ValidateFunc validate) const -> Children
         {
             Children children;
-            for(auto direction = '1'; direction <= '8'; ++direction)
+            for (auto direction = '1'; direction <= '8'; ++direction)
             {
                 auto child = Node{ _path + direction, _start, _goal };
-                if(validate(child))
+                if (validate(child))
                     children.push_back(child);
             }
             return children;

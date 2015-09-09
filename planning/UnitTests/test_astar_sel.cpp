@@ -21,11 +21,11 @@ namespace UnitTests
             function<bool(Node)> validate = [](Node const& n) {return true; };
             AStarSEL<Heuristc<Node>, decltype(validate)> search;
 
-            Assert::AreEqual(0u, search.get.max_q_size);
-            Assert::AreEqual(0u, search.get.expansions.size());
-            Assert::AreEqual(string{""}, search.get.final_path);
-            Assert::IsTrue(0 == search.get.run_time);
-            Assert::IsFalse(search.get.is_found);
+            Assert::AreEqual(0u, search.data.max_q_size);
+            Assert::AreEqual(0u, search.data.expansions.size());
+            Assert::AreEqual(string{""}, search.data.final_path);
+            Assert::IsTrue(0 == search.data.run_time);
+            Assert::IsFalse(search.data.is_found);
         }
 
     };
