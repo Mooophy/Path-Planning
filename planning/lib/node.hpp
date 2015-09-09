@@ -4,6 +4,8 @@
 #include <functional>
 #include <vector>
 
+using std::string;
+
 namespace search
 {
     using Size = int;
@@ -77,6 +79,14 @@ namespace search
             for (auto direction : _path)
                 c = GOES.at(direction)(c);
             return c;
+        }
+
+        auto to_string() const -> string
+        {
+            using std::to_string;
+            auto y = [](Coordinate const& c) { return to_string(c.y); };
+            auto x = [](Coordinate const& c) { return to_string(c.x); };
+            return "[" + y(_start) + "," + x(_start) + "][" + _path + "][" + y(_goal) + "," + x(_goal) + "]";
         }
 
         //
