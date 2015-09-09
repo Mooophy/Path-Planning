@@ -11,6 +11,7 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
+#include <unordered_set>
 #include "../lib/node.hpp"
 #include "../lib/priority_queue.hpp"
 #include "../lib/func.hpp"

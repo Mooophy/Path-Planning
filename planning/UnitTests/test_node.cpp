@@ -34,6 +34,20 @@ namespace UnitTests
             Assert::AreEqual(std::string{ "1123" }, node.path());
         }
 
+        TEST_METHOD(Coordinate_to_string)
+        {
+            Coordinate c = { 42, 99 };
+            Assert::AreEqual(string{ "[42,99]" }, c.to_string());
+        }
+
+        TEST_METHOD(Node_to_string)
+        {
+            auto start = Coordinate{ 1u, 1u };
+            auto goal = Coordinate{ 2u, 2u };
+            Node node{ "1123", start, goal };
+            Assert::AreEqual(std::string{ "[1,1][1123][2,2]" }, node.to_string());
+        }
+
         TEST_METHOD(coordinate)
         {
             auto start = Coordinate{ 1u, 1u };
@@ -73,6 +87,19 @@ namespace UnitTests
 
             for (auto i = 0u; i != 1u; ++i)
                 Assert::IsTrue(expect[i] == expect[i]);
+        }
+
+        TEST_METHOD(hash)
+        {
+            auto start = Coordinate{ 1u, 1u };
+            auto goal = Coordinate{ 2u, 2u };
+            Node node{ "87654321", start, goal };
+
+            Assert::AreEqual(1681822733u, node.hash());
+            Assert::AreEqual(1681822733u, std::hash<Node>{}(node));
+            
+            std::unordered_set<Node> uset{ node };
+            Assert::AreEqual(1u, uset.size());
         }
     };
 }
