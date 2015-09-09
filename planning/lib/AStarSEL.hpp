@@ -18,7 +18,7 @@ namespace search
         using Q = PriorityQueue<Node, Less<Node, ManhattanDistance<Node>>>;
         Q _q;
         size_t _max_q_size;
-        unordered_set<Node> _expanded;
+        //unordered_set<Node> _expanded;
         string _final_path;
         RunningTime _running_time;
     };

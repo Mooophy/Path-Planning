@@ -101,3 +101,23 @@ namespace search
         Coordinate _goal;
     };
 }//end of namespace
+
+using namespace search;
+using std::to_string;
+namespace std
+{
+    template<>
+    struct hash<Node>
+    {
+        //[start.to_string][path][goal.to_string]
+        auto operator()(Node const& node) const -> size_t
+        {
+            auto const& n = node;
+            using C = Coordinate;
+            auto x = [](C const& c) { return to_string(c.x); };
+            auto y = [](C const& c) { return to_string(c.y); };
+            auto s = y(n.start()) + x(n.start()) + n.path() + y(n.goal()) + x(n.goal());
+            return std::hash<string>{}(s);
+        }
+    };
+}
