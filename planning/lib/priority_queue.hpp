@@ -107,6 +107,8 @@ namespace search
         using SizeType = typename Vector::size_type;
         using Iterator = typename Vector::iterator;
 
+        PriorityQueue() = default;
+
         PriorityQueue(CompareFunc c)
             : _seq{}, _compare{ c }
         {   }
