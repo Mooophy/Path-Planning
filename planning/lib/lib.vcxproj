@@ -120,7 +120,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AStarSEL.hpp" />
+    <ClInclude Include="a_star_sel.hpp" />
     <ClInclude Include="func.hpp" />
     <ClInclude Include="node.hpp" />
     <ClInclude Include="priority_queue.hpp" />

@@ -16,4 +16,4 @@
 #include "../lib/priority_queue.hpp"
 #include "../lib/func.hpp"
 #include "../lib/timing.hpp"
-#include "../lib/AStarSEL.hpp"
+#include "../lib/a_star_sel.hpp"

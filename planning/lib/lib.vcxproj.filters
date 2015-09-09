@@ -27,7 +27,7 @@
     <ClInclude Include="timing.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AStarSEL.hpp">
+    <ClInclude Include="a_star_sel.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
