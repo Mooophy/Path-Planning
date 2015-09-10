@@ -39,10 +39,10 @@ namespace search
             string const& final_path;
             long long const& run_time;
             bool const& is_found;
-        } const data;
+        } const last_run;
 
         AStarSEL()
-            : data{ _q, _max_q_size, _expansions, _final_path, _run_time, _is_found }
+            : last_run{ _q, _max_q_size, _expansions, _final_path, _run_time, _is_found }
         {
             reset();
         }
@@ -50,7 +50,7 @@ namespace search
         auto operator()(State start, State goal, ValidateFunc validate) -> void
         {
             reset();
-            _is_found = search(start, goal, validate);
+            search(start, goal, validate);
         }
 
     private:
@@ -82,14 +82,18 @@ namespace search
                 {
                     //handle expansions
                     if (any_of(_expansions.cbegin(), _expansions.cend(), [&](State state) {
-                        return state == curr.state();
+                        return state == child.state();
                     }))
                         continue;
                     //handle q
                     function<bool(Node)> is_same_state = [&](Node const& node) {
                         return node.state() == child.state();
                     };
-                    _q.update_with_if(child, is_same_state);
+
+                    if (!_q.any_of(is_same_state))
+                        _q.push(child);
+                    else
+                        _q.update_with_if(child, is_same_state);
                 }
             }
             return false;

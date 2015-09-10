@@ -151,6 +151,12 @@ namespace search
             return _seq.cend() != std::find(_seq.cbegin(), _seq.cend(), value);
         }
 
+        template<typename Predicate>
+        auto any_of(Predicate predicate) const -> bool
+        {
+            return std::any_of(_seq.cbegin(), _seq.cend(), predicate);
+        }
+
         auto push(Value const& new_val) -> void
         {
             // find the right place for new_val
