@@ -33,24 +33,24 @@ namespace UnitTests
 
         TEST_METHOD(astar_algorithm)
         {
-            unordered_set<State> blokeds{ /*{ 3, 2 }, { 5, 4 }*/ };
+            unordered_set<State> blokeds{ { 3, 2 }, { 5, 4 } };
             function<bool(Node)> validate = [&](Node const& n) {
-                //auto is_not_bloked = none_of(blokeds.cbegin(), blokeds.cend(), [&](State s) {
-                //    return s == n.state();
-                //});
-                //auto is_within_grid = n.state().x <= 39 && n.state().x >= 0 && n.state().y <= 39 && n.state().y >= 0;
+                auto is_not_bloked = none_of(blokeds.cbegin(), blokeds.cend(), [&](State s) {
+                    return s == n.state();
+                });
+                auto is_within_grid = n.state().x <= 39 && n.state().x >= 0 && n.state().y <= 39 && n.state().y >= 0;
 
-                //return is_not_bloked && is_within_grid;
+                return is_not_bloked && is_within_grid;
 
-                return true;
+                //return true;
             };
             AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
-            astar({ 0, 0 }, { 3, 3 }, validate);
+            astar({ 0, 0 }, { 8, 12 }, validate);
 
-            Assert::AreEqual(16u, astar.last_run.max_q_size);
-            Assert::AreEqual(3u, astar.last_run.expansions.size());
-            Assert::AreEqual(string{ "" }, astar.last_run.final_path);
-            Assert::IsTrue(0 == astar.last_run.run_time);
+            Assert::AreEqual(44u, astar.last_run.max_q_size);
+            Assert::AreEqual(32u, astar.last_run.expansions.size());
+            //Assert::AreEqual(string{ "" }, astar.last_run.final_path);
+            //Assert::IsTrue(0 == astar.last_run.run_time);
             Assert::IsTrue(astar.last_run.is_found);
         }
     };

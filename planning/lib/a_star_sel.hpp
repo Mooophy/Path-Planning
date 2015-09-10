@@ -15,6 +15,7 @@ using std::string;
 using std::move;
 using std::max;
 using std::any_of;
+using std::unordered_set;
 
 namespace search
 {
@@ -29,7 +30,7 @@ namespace search
     public:
 
         using Q = PriorityQueue<Node, Less<Node, Hfunc>>;
-        using Expansions = std::unordered_set<State>;
+        using Expansions = unordered_set<State>;
 
         struct Get
         {
@@ -54,51 +55,61 @@ namespace search
         }
 
     private:
-
+        //
+        //  Data members
+        //
         Q _q;
         size_t _max_q_size;
         Expansions _expansions;
         string _final_path;
         long long _run_time;
         bool _is_found;
-
+        //
+        //  Core part
+        //
         auto search(State start, State goal, ValidateFunc validate) -> bool
         {
             for (_q.push({ "", start, goal }); true; _max_q_size = max(_max_q_size, _q.size()))
             {
-                if (_q.empty()) break;
+                if (_q.empty()) return _is_found = false;
 
                 auto curr = _q.top(); _q.pop();
                 if (goal == curr.state()) return _is_found = true;
-
-                // is really needed? need refactoring anyway.
-                if (any_of(_expansions.cbegin(), _expansions.cend(), [&](State const& state) {
-                    return state == curr.state(); 
-                }))
-                    continue;
-                _expansions.insert(curr.state());
+                if (expansions_contain_state_of(curr))  continue;
+                expand(curr);
 
                 for (auto const& child : curr.children(validate))
                 {
-                    //handle expansions
-                    if (any_of(_expansions.cbegin(), _expansions.cend(), [&](State state) {
-                        return state == child.state();
-                    }))
-                        continue;
-                    //handle q
+                    if (expansions_contain_state_of(child))  continue;
+
                     function<bool(Node)> is_same_state = [&](Node const& node) {
                         return node.state() == child.state();
                     };
-
-                    if (!_q.any_of(is_same_state))
+                    if (!_q.any(is_same_state))
                         _q.push(child);
                     else
                         _q.update_with_if(child, is_same_state);
                 }
             }
-            return false;
         }
-
+        //
+        //  helper for method search
+        //
+        auto expansions_contain_state_of(Node const& n) const -> bool
+        {
+            auto const& e = _expansions;
+            return any_of(e.cbegin(), e.cend(), [&](State s) {return s == n.state(); });
+        }
+        //
+        //  helper for method search
+        //
+        auto expand(Node const& n) -> void
+        {
+            _expansions.insert(n.state());
+        }
+        //
+        //  reset all data members
+        //
         auto reset() -> void
         {
             _q.reset();

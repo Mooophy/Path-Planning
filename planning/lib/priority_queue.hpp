@@ -152,7 +152,7 @@ namespace search
         }
 
         template<typename Predicate>
-        auto any_of(Predicate predicate) const -> bool
+        auto any(Predicate predicate) const -> bool
         {
             return std::any_of(_seq.cbegin(), _seq.cend(), predicate);
         }
