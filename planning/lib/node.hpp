@@ -15,8 +15,11 @@ using std::function;
 namespace search
 {
     using Size = int;
-
-    struct Coordinate
+    //
+    //  State
+    //      That is coordinate.
+    //
+    struct State
     {
         Size y, x;
         auto to_string() const -> string
@@ -24,31 +27,31 @@ namespace search
             return "[" + std::to_string(y) + "," + std::to_string(x) + "]";
         }
     };
-    inline auto operator==(Coordinate lhs, Coordinate rhs) -> bool
+    inline auto operator==(State lhs, State rhs) -> bool
     {
         return lhs.x == rhs.x && lhs.y == rhs.y;
     }
     //
     //  Function map for 8 directions
     //
-    using Functions = std::map< char, function< Coordinate(Coordinate) >>;
+    using Functions = std::map< char, function< State(State) >>;
     struct Goes : public Functions
     {
         Goes()
         {
-            (*this)['1'] = [](Coordinate c) -> Coordinate { return{ c.y - 1, c.x - 1 }; };
-            (*this)['2'] = [](Coordinate c) -> Coordinate { return{ c.y - 1, c.x - 0 }; };
-            (*this)['3'] = [](Coordinate c) -> Coordinate { return{ c.y - 1, c.x + 1 }; };
-            (*this)['4'] = [](Coordinate c) -> Coordinate { return{ c.y - 0, c.x - 1 }; };
-            (*this)['5'] = [](Coordinate c) -> Coordinate { return{ c.y + 0, c.x + 1 }; };
-            (*this)['6'] = [](Coordinate c) -> Coordinate { return{ c.y + 1, c.x - 1 }; };
-            (*this)['7'] = [](Coordinate c) -> Coordinate { return{ c.y + 1, c.x - 0 }; };
-            (*this)['8'] = [](Coordinate c) -> Coordinate { return{ c.y + 1, c.x + 1 }; };
+            (*this)['1'] = [](State c) -> State { return{ c.y - 1, c.x - 1 }; };
+            (*this)['2'] = [](State c) -> State { return{ c.y - 1, c.x - 0 }; };
+            (*this)['3'] = [](State c) -> State { return{ c.y - 1, c.x + 1 }; };
+            (*this)['4'] = [](State c) -> State { return{ c.y - 0, c.x - 1 }; };
+            (*this)['5'] = [](State c) -> State { return{ c.y + 0, c.x + 1 }; };
+            (*this)['6'] = [](State c) -> State { return{ c.y + 1, c.x - 1 }; };
+            (*this)['7'] = [](State c) -> State { return{ c.y + 1, c.x - 0 }; };
+            (*this)['8'] = [](State c) -> State { return{ c.y + 1, c.x + 1 }; };
         }
     } const GOES;
     //
     //  Class Node
-    //  Storing start, goal coordinate and path moved so far as well as a few methods.    
+    //  Storing start, goal State and path moved so far as well as a few methods.    
     //
     class Node
     {
@@ -68,7 +71,7 @@ namespace search
         //
         //  Ctor
         //
-        Node(Path const& path, Coordinate start, Coordinate goal)
+        Node(Path const& path, State start, State goal)
             : _path{ path }, _start{ start }, _goal{ goal }
         {   }
         //
@@ -85,25 +88,25 @@ namespace search
             return _path;
         }
         //
-        //  Return start coordinate
+        //  Return start State
         //
-        auto start() const& -> Coordinate
+        auto start() const& -> State
         {
             return _start;
         }
         //
-        //  Return goal coordinate
+        //  Return goal State
         //
-        auto goal() const& -> Coordinate
+        auto goal() const& -> State
         {
             return _goal;
         }
         //
-        //  Return current coordinate for this node
+        //  Return current State for this node
         //
-        auto coordinate() const -> Coordinate
+        auto state() const -> State
         {
-            Coordinate c = _start;
+            State c = _start;
             for (auto direction : _path)
                 c = GOES.at(direction)(c);
             return c;
@@ -142,8 +145,8 @@ namespace search
     private:
 
         Path _path;
-        Coordinate _start;
-        Coordinate _goal;
+        State _start;
+        State _goal;
     };
 }//end of search namespace
 
@@ -153,6 +156,15 @@ namespace search
 namespace std
 {
     using namespace search;
+
+    template<>
+    struct hash<State>
+    {
+        auto operator()(State c) const -> size_t
+        {
+            return std::hash<string>{}(c.to_string());
+        }
+    };
 
     template<>
     struct hash<Node>

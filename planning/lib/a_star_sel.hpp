@@ -3,6 +3,7 @@
 //
 #pragma once
 
+#include <functional>
 #include <unordered_set>
 #include "priority_queue.hpp"
 #include "func.hpp"
@@ -12,6 +13,8 @@
 using std::size_t;
 using std::string;
 using std::move;
+using std::max;
+using std::any_of;
 
 namespace search
 {
@@ -21,7 +24,7 @@ namespace search
     public:
 
         using Q = PriorityQueue<Node, Less<Node, Hfunc>>;
-        using Expansions = std::unordered_set<Node>;
+        using Expansions = std::unordered_set<State>;
 
         struct Get
         {
@@ -42,7 +45,7 @@ namespace search
         auto operator()(ValidateFunc validate) -> void
         {
             reset();
-            search(move(validate));
+            _is_found = search(move(validate));
         }
 
     private:
@@ -54,9 +57,50 @@ namespace search
         long long _run_time;
         bool _is_found;
 
-        auto search(ValidateFunc && validate) -> void
+        auto search(State start, State goal, ValidateFunc && validation) -> bool
         {
+            for (_q.push({ "", start, goal }); true; _max_q_size = max(_max_q_size, _q.size()))
+            {
+                if (_q.empty())
+                    return false;
 
+                auto curr = _q.top(); _q.pop();
+                if (goal == curr.state())
+                {
+                    _is_found = true;
+                    return true;
+                }
+
+                // is really needed? need refactoring anyway.
+                if (any_of(_expansions.cbegin(), _expansions, [&](Node const& node) {
+                    return node.state() == curr.state(); 
+                }))
+                    continue;
+
+                _expansions.insert(curr.state());
+
+                for (auto const& child : curr.children(validation))
+                {
+                    //handle expansions
+                    if (any_of(_expansions.cbegin(), _expansions, [&](Node const& node) {
+                        return node.state() == child.state();
+                    }))
+                        continue;
+
+                    //handle q
+                    struct Functor
+                    {
+                        Node const value;
+                        //  to see if same state
+                        auto operator()(Node const& node) const -> bool
+                        {
+                            return node.state() == value.state();
+                        }
+                    };
+
+                    _q.update_if(Functor{ child });
+                }
+            }
         }
 
         auto reset() -> void

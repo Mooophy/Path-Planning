@@ -22,8 +22,8 @@ namespace UnitTests
 
         auto manhattan(Node const& node) const -> std::size_t
         {
-            auto dy = abs(node.goal().y - node.coordinate().y);
-            auto dx = abs(node.goal().x - node.coordinate().x);
+            auto dy = abs(node.goal().y - node.state().y);
+            auto dx = abs(node.goal().x - node.state().x);
             return max(dy, dx);
         }
     };
@@ -126,8 +126,8 @@ namespace UnitTests
                 // [1,1] 1,2  1,3       1   2   3
                 //  2,1 {2,2} 2,3       4       5 
                 //  3,1  3,2 (3,3)      6   7   8
-                auto start = Coordinate{ 1, 1 };
-                auto goal = Coordinate{ 3, 3 };
+                auto start = State{ 1, 1 };
+                auto goal = State{ 3, 3 };
                 auto path = std::string{ "8" };
                 auto nodes = std::vector<Node>{};
                 for (auto i = '1'; i != '9'; ++i)
@@ -152,8 +152,8 @@ namespace UnitTests
 
         TEST_METHOD(pq_push)
         {
-            auto start = Coordinate{ 1, 1 };
-            auto goal = Coordinate{ 3, 3 };
+            auto start = State{ 1, 1 };
+            auto goal = State{ 3, 3 };
             auto path = std::string{ "8" };
             auto nodes = std::vector<Node>{};
             for (auto i = '1'; i != '9'; ++i)
@@ -199,8 +199,8 @@ namespace UnitTests
                 // [1,1] 1,2  1,3       1   2   3
                 //  2,1 {2,2} 2,3       4       5 
                 //  3,1  3,2 (3,3)      6   7   8
-                auto start = Coordinate{ 1, 1 };
-                auto goal = Coordinate{ 3, 3 };
+                auto start = State{ 1, 1 };
+                auto goal = State{ 3, 3 };
                 auto path = std::string{ "8" };
                 auto nodes = std::vector<Node>{};
                 for (auto i = '1'; i != '9'; ++i)
@@ -249,8 +249,8 @@ namespace UnitTests
                 // [1,1] 1,2  1,3       1   2   3
                 //  2,1 {2,2} 2,3       4       5 
                 //  3,1  3,2 (3,3)      6   7   8
-                auto start = Coordinate{ 1, 1 };
-                auto goal = Coordinate{ 3, 3 };
+                auto start = State{ 1, 1 };
+                auto goal = State{ 3, 3 };
                 auto path = std::string{ "8" };
                 auto nodes = std::vector<Node>{};
                 for (auto i = '1'; i != '9'; ++i)

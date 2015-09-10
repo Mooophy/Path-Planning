@@ -9,6 +9,7 @@
 #include <algorithm>
 
 using std::move;
+using std::find_if;
 
 namespace search
 {
@@ -171,18 +172,30 @@ namespace search
             heapify(_seq.begin(), _seq.end(), _seq.begin(), _compare);
         }
 
-        auto remove(Value item) -> void
+        auto remove(Value const& item) -> void
         {
             auto it = std::find(_seq.begin(), _seq.end(), item);
-            if (_seq.end() != it)   remove(it);
+            if (_seq.end() != it)   
+                remove(it);
         }
         //
         //  O(lg n)
         //
-        auto substitute(Value old_value, Value new_value) -> void
+        auto substitute(Value const& old_value, Value const& new_value) -> void
         {
             remove(old_value);
             push(new_value);
+        }
+
+        template<typename Functor>
+        auto update_if(Functor && functor)
+        {
+            auto iterator = find_if(_seq.begin(), _seq.end(), [this](Value const& val) {
+                return functor(val);
+            });
+
+            if (iterator != _seq.end() && _compare(functor.value, *iterator))
+                substitute(*iterator, functor.value);
         }
 
         void reset()

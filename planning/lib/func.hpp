@@ -16,12 +16,12 @@ namespace search
     template<typename Node>
     inline auto dy(Node const& node) -> Size
     {
-        return abs(node.goal().y - node.coordinate().y);
+        return abs(node.goal().y - node.state().y);
     }
     template<typename Node>
     inline auto dx(Node const& node) -> Size
     {
-        return abs(node.goal().x - node.coordinate().x);
+        return abs(node.goal().x - node.state().x);
     }
 
     template<typename Node>

@@ -14,60 +14,60 @@ namespace UnitTests
         //  2,0     2,1     2,2     ||  6   7   8
         TEST_METHOD(goes)
         {
-            auto const c = Coordinate{ 1u, 1u };
+            auto const c = State{ 1u, 1u };
 
-            Assert::IsTrue(Coordinate{ 0u, 0u } == GOES.at('1')(c));
-            Assert::IsTrue(Coordinate{ 0u, 1u } == GOES.at('2')(c));
-            Assert::IsTrue(Coordinate{ 0u, 2u } == GOES.at('3')(c));
-            Assert::IsTrue(Coordinate{ 1u, 0u } == GOES.at('4')(c));
-            Assert::IsTrue(Coordinate{ 1u, 2u } == GOES.at('5')(c));
-            Assert::IsTrue(Coordinate{ 2u, 0u } == GOES.at('6')(c));
-            Assert::IsTrue(Coordinate{ 2u, 1u } == GOES.at('7')(c));
-            Assert::IsTrue(Coordinate{ 2u, 2u } == GOES.at('8')(c));
+            Assert::IsTrue(State{ 0u, 0u } == GOES.at('1')(c));
+            Assert::IsTrue(State{ 0u, 1u } == GOES.at('2')(c));
+            Assert::IsTrue(State{ 0u, 2u } == GOES.at('3')(c));
+            Assert::IsTrue(State{ 1u, 0u } == GOES.at('4')(c));
+            Assert::IsTrue(State{ 1u, 2u } == GOES.at('5')(c));
+            Assert::IsTrue(State{ 2u, 0u } == GOES.at('6')(c));
+            Assert::IsTrue(State{ 2u, 1u } == GOES.at('7')(c));
+            Assert::IsTrue(State{ 2u, 2u } == GOES.at('8')(c));
         }
 
         TEST_METHOD(node_ctor)
         {
-            auto start = Coordinate{ 1u, 1u };
-            auto goal = Coordinate{ 2u, 2u };
+            auto start = State{ 1u, 1u };
+            auto goal = State{ 2u, 2u };
             Node node{ "1123", start, goal };
             Assert::AreEqual(std::string{ "1123" }, node.path());
         }
 
-        TEST_METHOD(Coordinate_to_string)
+        TEST_METHOD(State_to_string)
         {
-            Coordinate c = { 42, 99 };
+            State c = { 42, 99 };
             Assert::AreEqual(string{ "[42,99]" }, c.to_string());
         }
 
         TEST_METHOD(Node_to_string)
         {
-            auto start = Coordinate{ 1u, 1u };
-            auto goal = Coordinate{ 2u, 2u };
+            auto start = State{ 1u, 1u };
+            auto goal = State{ 2u, 2u };
             Node node{ "1123", start, goal };
             Assert::AreEqual(std::string{ "[1,1][1123][2,2]" }, node.to_string());
         }
 
         TEST_METHOD(coordinate)
         {
-            auto start = Coordinate{ 1u, 1u };
-            auto goal = Coordinate{ 2u, 2u };
+            auto start = State{ 1u, 1u };
+            auto goal = State{ 2u, 2u };
             Node node{ "45782316", start, goal };
-            Assert::IsTrue(Coordinate{ 1u, 1u } == node.coordinate());
+            Assert::IsTrue(State{ 1u, 1u } == node.state());
         }
 
         TEST_METHOD(children)
         {
-            auto start = Coordinate{ 1u, 1u };
-            auto goal = Coordinate{ 2u, 2u };
+            auto start = State{ 1u, 1u };
+            auto goal = State{ 2u, 2u };
             Node node{ "", start, goal };
 
             struct Validate
             {
                 auto operator()(Node node) const -> bool
                 {
-                    auto y = node.coordinate().y;
-                    auto x = node.coordinate().x;
+                    auto y = node.state().y;
+                    auto x = node.state().x;
                     return y >= 0 && y <= 39 && x >= 0 && x <= 39;
                 }
             };
@@ -91,8 +91,8 @@ namespace UnitTests
 
         TEST_METHOD(hash)
         {
-            auto start = Coordinate{ 1u, 1u };
-            auto goal = Coordinate{ 2u, 2u };
+            auto start = State{ 1u, 1u };
+            auto goal = State{ 2u, 2u };
             Node node{ "87654321", start, goal };
 
             Assert::AreEqual(1681822733u, node.hash());

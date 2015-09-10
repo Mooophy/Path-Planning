@@ -12,8 +12,8 @@ namespace UnitTests
 
         TEST_METHOD(dy_dx)
         {
-            auto start = Coordinate{ 0u, 0u };
-            auto goal = Coordinate{ 2u, 2u };
+            auto start = State{ 0u, 0u };
+            auto goal = State{ 2u, 2u };
             Node node{ "8", start, goal };
 
             Assert::AreEqual(1, dy(node));
@@ -22,32 +22,32 @@ namespace UnitTests
 
         TEST_METHOD(ManhattanDistance)
         {
-            auto start = Coordinate{ 0u, 0u };
-            auto goal = Coordinate{ 60u, 80u };
+            auto start = State{ 0u, 0u };
+            auto goal = State{ 60u, 80u };
             Node node{ "8", start, goal };
             Assert::AreEqual(79, search::ManhattanDistance<Node>{}(node));
         }
 
         TEST_METHOD(EuclideanDinstance)
         {
-            auto start = Coordinate{ 0u, 0u };
-            auto goal = Coordinate{ 60u, 80u };
+            auto start = State{ 0u, 0u };
+            auto goal = State{ 60u, 80u };
             Node node{ "8", start, goal };
             Assert::AreEqual(99, search::EuclideanDistance<Node>{}(node));
         }
 
         TEST_METHOD(Cost)
         {
-            auto start = Coordinate{ 0u, 0u };
-            auto goal = Coordinate{ 60u, 80u };
+            auto start = State{ 0u, 0u };
+            auto goal = State{ 60u, 80u };
             Node node{ "854617", start, goal };
             Assert::AreEqual(6, search::Cost<Node>{}(node));
         }
 
         TEST_METHOD(Less)
         {
-            auto start = Coordinate{ 0u, 0u };
-            auto goal = Coordinate{ 60u, 80u };
+            auto start = State{ 0u, 0u };
+            auto goal = State{ 60u, 80u };
             Node lhs{ "88", start, goal };
             Node rhs{ "81", start, goal };
             
