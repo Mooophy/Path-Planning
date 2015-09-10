@@ -18,6 +18,11 @@ using std::any_of;
 
 namespace search
 {
+    //
+    //  Hfunc : heuristic function, (Node) -> h value
+    //  ValidateFunc : unary predicate, check if a node is valid, (Node) -> bool
+    //  Cfunc : cost function, (Node) -> c value
+    //
     template<typename Hfunc, typename ValidateFunc, typename Cfunc = Cost<Node>>
     class AStarSEL
     {
@@ -42,10 +47,10 @@ namespace search
             reset();
         }
 
-        auto operator()(ValidateFunc validate) -> void
+        auto operator()(State start, State goal, ValidateFunc validate) -> void
         {
             reset();
-            _is_found = search(move(validate));
+            _is_found = search(start, goal, validate);
         }
 
     private:
@@ -57,50 +62,37 @@ namespace search
         long long _run_time;
         bool _is_found;
 
-        auto search(State start, State goal, ValidateFunc && validation) -> bool
+        auto search(State start, State goal, ValidateFunc validate) -> bool
         {
             for (_q.push({ "", start, goal }); true; _max_q_size = max(_max_q_size, _q.size()))
             {
-                if (_q.empty())
-                    return false;
+                if (_q.empty()) break;
 
                 auto curr = _q.top(); _q.pop();
-                if (goal == curr.state())
-                {
-                    _is_found = true;
-                    return true;
-                }
+                if (goal == curr.state()) return _is_found = true;
 
                 // is really needed? need refactoring anyway.
-                if (any_of(_expansions.cbegin(), _expansions, [&](Node const& node) {
-                    return node.state() == curr.state(); 
+                if (any_of(_expansions.cbegin(), _expansions.cend(), [&](State const& state) {
+                    return state == curr.state(); 
                 }))
                     continue;
-
                 _expansions.insert(curr.state());
 
-                for (auto const& child : curr.children(validation))
+                for (auto const& child : curr.children(validate))
                 {
                     //handle expansions
-                    if (any_of(_expansions.cbegin(), _expansions, [&](Node const& node) {
-                        return node.state() == child.state();
+                    if (any_of(_expansions.cbegin(), _expansions.cend(), [&](State state) {
+                        return state == curr.state();
                     }))
                         continue;
-
                     //handle q
-                    struct Functor
-                    {
-                        Node const value;
-                        //  to see if same state
-                        auto operator()(Node const& node) const -> bool
-                        {
-                            return node.state() == value.state();
-                        }
+                    function<bool(Node)> is_same_state = [&](Node const& node) {
+                        return node.state() == child.state();
                     };
-
-                    _q.update_if(Functor{ child });
+                    _q.update_with_if(child, is_same_state);
                 }
             }
+            return false;
         }
 
         auto reset() -> void

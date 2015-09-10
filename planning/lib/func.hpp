@@ -14,41 +14,38 @@ using std::find;
 namespace search
 {
     template<typename Node>
-    inline auto dy(Node const& node) -> Size
+    inline auto dy(Node const& node) -> Integer
     {
         return abs(node.goal().y - node.state().y);
     }
     template<typename Node>
-    inline auto dx(Node const& node) -> Size
+    inline auto dx(Node const& node) -> Integer
     {
         return abs(node.goal().x - node.state().x);
     }
 
     template<typename Node>
-    struct Heuristc {};
-
-    template<typename Node>
-    struct ManhattanDistance : public Heuristc<Node>
+    struct ManhattanDistance
     {
-        auto operator()(Node const& node) const -> Size
+        auto operator()(Node const& node) const -> Integer
         {
             return max(dy(node), dx(node));
         }
     };
 
     template<typename Node>
-    struct EuclideanDistance : public Heuristc<Node>
+    struct EuclideanDistance
     {
-        auto operator()(Node const& node) const -> Size
+        auto operator()(Node const& node) const -> Integer
         {
-            return static_cast<Size>(round(hypot(dy(node), dx(node))));
+            return static_cast<Integer>(round(hypot(dy(node), dx(node))));
         }
     };
 
     template<typename Node>
     struct Cost
     {
-        auto operator()(Node const& node) const -> Size
+        auto operator()(Node const& node) const -> Integer
         {
             return node.path().size();
         }

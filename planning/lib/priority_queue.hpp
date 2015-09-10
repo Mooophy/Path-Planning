@@ -187,15 +187,14 @@ namespace search
             push(new_value);
         }
 
-        template<typename Functor>
-        auto update_if(Functor && functor)
+        template<typename Predicate>
+        auto update_with_if(Value const& new_value, Predicate predicate) -> void
         {
-            auto iterator = find_if(_seq.begin(), _seq.end(), [this](Value const& val) {
-                return functor(val);
+            auto iterator = find_if(_seq.begin(), _seq.end(), [&](Value const& value) {
+                return predicate(value);
             });
-
-            if (iterator != _seq.end() && _compare(functor.value, *iterator))
-                substitute(*iterator, functor.value);
+            if (iterator != _seq.end() && _compare(new_value, *iterator))
+                substitute(*iterator, new_value);
         }
 
         void reset()

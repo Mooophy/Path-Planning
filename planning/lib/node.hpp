@@ -14,14 +14,14 @@ using std::function;
 
 namespace search
 {
-    using Size = int;
+    using Integer = int;
     //
     //  State
     //      That is coordinate.
     //
     struct State
     {
-        Size y, x;
+        Integer y, x;
         auto to_string() const -> string
         {
             return "[" + std::to_string(y) + "," + std::to_string(x) + "]";
@@ -30,6 +30,10 @@ namespace search
     inline auto operator==(State lhs, State rhs) -> bool
     {
         return lhs.x == rhs.x && lhs.y == rhs.y;
+    }
+    inline auto operator!=(State lhs, State rhs) -> bool
+    {
+        return !(lhs == rhs);
     }
     //
     //  Function map for 8 directions
