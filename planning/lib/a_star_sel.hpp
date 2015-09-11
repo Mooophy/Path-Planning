@@ -79,34 +79,32 @@ namespace search
         //
         //  Core part
         //
-        auto search(State start, State goal, ValidateFunc validate) -> bool
+        auto search(State start, State goal, ValidateFunc validate) -> void
         {
-            for (_q.push({ "", start, goal }); ; update_max_q_size())
+            for (_q.push({ "", start, goal }); !_q.empty() && _q.top().state() != goal; update_max_q_size())
             {
-                if (_q.empty()) 
-                    return _is_found = false;
-
-                auto curr = _q.top(); _q.pop();
-                if (curr.state() == goal)
-                {
-                    _final_path = curr.path();
-                    return _is_found = true;
-                }
-
+                auto curr = _q.pop();
                 if (!is_expanded(curr))
                 {
                     expand(curr);
                     for (auto const& child : curr.children(validate))
-                    {
                         if (!is_expanded(child))
-                        {
                             if (!_q.any(SameStateAs{ child.state() }))
                                 _q.push(child);
                             else
                                 _q.update_with_if(child, SameStateAs{ child.state() });
-                        }
-                    }
                 }
+            }
+
+            if (_q.empty())
+            {
+                _final_path = "";
+                _is_found = false;
+            }
+            else
+            {
+                _final_path = _q.top().path();
+                _is_found = true;
             }
         }
         //

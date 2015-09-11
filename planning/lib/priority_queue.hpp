@@ -169,13 +169,16 @@ namespace search
             *curr = new_val;
         }
 
-        auto pop() -> void
+        auto pop() -> Value
         {
             if (empty())
                 throw std::underflow_error{ "underflow." };
+            auto popped = _seq.front();
             _seq.front() = _seq.back();
             _seq.resize(_seq.size() - 1);
             heapify(_seq.begin(), _seq.end(), _seq.begin(), _compare);
+
+            return popped;
         }
 
         auto remove(Value const& item) -> void
