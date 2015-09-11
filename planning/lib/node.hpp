@@ -11,6 +11,8 @@
 using std::string;
 using std::to_string;
 using std::function;
+using std::max;
+using std::min;
 
 namespace search
 {
@@ -25,6 +27,15 @@ namespace search
         auto to_string() const -> string
         {
             return "[" + std::to_string(y) + "," + std::to_string(x) + "]";
+        }
+
+        auto is_with_in_grid(State s1, State s2) const -> bool
+        {
+            auto ymax = max(s1.y, s2.y);
+            auto ymin = min(s1.y, s2.y);
+            auto xmax = max(s1.x, s2.x);
+            auto xmin = min(s1.x, s2.x);
+            return x >= xmin && x <= xman && y >= ymin && y <= ymax;
         }
     };
     inline auto operator==(State lhs, State rhs) -> bool
