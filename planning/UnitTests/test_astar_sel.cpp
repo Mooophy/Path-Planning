@@ -46,7 +46,7 @@ namespace UnitTests
             Assert::AreEqual(44u, astar.last_run.max_q_size);
             Assert::AreEqual(32u, astar.last_run.expansions.size());
             Assert::AreEqual(string{ "588885888838" }, astar.last_run.final_path);
-            //Assert::IsTrue(0 == astar.last_run.run_time);
+            Assert::IsTrue(100 < (int)astar.last_run.run_time && 1000 > (int)astar.last_run.run_time);
             Assert::IsTrue(astar.last_run.is_found);
         }
     };
