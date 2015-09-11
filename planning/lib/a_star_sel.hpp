@@ -28,7 +28,6 @@ namespace search
     class AStarSEL
     {
     public:
-
         using Q = PriorityQueue<Node, Less<Node, Hfunc>>;
         using Expansions = unordered_set<State>;
 
@@ -83,10 +82,15 @@ namespace search
         {
             for (_q.push({ "", start, goal }); ; update_max_q_size())
             {
-                if (_q.empty()) return _is_found = false;
+                if (_q.empty()) 
+                    return _is_found = false;
 
                 auto curr = _q.top(); _q.pop();
-                if (goal == curr.state()) return _is_found = true;
+                if (curr.state() == goal)
+                {
+                    _final_path = curr.path();
+                    return _is_found = true;
+                }
 
                 if (!is_expanded(curr))
                 {
