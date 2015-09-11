@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <vector>
 
 using std::max;
 using std::abs;

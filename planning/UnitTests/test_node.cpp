@@ -109,5 +109,29 @@ namespace UnitTests
             std::unordered_set<Node> uset{ node };
             Assert::AreEqual(1u, uset.size());
         }
+
+        TEST_METHOD(path_to_states_function)
+        {
+            {
+                auto actual = path_to_states({ 0, 0 }, "8");
+                auto expect = vector<State>{ { 1,1 } };
+                for (auto i = 0u; i != actual.size(); ++i)
+                    Assert::IsTrue(expect[i] == actual[i]);
+            }
+
+            {
+                auto actual = path_to_states({ 0, 0 }, "88");
+                auto expect = vector<State>{ { 1, 1 }, { 2, 2 } };
+                for (auto i = 0u; i != actual.size(); ++i)
+                    Assert::IsTrue(expect[i] == actual[i]);
+            }
+
+            {
+                auto actual = path_to_states({ 0, 0 }, "81");
+                auto expect = vector<State>{ { 1, 1 }, { 0, 0 } };
+                for (auto i = 0u; i != actual.size(); ++i)
+                    Assert::IsTrue(expect[i] == actual[i]);
+            }
+        }
     };
 }

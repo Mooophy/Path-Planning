@@ -14,6 +14,7 @@ using std::to_string;
 using std::function;
 using std::max;
 using std::min;
+using std::vector;
 
 namespace search
 {
@@ -165,6 +166,17 @@ namespace search
         State _start;
         State _goal;
     };
+
+    //
+    //  Decode path to states
+    //
+    auto inline static path_to_states(State start, string const& path) -> vector<State>
+    {
+        vector<State> states;
+        for (auto direction : path)
+            states.push_back(start = GOES.at(direction)(start));
+        return states;
+    }
 }//end of search namespace
 
 //
