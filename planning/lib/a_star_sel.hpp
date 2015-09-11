@@ -84,11 +84,11 @@ namespace search
             for (_q.push({ "", start, goal }); !_q.empty() && _q.top().state() != goal; update_max_q_size())
             {
                 auto curr = _q.pop();
-                if (!is_expanded(curr))
+                if (!has_expanded_into_state_of(curr))
                 {
-                    expand(curr);
+                    expand_into(curr.state());
                     for (auto const& child : curr.children(validate))
-                        if (!is_expanded(child))
+                        if (!has_expanded_into_state_of(child))
                             if (!_q.any(SameStateAs{ child.state() }))
                                 _q.push(child);
                             else
@@ -128,7 +128,7 @@ namespace search
         //
         //  helper for method search
         //
-        auto is_expanded(Node const& n) const -> bool
+        auto has_expanded_into_state_of(Node const& n) const -> bool
         {
             auto const& e = _expansions;
             return any_of(e.cbegin(), e.cend(), [&](State s) {return s == n.state(); });
@@ -136,9 +136,9 @@ namespace search
         //
         //  helper for method search
         //
-        auto expand(Node const& n) -> void
+        auto expand_into(State s) -> void
         {
-            _expansions.insert(n.state());
+            _expansions.insert(s);
         }
     };
 }
