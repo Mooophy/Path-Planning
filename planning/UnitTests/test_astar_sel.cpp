@@ -38,9 +38,7 @@ namespace UnitTests
                 auto is_not_bloked = none_of(blokeds.cbegin(), blokeds.cend(), [&](State s) {
                     return s == n.state();
                 });
-                auto is_within_grid = n.state().x <= 39 && n.state().x >= 0 && n.state().y <= 39 && n.state().y >= 0;
-
-                return is_not_bloked && is_within_grid;
+                return is_not_bloked && n.state().is_with_in_grid({ 0, 0 }, { 39, 39 });
             };
             AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
             astar({ 0, 0 }, { 8, 12 }, validate);

@@ -36,6 +36,7 @@ namespace search
             auto ymin = min(s1.y, s2.y);
             auto xmax = max(s1.x, s2.x);
             auto xmin = min(s1.x, s2.x);
+
             return x >= xmin && x <= xmax && y >= ymin && y <= ymax;
         }
     };
