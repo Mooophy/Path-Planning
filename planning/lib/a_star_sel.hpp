@@ -65,49 +65,6 @@ namespace search
         long long _run_time;
         bool _is_found;
         //
-        //  Core part
-        //
-        auto search(State start, State goal, ValidateFunc validate) -> bool
-        {
-            for (_q.push({ "", start, goal }); true; _max_q_size = max(_max_q_size, _q.size()))
-            {
-                if (_q.empty()) return _is_found = false;
-
-                auto curr = _q.top(); _q.pop();
-                if (goal == curr.state()) return _is_found = true;
-                if (expansions_contain_state_of(curr))  continue;
-                expand(curr);
-
-                for (auto const& child : curr.children(validate))
-                {
-                    if (expansions_contain_state_of(child))  continue;
-
-                    function<bool(Node)> is_same_state = [&](Node const& node) {
-                        return node.state() == child.state();
-                    };
-                    if (!_q.any(is_same_state))
-                        _q.push(child);
-                    else
-                        _q.update_with_if(child, is_same_state);
-                }
-            }
-        }
-        //
-        //  helper for method search
-        //
-        auto expansions_contain_state_of(Node const& n) const -> bool
-        {
-            auto const& e = _expansions;
-            return any_of(e.cbegin(), e.cend(), [&](State s) {return s == n.state(); });
-        }
-        //
-        //  helper for method search
-        //
-        auto expand(Node const& n) -> void
-        {
-            _expansions.insert(n.state());
-        }
-        //
         //  reset all data members
         //
         auto reset() -> void
@@ -118,6 +75,67 @@ namespace search
             _final_path.clear();
             _run_time = 0;
             _is_found = false;
+        }
+        //
+        //  Core part
+        //
+        auto search(State start, State goal, ValidateFunc validate) -> bool
+        {
+            for (_q.push({ "", start, goal }); ; update_max_q_size())
+            {
+                if (_q.empty()) return _is_found = false;
+
+                auto curr = _q.top(); _q.pop();
+                if (goal == curr.state()) return _is_found = true;
+
+                if (!is_expanded(curr))
+                {
+                    expand(curr);
+                    for (auto const& child : curr.children(validate))
+                    {
+                        if (!is_expanded(child))
+                        {
+                            if (!_q.any(SameStateAs{ child.state() }))
+                                _q.push(child);
+                            else
+                                _q.update_with_if(child, SameStateAs{ child.state() });
+                        }
+                    }
+                }
+            }
+        }
+        //
+        //  helper for method search
+        //
+        auto update_max_q_size() -> void
+        {
+            _max_q_size = max(_max_q_size, _q.size());
+        }
+        //
+        //  helper for method search
+        //
+        struct SameStateAs
+        {
+            State state_to_compare;
+            auto operator()(Node const& n) const -> bool
+            {
+                return n.state() == state_to_compare;
+            }
+        };
+        //
+        //  helper for method search
+        //
+        auto is_expanded(Node const& n) const -> bool
+        {
+            auto const& e = _expansions;
+            return any_of(e.cbegin(), e.cend(), [&](State s) {return s == n.state(); });
+        }
+        //
+        //  helper for method search
+        //
+        auto expand(Node const& n) -> void
+        {
+            _expansions.insert(n.state());
         }
     };
 }
