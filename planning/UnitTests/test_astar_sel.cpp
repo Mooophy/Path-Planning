@@ -16,7 +16,7 @@ namespace UnitTests
         {
             function<bool(Node)> validate = [](Node const& n) {return true; };
             AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
-            astar({ 1, 1 }, { 2, 2 }, validate);
+            astar({ "",{ 1, 1 },{ 2, 2 } }, validate);
         }
 
         TEST_METHOD(getter)
@@ -42,7 +42,7 @@ namespace UnitTests
                     return is_not_bloked && n.state().is_with_in_grid({ 0, 0 }, { 39, 39 });
                 };
                 AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
-                astar({ 0, 0 }, { 8, 12 }, validate);
+                astar({ "", { 0, 0 }, { 8, 12 } }, validate);
 
                 Assert::AreEqual(44u, astar.last_run.max_q_size);
                 Assert::AreEqual(32u, astar.last_run.expansions.size());
@@ -60,7 +60,7 @@ namespace UnitTests
                     return is_not_bloked && n.state().is_with_in_grid({ 0, 0 }, { 39, 39 });
                 };
                 AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
-                astar({ 0, 0 }, { 30, 30 }, validate);
+                astar({ "", { 0, 0 }, { 30, 30 } }, validate);
 
                 Assert::AreEqual(119u, astar.last_run.max_q_size);
                 Assert::AreEqual(75u, astar.last_run.expansions.size());
@@ -78,7 +78,7 @@ namespace UnitTests
                     return is_not_bloked && n.state().is_with_in_grid({ 0, 0 }, { 9, 9 });
                 };
                 AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
-                astar({ 0, 0 }, { 9, 9 }, validate);
+                astar({ "", { 0, 0 }, { 9, 9 } }, validate);
 
                 Assert::AreEqual(32u, astar.last_run.max_q_size);
                 Assert::AreEqual(97u, astar.last_run.expansions.size());

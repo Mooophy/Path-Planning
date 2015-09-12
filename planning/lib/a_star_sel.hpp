@@ -82,7 +82,7 @@ namespace search
         auto search(Node from, ValidateFunc validate) -> void
         {
             //astar algorithm
-            for (_q.push(from.state()); !_q.empty() && _q.top().state() != goal; update_max_q_size())
+            for (_q.push(from); !_q.empty() && _q.top().state() != from.goal(); update_max_q_size())
             {
                 auto curr = _q.pop();
                 if (hasnot_expanded_into_state_of(curr))
