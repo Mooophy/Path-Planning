@@ -81,6 +81,7 @@ namespace search
         //
         auto search(Node from, ValidateFunc validate) -> void
         {
+            //astar algorithm
             for (_q.push(from.state()); !_q.empty() && _q.top().state() != goal; update_max_q_size())
             {
                 auto curr = _q.pop();
@@ -95,7 +96,8 @@ namespace search
                                 _q.update_with_if(child, SameStateAs{ child.state() });
                 }
             }
-
+                
+            //update    
             if (_q.empty())
                 _is_found = false,  _final_path = "";
             else
