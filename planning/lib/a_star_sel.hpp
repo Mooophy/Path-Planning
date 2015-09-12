@@ -79,9 +79,9 @@ namespace search
         //
         //  Core part
         //
-        auto search(State start, State goal, ValidateFunc validate) -> void
+        auto search(Node from, ValidateFunc validate) -> void
         {
-            for (_q.push({ "", start, goal }); !_q.empty() && _q.top().state() != goal; update_max_q_size())
+            for (_q.push(from.state()); !_q.empty() && _q.top().state() != goal; update_max_q_size())
             {
                 auto curr = _q.pop();
                 if (!has_expanded_into_state_of(curr))
