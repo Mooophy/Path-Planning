@@ -355,6 +355,11 @@ void runSimulation(char *fileName)
 
         case 106:
             //~ algorithmSelection = ASTAR_ALGORITHM;
+        {
+            auto const& g = grid_world;
+            State start{ g.getStartVertex().col, g.getStartVertex().row };
+            State goal{ g.getGoalVertex().col, g.getGoalVertex().row };
+        }
             break;
 
         case 107:

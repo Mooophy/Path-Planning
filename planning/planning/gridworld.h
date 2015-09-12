@@ -165,7 +165,7 @@ public:
         return map[row][col].h;
     }
 
-    vertex getStartVertex() {
+    vertex getStartVertex() const {
         if (!MAP_INITIALISED) {
             cout << "Error in getStartVertex()" << endl;
             exit(1);
@@ -173,7 +173,7 @@ public:
         return startVertex;
     }
 
-    vertex getGoalVertex() {
+    vertex getGoalVertex() const {
         if (!MAP_INITIALISED) {
             cout << "Error in getStartVertex()" << endl;
             exit(1);
