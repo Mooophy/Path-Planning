@@ -47,11 +47,11 @@ namespace search
             reset();
         }
 
-        auto operator()(State start, State goal, ValidateFunc validate) -> void
+        auto operator()(Node from, ValidateFunc validate) -> void
         {
             reset();
             Timing timing{ _run_time };
-            search(start, goal, validate);
+            search(from, validate);
         }
 
     private:
