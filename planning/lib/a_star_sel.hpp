@@ -84,11 +84,11 @@ namespace search
             for (_q.push(from.state()); !_q.empty() && _q.top().state() != goal; update_max_q_size())
             {
                 auto curr = _q.pop();
-                if (!has_expanded_into_state_of(curr))
+                if (hasnot_expanded_into_state_of(curr))
                 {
                     expand_into(curr.state());
                     for (auto const& child : curr.children(validate))
-                        if (!has_expanded_into_state_of(child))
+                        if (hasnot_expanded_into_state_of(child))
                             if (!_q.any(SameStateAs{ child.state() }))
                                 _q.push(child);
                             else
@@ -97,15 +97,9 @@ namespace search
             }
 
             if (_q.empty())
-            {
-                _final_path = "";
-                _is_found = false;
-            }
+                _is_found = false,  _final_path = "";
             else
-            {
-                _final_path = _q.top().path();
-                _is_found = true;
-            }
+                _is_found = true,   _final_path = _q.top().path();
         }
         //
         //  helper for method search
@@ -128,10 +122,10 @@ namespace search
         //
         //  helper for method search
         //
-        auto has_expanded_into_state_of(Node const& n) const -> bool
+        auto hasnot_expanded_into_state_of(Node const& n) const -> bool
         {
             auto const& e = _expansions;
-            return any_of(e.cbegin(), e.cend(), [&](State s) {return s == n.state(); });
+            return none_of(e.cbegin(), e.cend(), [&](State s) {return s == n.state(); });
         }
         //
         //  helper for method search
