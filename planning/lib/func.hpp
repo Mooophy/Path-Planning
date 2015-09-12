@@ -6,6 +6,7 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include "node.hpp"
 
 using std::max;
 using std::abs;

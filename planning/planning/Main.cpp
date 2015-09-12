@@ -34,6 +34,8 @@
 #include <set>
 #include <vector>
 
+#include "../lib/a_star_sel.hpp"
+
 //-------------------------
 #include "globalVariables.h"
 #include "transform.h"
