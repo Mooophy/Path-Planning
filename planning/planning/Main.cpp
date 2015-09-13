@@ -364,16 +364,25 @@ void runSimulation(char *fileName)
             print("start : ", start.x, start.y);
             print("goal : ", goal.x, goal.y);
 
-            unordered_set<State> blokeds{ { 3, 3 },{ 5, 5 },{ 9, 9 } };
+            unordered_set<State> blokeds{ };
             function<bool(Node)> validate = [&](Node const& n) {
                 auto const& b = blokeds;
                 auto is_not_bloked = none_of(blokeds.cbegin(), blokeds.cend(), [&](State s) {
                     return s == n.state();
                 });
-                return is_not_bloked && n.state().is_with_in_grid({ 0, 0 }, { 9, 9 });
+                return is_not_bloked && n.state().is_with_in_grid({ 0, 0 }, { 39, 39 });
             };
 
-            for (auto i = 999999u; --i;);
+            AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
+            astar(Node{ "", start, goal }, validate);
+            print(astar.last_run.final_path);
+            auto plan = path_to_states(start, astar.last_run.final_path);
+            if (!plan.empty())
+                for (auto state : plan)
+                    grid_world.setMapTypeValue(state.x, state.y,'1');
+            //
+            //  result not correct
+            //
         }
             break;
 

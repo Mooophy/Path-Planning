@@ -16,6 +16,7 @@ using std::move;
 using std::max;
 using std::any_of;
 using std::unordered_set;
+using std::none_of;
 
 namespace search
 {
@@ -39,7 +40,8 @@ namespace search
             string const& final_path;
             long long const& run_time;
             bool const& is_found;
-        } const last_run;
+        } 
+        const last_run;
 
         AStarSEL()
             : last_run{ _q, _max_q_size, _expansions, _final_path, _run_time, _is_found }
