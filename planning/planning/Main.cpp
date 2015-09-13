@@ -356,6 +356,7 @@ void runSimulation(char *fileName)
 
         case 106:
             //~ algorithmSelection = ASTAR_ALGORITHM;
+            // refactoring needed
         {
             auto const& g = grid_world;
             State start{ g.getStartVertex().col, g.getStartVertex().row };
@@ -364,7 +365,8 @@ void runSimulation(char *fileName)
             print("start : ", start.x, start.y);
             print("goal : ", goal.x, goal.y);
 
-            unordered_set<State> blokeds{ };
+            
+            unordered_set<State> blokeds{ /*{ 5, 5 }*/ };
             function<bool(Node)> validate = [&](Node const& n) {
                 auto const& b = blokeds;
                 auto is_not_bloked = none_of(blokeds.cbegin(), blokeds.cend(), [&](State s) {
@@ -376,10 +378,17 @@ void runSimulation(char *fileName)
             AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
             astar(Node{ "", start, goal }, validate);
             print(astar.last_run.final_path);
+
+            //draw expansions
+            for(auto state : astar.last_run.expansions)
+                if (state != goal && state != start)
+                    grid_world.setMapTypeValue(state.x, state.y, '9');
+
+            //draw the path
             auto plan = path_to_states(start, astar.last_run.final_path);
-            if (!plan.empty())
-                for (auto state : plan)
-                    grid_world.setMapTypeValue(state.x, state.y,'1');
+            for (auto state : plan)
+                if (state != goal && state != start)
+                    grid_world.setMapTypeValue(state.x, state.y, '6');
         }
             break;
 
