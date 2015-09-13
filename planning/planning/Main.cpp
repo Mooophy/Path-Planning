@@ -35,6 +35,7 @@
 #include <vector>
 
 #include "../lib/a_star_sel.hpp"
+#include "../lib/utility.hpp"
 
 //-------------------------
 #include "globalVariables.h"
@@ -359,6 +360,20 @@ void runSimulation(char *fileName)
             auto const& g = grid_world;
             State start{ g.getStartVertex().col, g.getStartVertex().row };
             State goal{ g.getGoalVertex().col, g.getGoalVertex().row };
+
+            print("start : ", start.x, start.y);
+            print("goal : ", goal.x, goal.y);
+
+            unordered_set<State> blokeds{ { 3, 3 },{ 5, 5 },{ 9, 9 } };
+            function<bool(Node)> validate = [&](Node const& n) {
+                auto const& b = blokeds;
+                auto is_not_bloked = none_of(blokeds.cbegin(), blokeds.cend(), [&](State s) {
+                    return s == n.state();
+                });
+                return is_not_bloked && n.state().is_with_in_grid({ 0, 0 }, { 9, 9 });
+            };
+
+            for (auto i = 999999u; --i;);
         }
             break;
 
