@@ -380,9 +380,6 @@ void runSimulation(char *fileName)
             if (!plan.empty())
                 for (auto state : plan)
                     grid_world.setMapTypeValue(state.x, state.y,'1');
-            //
-            //  result not correct
-            //
         }
             break;
 
