@@ -10,6 +10,7 @@
 
 using std::move;
 using std::find_if;
+using std::swap;
 
 namespace search
 {
@@ -60,16 +61,11 @@ namespace search
             auto max_min = (left != last && compare(*left, *curr)) ? left : curr;
             if (right != last && compare(*right, *max_min))	max_min = right;
 
+            if (curr == max_min) return;
+
             //!	exchange.
-            if (max_min != curr)
-            {
-                std::swap(*max_min, *curr);
-                curr = max_min;
-            }
-            else
-            {
-                return;
-            }
+            swap(*max_min, *curr);
+            curr = max_min;
         }
     }
     //
