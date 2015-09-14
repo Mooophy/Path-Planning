@@ -42,10 +42,10 @@ namespace UnitTests
 
         TEST_METHOD(State_is_with_grid)
         {
-            Assert::IsTrue(State{ 1, 2 }.is_with_in_grid({ 0, 0 }, { 2, 2 }));
-            Assert::IsTrue(State{ 1, 2 }.is_with_in_grid({ 1, 1 }, { 2, 2 }));
-            Assert::IsFalse(State{ 1, 3 }.is_with_in_grid({ 1, 1 }, { 2, 2 }));
-            Assert::IsFalse(State{ 2, 3 }.is_with_in_grid({ 1, 1 }, { 2, 2 }));
+            Assert::IsTrue(State{ 1, 2 }.is_within_grid({ 0, 0 }, { 2, 2 }));
+            Assert::IsTrue(State{ 1, 2 }.is_within_grid({ 1, 1 }, { 2, 2 }));
+            Assert::IsFalse(State{ 1, 3 }.is_within_grid({ 1, 1 }, { 2, 2 }));
+            Assert::IsFalse(State{ 2, 3 }.is_within_grid({ 1, 1 }, { 2, 2 }));
         }
 
         TEST_METHOD(Node_to_string)

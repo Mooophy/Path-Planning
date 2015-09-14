@@ -31,7 +31,7 @@ namespace search
             return "[" + std::to_string(y) + "," + std::to_string(x) + "]";
         }
 
-        auto is_with_in_grid(State s1, State s2) const -> bool
+        auto is_within_grid(State s1, State s2) const -> bool
         {
             auto ymax = max(s1.y, s2.y);
             auto ymin = min(s1.y, s2.y);

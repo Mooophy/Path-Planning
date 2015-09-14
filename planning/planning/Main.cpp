@@ -372,7 +372,7 @@ void runSimulation(char *fileName)
                 auto is_not_bloked = none_of(blokeds.cbegin(), blokeds.cend(), [&](State s) {
                     return s == n.state();
                 });
-                return is_not_bloked && n.state().is_with_in_grid({ 0, 0 }, { 39, 39 });
+                return is_not_bloked && n.state().is_within_grid({ 0, 0 }, { 39, 39 });
             };
 
             AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
