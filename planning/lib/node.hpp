@@ -10,7 +10,6 @@
 #include <algorithm>
 
 using std::string;
-using std::to_string;
 using std::function;
 using std::max;
 using std::min;
@@ -28,7 +27,8 @@ namespace search
         Integer y, x;
         auto to_string() const -> string
         {
-            return "[" + std::to_string(y) + "," + std::to_string(x) + "]";
+            using std::to_string;
+            return "[" + to_string(y) + "," + to_string(x) + "]";
         }
 
         auto is_within_grid(State s1, State s2) const -> bool
@@ -57,14 +57,14 @@ namespace search
     {
         Goes()
         {
-            (*this)['1'] = [](State c) -> State { return{ c.y - 1, c.x - 1 }; };
-            (*this)['2'] = [](State c) -> State { return{ c.y - 1, c.x - 0 }; };
-            (*this)['3'] = [](State c) -> State { return{ c.y - 1, c.x + 1 }; };
-            (*this)['4'] = [](State c) -> State { return{ c.y - 0, c.x - 1 }; };
-            (*this)['5'] = [](State c) -> State { return{ c.y + 0, c.x + 1 }; };
-            (*this)['6'] = [](State c) -> State { return{ c.y + 1, c.x - 1 }; };
-            (*this)['7'] = [](State c) -> State { return{ c.y + 1, c.x - 0 }; };
-            (*this)['8'] = [](State c) -> State { return{ c.y + 1, c.x + 1 }; };
+            (*this)['1'] = [](State s) -> State { return{ s.y - 1, s.x - 1 }; };
+            (*this)['2'] = [](State s) -> State { return{ s.y - 1, s.x - 0 }; };
+            (*this)['3'] = [](State s) -> State { return{ s.y - 1, s.x + 1 }; };
+            (*this)['4'] = [](State s) -> State { return{ s.y - 0, s.x - 1 }; };
+            (*this)['5'] = [](State s) -> State { return{ s.y + 0, s.x + 1 }; };
+            (*this)['6'] = [](State s) -> State { return{ s.y + 1, s.x - 1 }; };
+            (*this)['7'] = [](State s) -> State { return{ s.y + 1, s.x - 0 }; };
+            (*this)['8'] = [](State s) -> State { return{ s.y + 1, s.x + 1 }; };
         }
     } const GOES;
     //
@@ -124,10 +124,10 @@ namespace search
         //
         auto state() const -> State
         {
-            State c = _start;
+            State s = _start;
             for (auto direction : _path)
-                c = GOES.at(direction)(c);
-            return c;
+                s = GOES.at(direction)(s);
+            return s;
         }
         //  
         //  Format:
@@ -142,7 +142,8 @@ namespace search
         //
         auto hash() const -> size_t
         {
-            return std::hash<string>{}(to_string());
+            using std::hash;
+            return hash<string>{}(to_string());
         }
         //
         //  Require ValidateFunc implements interface operator()(Node)
@@ -189,9 +190,10 @@ namespace std
     template<>
     struct hash<State>
     {
-        auto operator()(State c) const -> size_t
+        auto operator()(State s) const -> size_t
         {
-            return std::hash<string>{}(c.to_string());
+            using std::hash;
+            return hash<string>{}(s.to_string());
         }
     };
 
@@ -199,9 +201,9 @@ namespace std
     struct hash<Node>
     {
         //[start.to_string][path][goal.to_string]
-        auto operator()(Node const& node) const -> size_t
+        auto operator()(Node const& n) const -> size_t
         {
-            return node.hash();
+            return n.hash();
         }
     };
 }//end of std namespace
