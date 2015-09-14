@@ -80,7 +80,7 @@ namespace search
         //
         //  Core part
         //
-        auto search(Node from, ValidateFunc validate) -> void
+        auto search(Node const& from, ValidateFunc validate) -> void
         {
             //astar algorithm
             for (_q.push(from); !_q.empty() && _q.top().state() != from.goal(); update_max_q_size())
@@ -88,7 +88,7 @@ namespace search
                 auto curr = _q.pop();
                 if (hasnot_expanded_into_state_of(curr))
                 {
-                    expand_into(curr.state());
+                    _expansions.insert(curr.state());
                     for (auto const& child : curr.children(validate))
                         if (hasnot_expanded_into_state_of(child))
                             if (!_q.any(SameStateAs{ child.state() }))
@@ -129,13 +129,6 @@ namespace search
         {
             auto const& e = _expansions;
             return none_of(e.cbegin(), e.cend(), [&](State s) {return s == n.state(); });
-        }
-        //
-        //  helper for method search
-        //
-        auto expand_into(State s) -> void
-        {
-            _expansions.insert(s);
         }
     };
 }
