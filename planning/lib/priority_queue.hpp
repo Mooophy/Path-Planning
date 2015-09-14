@@ -11,6 +11,11 @@
 using std::move;
 using std::find_if;
 using std::swap;
+using std::find;
+using std::any_of;
+using std::underflow_error;
+using std::initializer_list;
+using std::vector;
 
 namespace search
 {
@@ -57,15 +62,16 @@ namespace search
             auto left = left_child(first, last, curr);
             auto right = right_child(first, last, curr);
 
-            //! find max or min amoung curr, left and right children, depending on the CommpareFunc passed in.
+            // find max or min amoung curr, left and right children, depending on the CommpareFunc passed in.
             auto max_min = (left != last && compare(*left, *curr)) ? left : curr;
-            if (right != last && compare(*right, *max_min))	max_min = right;
+            if (right != last && compare(*right, *max_min))	
+                max_min = right;
 
-            if (curr == max_min) return;
-
-            //!	exchange.
-            swap(*max_min, *curr);
-            curr = max_min;
+            // exchange when needed
+            if (curr != max_min)
+                swap(*max_min, *curr), curr = max_min;
+            else
+                return;
         }
     }
     //
@@ -91,7 +97,7 @@ namespace search
         auto is_needed = [&] { return c != first && !compare(*p(), *c); };
 
         if (!is_needed()) return false;
-        for (; is_needed(); c = p())  std::swap(*p(), *c);
+        for (; is_needed(); c = p())  swap(*p(), *c);
         return true;
     }
 
@@ -102,7 +108,7 @@ namespace search
     class PriorityQueue
     {
     public:
-        using Vector = std::vector < Value >;
+        using Vector = vector < Value >;
         using SizeType = typename Vector::size_type;
         using Iterator = typename Vector::iterator;
 
@@ -112,8 +118,8 @@ namespace search
             : _seq{}, _compare{ c }
         {   }
 
-        PriorityQueue(std::initializer_list<Value>&& list, CompareFunc&& c)
-            : _seq(std::move(list)), _compare{ std::move(c) }
+        PriorityQueue(initializer_list<Value>&& list, CompareFunc&& c)
+            : _seq(move(list)), _compare{ move(c) }
         {
             if (!empty())
                 build_heap(_seq.begin(), _seq.end(), _compare);
@@ -121,7 +127,7 @@ namespace search
 
         template<typename Iterator>
         PriorityQueue(Iterator first, Iterator last, CompareFunc&& c)
-            : _seq(first, last), _compare{ std::move(c) }
+            : _seq(first, last), _compare{ move(c) }
         {
             if (!empty())
                 build_heap(_seq.begin(), _seq.end(), _compare);
@@ -144,13 +150,13 @@ namespace search
 
         auto contains(Value const& value) const -> bool
         {
-            return _seq.cend() != std::find(_seq.cbegin(), _seq.cend(), value);
+            return _seq.cend() != find(_seq.cbegin(), _seq.cend(), value);
         }
 
         template<typename Predicate>
         auto any(Predicate predicate) const -> bool
         {
-            return std::any_of(_seq.cbegin(), _seq.cend(), predicate);
+            return any_of(_seq.cbegin(), _seq.cend(), predicate);
         }
 
         auto push(Value const& new_val) -> void
@@ -168,18 +174,17 @@ namespace search
         auto pop() -> Value
         {
             if (empty())
-                throw std::underflow_error{ "underflow." };
+                throw underflow_error{ "underflow." };
             auto popped = _seq.front();
             _seq.front() = _seq.back();
             _seq.resize(_seq.size() - 1);
             heapify(_seq.begin(), _seq.end(), _seq.begin(), _compare);
-
             return popped;
         }
 
         auto remove(Value const& item) -> void
         {
-            auto it = std::find(_seq.begin(), _seq.end(), item);
+            auto it = find(_seq.begin(), _seq.end(), item);
             if (_seq.end() != it)   
                 remove(it);
         }
@@ -195,9 +200,7 @@ namespace search
         template<typename Predicate>
         auto update_with_if(Value const& new_value, Predicate predicate) -> void
         {
-            auto iterator = find_if(_seq.begin(), _seq.end(), [&](Value const& value) {
-                return predicate(value);
-            });
+            auto iterator = find_if(_seq.begin(), _seq.end(), [&](Value const& v) { return predicate(v); });
             if (iterator != _seq.end() && _compare(new_value, *iterator))
                 substitute(*iterator, new_value);
         }
@@ -223,7 +226,7 @@ namespace search
         template<typename Iterator>
         auto remove(Iterator at) -> void
         {
-            std::swap(*at, *(_seq.end() - 1));
+            swap(*at, *(_seq.end() - 1));
             if (!sift_up(_seq.begin(), at, _compare))
                 heapify(_seq.begin(), _seq.end() - 1, at, _compare);//avoid involving the last item.
             _seq.resize(size() - 1);
