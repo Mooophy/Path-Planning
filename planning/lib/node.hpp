@@ -24,19 +24,19 @@ namespace search
     //
     struct State
     {
-        Integer x, y;
+        Integer y, x;
         auto to_string() const -> string
         {
             using std::to_string;
-            return "[" + to_string(x) + "," + to_string(y) + "]";
+            return "[" + to_string(y) + "," + to_string(x) + "]";
         }
 
         auto is_within_grid(State s1, State s2) const -> bool
         {
-            auto xmax = max(s1.x, s2.x);
-            auto xmin = min(s1.x, s2.x);
             auto ymax = max(s1.y, s2.y);
             auto ymin = min(s1.y, s2.y);
+            auto xmax = max(s1.x, s2.x);
+            auto xmin = min(s1.x, s2.x);
 
             return x >= xmin && x <= xmax && y >= ymin && y <= ymax;
         }
@@ -57,14 +57,14 @@ namespace search
     {
         Goes()
         {
-            (*this)['1'] = [](State s) -> State { return{ s.x - 1, s.y - 1 }; };
-            (*this)['2'] = [](State s) -> State { return{ s.x - 0, s.y - 1 }; };
-            (*this)['3'] = [](State s) -> State { return{ s.x + 1, s.y - 1 }; };
-            (*this)['4'] = [](State s) -> State { return{ s.x - 1, s.y - 0 }; };
-            (*this)['5'] = [](State s) -> State { return{ s.x + 1, s.y + 0 }; };
-            (*this)['6'] = [](State s) -> State { return{ s.x - 1, s.y + 1 }; };
-            (*this)['7'] = [](State s) -> State { return{ s.x - 0, s.y + 1 }; };
-            (*this)['8'] = [](State s) -> State { return{ s.x + 1, s.y + 1 }; };
+            (*this)['1'] = [](State s) -> State { return{ s.y - 1, s.x - 1 }; };
+            (*this)['2'] = [](State s) -> State { return{ s.y - 1, s.x - 0 }; };
+            (*this)['3'] = [](State s) -> State { return{ s.y - 1, s.x + 1 }; };
+            (*this)['4'] = [](State s) -> State { return{ s.y - 0, s.x - 1 }; };
+            (*this)['5'] = [](State s) -> State { return{ s.y + 0, s.x + 1 }; };
+            (*this)['6'] = [](State s) -> State { return{ s.y + 1, s.x - 1 }; };
+            (*this)['7'] = [](State s) -> State { return{ s.y + 1, s.x - 0 }; };
+            (*this)['8'] = [](State s) -> State { return{ s.y + 1, s.x + 1 }; };
         }
     } const GOES;
     //
