@@ -366,13 +366,11 @@ void runSimulation(char *fileName)
             print("goal : ", goal.x, goal.y);
 
             
-            unordered_set<State> blokeds{ /*{ 5, 5 }*/ };
+            unordered_set<State> blockeds{ { 28, 18 } };
             function<bool(Node)> validate = [&](Node const& n) {
-                auto const& b = blokeds;
-                auto is_not_bloked = none_of(blokeds.cbegin(), blokeds.cend(), [&](State s) {
-                    return s == n.state();
-                });
-                return is_not_bloked && n.state().is_within_grid({ 0, 0 }, { 39, 39 });
+                auto const& b = blockeds;
+                auto not_bloked = none_of(b.cbegin(), b.cend(), [&](State s) {return s == n.state();});
+                return not_bloked && n.state().is_within_grid({ 0, 0 }, { 39, 39 });
             };
 
             AStarSEL<ManhattanDistance<Node>, decltype(validate)> astar;
