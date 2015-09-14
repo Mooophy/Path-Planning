@@ -17,12 +17,12 @@ namespace UnitTests
             auto const c = State{ 1u, 1u };
 
             Assert::IsTrue(State{ 0u, 0u } == GOES.at('1')(c));
-            Assert::IsTrue(State{ 0u, 1u } == GOES.at('2')(c));
-            Assert::IsTrue(State{ 0u, 2u } == GOES.at('3')(c));
-            Assert::IsTrue(State{ 1u, 0u } == GOES.at('4')(c));
-            Assert::IsTrue(State{ 1u, 2u } == GOES.at('5')(c));
-            Assert::IsTrue(State{ 2u, 0u } == GOES.at('6')(c));
-            Assert::IsTrue(State{ 2u, 1u } == GOES.at('7')(c));
+            Assert::IsTrue(State{ 1u, 0u } == GOES.at('2')(c));
+            Assert::IsTrue(State{ 2u, 0u } == GOES.at('3')(c));
+            Assert::IsTrue(State{ 0u, 1u } == GOES.at('4')(c));
+            Assert::IsTrue(State{ 2u, 1u } == GOES.at('5')(c));
+            Assert::IsTrue(State{ 0u, 2u } == GOES.at('6')(c));
+            Assert::IsTrue(State{ 1u, 2u } == GOES.at('7')(c));
             Assert::IsTrue(State{ 2u, 2u } == GOES.at('8')(c));
         }
 
