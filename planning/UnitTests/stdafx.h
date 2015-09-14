@@ -17,3 +17,4 @@
 #include "../lib/func.hpp"
 #include "../lib/timing.hpp"
 #include "../lib/a_star_sel.hpp"
+#include "../lib/lifelong_planning.hpp"
