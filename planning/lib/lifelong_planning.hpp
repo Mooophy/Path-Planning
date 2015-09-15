@@ -22,11 +22,11 @@ namespace search
     //
     namespace lp
     {
-        constexpr auto infinity() -> int
-        {
-            return std::numeric_limits<int>::max();
+        constexpr auto infinity() 
+        { 
+            return std::numeric_limits<int>::max(); 
         }
-        constexpr auto cost() -> int
+        constexpr auto cost()
         {
             return 1;
         }
@@ -44,20 +44,20 @@ namespace search
                 return !(l == r);
             }
 
-            auto neighbours() const -> vector<Coordinate>
+            auto neighbours() const
             {
                 struct Directions : public map< char, function< Coordinate(Coordinate) >>
                 {
                     Directions()
                     {
-                        (*this)['1'] = [](Coordinate c) -> Coordinate { return{ c.x - 1, c.y - 1 }; };
-                        (*this)['2'] = [](Coordinate c) -> Coordinate { return{ c.x - 0, c.y - 1 }; };
-                        (*this)['3'] = [](Coordinate c) -> Coordinate { return{ c.x + 1, c.y - 1 }; };
-                        (*this)['4'] = [](Coordinate c) -> Coordinate { return{ c.x - 1, c.y - 0 }; };
-                        (*this)['5'] = [](Coordinate c) -> Coordinate { return{ c.x + 1, c.y + 0 }; };
-                        (*this)['6'] = [](Coordinate c) -> Coordinate { return{ c.x - 1, c.y + 1 }; };
-                        (*this)['7'] = [](Coordinate c) -> Coordinate { return{ c.x - 0, c.y + 1 }; };
-                        (*this)['8'] = [](Coordinate c) -> Coordinate { return{ c.x + 1, c.y + 1 }; };
+                        (*this)['1'] = [](Coordinate c) { return Coordinate{ c.x - 1, c.y - 1 }; };
+                        (*this)['2'] = [](Coordinate c) { return Coordinate{ c.x - 0, c.y - 1 }; };
+                        (*this)['3'] = [](Coordinate c) { return Coordinate{ c.x + 1, c.y - 1 }; };
+                        (*this)['4'] = [](Coordinate c) { return Coordinate{ c.x - 1, c.y - 0 }; };
+                        (*this)['5'] = [](Coordinate c) { return Coordinate{ c.x + 1, c.y + 0 }; };
+                        (*this)['6'] = [](Coordinate c) { return Coordinate{ c.x - 1, c.y + 1 }; };
+                        (*this)['7'] = [](Coordinate c) { return Coordinate{ c.x - 0, c.y + 1 }; };
+                        (*this)['8'] = [](Coordinate c) { return Coordinate{ c.x + 1, c.y + 1 }; };
                     }
                 } static const directions;
 
@@ -74,11 +74,11 @@ namespace search
             {
                 const int first, second;
 
-                friend auto operator== (Key l, Key r) -> bool
+                friend auto operator== (Key l, Key r)
                 {
                     return l.first == r.first && l.second == r.second;
                 }
-                friend auto operator < (Key l, Key r) -> bool
+                friend auto operator < (Key l, Key r)
                 {
                     return (l.first < r.first) || (l.first == r.first && l.second < r.second);
                 }
@@ -88,16 +88,16 @@ namespace search
             int g, r;
 
             template<typename Hfunc>
-            auto key(Hfunc h) const -> Key
+            auto key(Hfunc h) const
             {
-                return{ min(g, r + h(coordinate)), min(g, r) };
+                return Key{ min(g, r + h(coordinate)), min(g, r) };
             }
         };
 
         struct LpManhattanDistance
         {
             const Coordinate goal;
-            auto operator()(Coordinate c) const -> int
+            auto operator()(Coordinate c) const
             {
                 return max(abs(goal.x - c.x), abs(goal.y - c.y));
             }
@@ -106,7 +106,7 @@ namespace search
         struct LpEuclideanDistance
         {
             const Coordinate goal;
-            auto operator()(Coordinate c) const -> int
+            auto operator()(Coordinate c) const
             {
                 auto result = hypot(abs(goal.x - c.x), abs(goal.y - c.y));
                 return static_cast<int>(round(result));
