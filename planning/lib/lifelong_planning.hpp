@@ -33,7 +33,7 @@ namespace search
 
         struct Coordinate
         {
-            const int x, y;
+            int x, y;
             
             friend auto operator== (Coordinate l, Coordinate r)
             {
@@ -84,7 +84,7 @@ namespace search
                 }
             };
 
-            const Coordinate coordinate;
+            Coordinate coordinate;
             int g, r;
 
             template<typename Hfunc>
@@ -112,5 +112,15 @@ namespace search
                 return static_cast<int>(round(result));
             }
         };
+
+        //class Matrix
+        //{
+        //public:
+        //    Matrix(unsigned width, unsigned height)
+        //        : _data{ height, vector<LpState>(width)}
+        //    {   }
+        //private:
+        //    vector<vector<LpState>> _data;
+        //};
     }
 }
