@@ -23,11 +23,13 @@ namespace UnitTests
             Assert::AreEqual(99, key.second);
         }
 
-        TEST_METHOD(coordinate)
+        TEST_METHOD(lp_coordinate)
         {
             Coordinate c{ 42, 99 };
             Assert::AreEqual(42, c.x);
             Assert::AreEqual(99, c.y);
+            Assert::IsTrue(Coordinate{ 1, 1 } == Coordinate{ 1, 1 });
+            Assert::IsTrue(Coordinate{ 1, 2 } != Coordinate{ 1, 1 });
         }
 
         TEST_METHOD(lp_manhattan)

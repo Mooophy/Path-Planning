@@ -35,6 +35,10 @@ namespace search
             {
                 return l.x == r.x && l.y == r.y;
             }
+            friend auto operator!= (Coordinate l, Coordinate r)
+            {
+                return !(l == r);
+            }
         };
 
         struct LpState
