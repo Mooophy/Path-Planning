@@ -33,6 +33,20 @@ namespace UnitTests
             Assert::AreEqual(99, c.y);
             Assert::IsTrue(Coordinate{ 1, 1 } == Coordinate{ 1, 1 });
             Assert::IsTrue(Coordinate{ 1, 2 } != Coordinate{ 1, 1 });
+
+            //test neighbour
+            {
+                Coordinate c{ 1, 1 };
+                decltype(c.neighbours()) expect = 
+                {
+                    { 0, 0 }, { 1, 0 }, { 2, 0 },
+                    { 0, 1 },   /* */   { 2, 1 },
+                    { 0, 2 }, { 1, 2 }, { 2, 2 }
+                };
+
+                for (auto i = 1; i != expect.size(); ++i)
+                    Assert::IsTrue(expect[i] == c.neighbours()[i]);
+            }
         }
 
         TEST_METHOD(lp_manhattan)
