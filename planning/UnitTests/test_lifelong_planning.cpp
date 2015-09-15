@@ -11,6 +11,11 @@ namespace UnitTests
     {
     public:
 
+        TEST_METHOD(infinity_function)
+        {
+            Assert::AreEqual(2147483647, infinity());
+        }
+
         TEST_METHOD(key)
         {
             Key key{ 42, 99 };

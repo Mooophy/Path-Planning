@@ -1,5 +1,7 @@
 #pragma once
 
+#include <limits>
+
 using std::make_pair;
 using std::min;
 using std::abs;
@@ -12,6 +14,11 @@ namespace search
     //
     namespace lp
     {
+        static auto infinity() -> int
+        {
+            return std::numeric_limits<int>::max();
+        }
+
         struct Key
         {
             int first, second;
