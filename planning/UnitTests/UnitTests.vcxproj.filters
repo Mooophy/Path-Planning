@@ -41,7 +41,7 @@
     <ClCompile Include="test_astar_sel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test_life_long.cpp">
+    <ClCompile Include="test_lifelong_planning.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

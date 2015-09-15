@@ -166,7 +166,7 @@
     </ClCompile>
     <ClCompile Include="test_astar_sel.cpp" />
     <ClCompile Include="test_func.cpp" />
-    <ClCompile Include="test_life_long.cpp" />
+    <ClCompile Include="test_lifelong_planning.cpp" />
     <ClCompile Include="test_node.cpp" />
     <ClCompile Include="test_priority_queue.cpp" />
     <ClCompile Include="test_timing.cpp" />
