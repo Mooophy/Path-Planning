@@ -21,7 +21,8 @@ namespace search
 
         struct Key
         {
-            int first, second;
+            const int first, second;
+
             friend auto operator== (Key l, Key r) -> bool
             {
                 return l.first == r.first && l.second == r.second;
@@ -34,7 +35,8 @@ namespace search
 
         struct Coordinate
         {
-            int x, y;
+            const int x, y;
+            
             friend auto operator== (Coordinate l, Coordinate r)
             {
                 return l.x == r.x && l.y == r.y;
@@ -47,7 +49,7 @@ namespace search
 
         struct LpState
         {
-            Coordinate c;
+            const Coordinate c;
             int g, r;
 
             template<typename Hfunc>
@@ -59,7 +61,8 @@ namespace search
 
         struct LpManhattanDistance
         {
-            Coordinate goal;
+            const Coordinate goal;
+            
             auto operator()(Coordinate c) const -> int
             {
                 return max(abs(goal.x - c.x), abs(goal.y - c.y));
@@ -68,7 +71,8 @@ namespace search
 
         struct LpEuclideanDistance
         {
-            Coordinate goal;
+            const Coordinate goal;
+            
             auto operator()(Coordinate c) const -> int
             {
                 auto result = hypot(abs(goal.x - c.x), abs(goal.y - c.y));
