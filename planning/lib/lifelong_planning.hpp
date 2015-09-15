@@ -22,24 +22,14 @@ namespace search
     //
     namespace lp
     {
-        static auto infinity() -> int
+        constexpr auto infinity() -> int
         {
             return std::numeric_limits<int>::max();
         }
-
-        struct Key
+        constexpr auto cost() -> int
         {
-            const int first, second;
-
-            friend auto operator== (Key l, Key r) -> bool
-            {
-                return l.first == r.first && l.second == r.second;
-            }
-            friend auto operator < (Key l, Key r) -> bool
-            {
-                return (l.first < r.first) || (l.first == r.first && l.second < r.second);
-            }
-        };
+            return 1;
+        }
 
         struct Coordinate
         {
@@ -78,17 +68,29 @@ namespace search
             }
         };
 
-
-
         struct LpState
         {
-            const Coordinate c;
+            struct Key
+            {
+                const int first, second;
+
+                friend auto operator== (Key l, Key r) -> bool
+                {
+                    return l.first == r.first && l.second == r.second;
+                }
+                friend auto operator < (Key l, Key r) -> bool
+                {
+                    return (l.first < r.first) || (l.first == r.first && l.second < r.second);
+                }
+            };
+
+            const Coordinate coordinate;
             int g, r;
 
             template<typename Hfunc>
             auto key(Hfunc h) const -> Key
             {
-                return{ min(g, r + h(c)), min(g, r) };
+                return{ min(g, r + h(coordinate)), min(g, r) };
             }
         };
 

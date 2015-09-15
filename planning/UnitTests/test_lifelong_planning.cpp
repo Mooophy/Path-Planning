@@ -11,6 +11,11 @@ namespace UnitTests
     {
     public:
 
+        TEST_METHOD(cost_function)
+        {
+            Assert::AreEqual(1, cost());
+        }
+
         TEST_METHOD(infinity_function)
         {
             Assert::AreEqual(2147483647, infinity());
@@ -18,6 +23,7 @@ namespace UnitTests
 
         TEST_METHOD(key)
         {
+            using Key = LpState::Key;
             Key key{ 42, 99 };
             Assert::AreEqual(42, key.first);
             Assert::AreEqual(99, key.second);
@@ -66,11 +72,12 @@ namespace UnitTests
         TEST_METHOD(lp_state)
         {
             auto ls = LpState{ { 3, 4 }, 6, 7 };
-            Assert::AreEqual(3, ls.c.x);
-            Assert::AreEqual(4, ls.c.y);
+            Assert::AreEqual(3, ls.coordinate.x);
+            Assert::AreEqual(4, ls.coordinate.y);
             Assert::AreEqual(6, ls.g);
             Assert::AreEqual(7, ls.r);
 
+            using Key = LpState::Key;
             Assert::IsTrue(Key{ 6, 6 } == ls.key(LpManhattanDistance{ { 39, 29 } }));
             Assert::IsTrue(Key{ 6, 6 } == ls.key(LpManhattanDistance{ { 6, 7 } }));
 
