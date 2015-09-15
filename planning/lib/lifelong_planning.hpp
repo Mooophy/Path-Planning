@@ -22,9 +22,13 @@ namespace search
         struct Key
         {
             int first, second;
-            friend auto operator== (Key l, Key r)
+            friend auto operator== (Key l, Key r) -> bool
             {
                 return l.first == r.first && l.second == r.second;
+            }
+            friend auto operator < (Key l, Key r) -> bool
+            {
+                return (l.first < r.first) || (l.first == r.first && l.second < r.second);
             }
         };
 

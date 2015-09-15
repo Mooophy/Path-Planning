@@ -21,6 +21,9 @@ namespace UnitTests
             Key key{ 42, 99 };
             Assert::AreEqual(42, key.first);
             Assert::AreEqual(99, key.second);
+            Assert::IsTrue(Key{ 1, 2 } < Key{ 2, 1 });
+            Assert::IsTrue(Key{ 2, 1 } < Key{ 2, 2 });
+            Assert::IsTrue(Key{ 2, 2 } == Key{ 2, 2 });
         }
 
         TEST_METHOD(lp_coordinate)
