@@ -113,7 +113,6 @@ namespace search
             {
                 return _data.size();
             }
-
             auto cols() const
             {
                 return _data.front().size();
