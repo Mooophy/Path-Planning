@@ -86,9 +86,8 @@ namespace UnitTests
         TEST_METHOD(matrix_class)
         {
             Matrix matrix{ 10, 10 };
-
-            //for x = 0, y = 0
-            {
+            
+            {//x = 0, y = 0
                 Coordinate c = { 0, 0 };
                 Assert::AreEqual(0, matrix.at(c).g);
                 Assert::AreEqual(0, matrix.at(c).r);
@@ -96,8 +95,7 @@ namespace UnitTests
                 Assert::IsTrue(Key{ 0, 0 } == matrix.at(c).key(LpEuclideanDistance{ { 6, 7 } }));
             }
 
-            //for x = 2, y = 4
-            {
+            {//x = 2, y = 4
                 Coordinate c = { 2, 4 };
                 Assert::AreEqual(0, matrix.at(c).g);
                 Assert::AreEqual(0, matrix.at(c).r);
