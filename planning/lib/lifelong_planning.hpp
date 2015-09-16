@@ -7,6 +7,7 @@
 #include <functional>
 #include <unordered_map>
 #include <string>
+#include "priority_queue.hpp"
 
 using std::max;
 using std::make_pair;
@@ -103,30 +104,31 @@ namespace search
         private:
             vector<vector<LpState>> _data;
         };
+
+        struct HeuristcFuncs : public unordered_map < string, function<int(Coordinate, Coordinate)> >
+        {
+            HeuristcFuncs()
+            {
+                (*this)["manhattan"] =
+                    [](Coordinate curr, Coordinate goal)
+                {
+                    return max(abs(goal.x - curr.x), abs(goal.y - curr.y));
+                };
+
+                (*this)["euclidean"] =
+                    [](Coordinate curr, Coordinate goal)
+                {
+                    return static_cast<int>(round(hypot(abs(goal.x - curr.x), abs(goal.y - curr.y))));
+                };
+            }
+        };
+
         //
         //  Lifelong A*
         //
         class LpAstar
         {
         public: 
-            struct HeuristcFuncs : public unordered_map < string, function<int(Coordinate, Coordinate)> >
-            {
-                HeuristcFuncs()
-                {
-                    (*this)["manhattan"] = 
-                        [](Coordinate curr, Coordinate goal) 
-                    {
-                        return max(abs(goal.x - curr.x), abs(goal.y - curr.y));
-                    };
-
-                    (*this)["euclidean"] = 
-                        [](Coordinate curr, Coordinate goal) 
-                    {
-                        return static_cast<int>(round(hypot(abs(goal.x - curr.x), abs(goal.y - curr.y))));
-                    };
-                }
-            } const static heuristic_table;
-
             struct Key
             {
                 const int first, second;
@@ -149,16 +151,22 @@ namespace search
                 }
             };
 
-            LpAstar(unsigned height, unsigned width, Coordinate goal, string heuristic)
-                : _matrix{ height, width }, goal{ goal }, h{ heuristic_table.at(heuristic) }
+            //
+            //  Constructor
+            //
+            LpAstar(unsigned height, unsigned width, Coordinate goal, string heuristic): 
+                heuristics{},
+                matrix{ height, width },
+                goal{ goal }, 
+                h{ heuristics.at(heuristic) },
+                q{ [&](LpState const& lft, LpState const& rht) { return Key{ lft, h, goal } < Key{ rht, h, goal }; } }
             {   }
 
-        private:
-            Matrix _matrix;
-
-        public: 
+            HeuristcFuncs heuristics;
+            Matrix matrix;
             Coordinate const goal;
             function<int(Coordinate, Coordinate)> h;
+            PriorityQueue < LpState, function<bool(LpState, LpState)>> q;
         };
     }
 }

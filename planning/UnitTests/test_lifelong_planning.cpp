@@ -55,7 +55,6 @@ namespace UnitTests
             }
         }
 
-        using HeuristcFuncs = LpAstar::HeuristcFuncs;
         TEST_METHOD(lp_heuristics)
         {
             Assert::AreEqual(6, HeuristcFuncs{}.at("manhattan")({ 3, 4 }, { 9, 9 }));
@@ -68,8 +67,8 @@ namespace UnitTests
         TEST_METHOD(lp_key)
         {
             auto ls = LpState{ { 3, 4 }, 6, 7 };
-            Assert::IsTrue(Key{ 6, 6 } == Key{ ls, LpAstar::HeuristcFuncs{}.at("manhattan"), { 39, 39 } });
-            Assert::IsTrue(Key{ 6, 6 } == Key{ ls, LpAstar::HeuristcFuncs{}.at("manhattan"), { 4, 4 } });
+            Assert::IsTrue(Key{ 6, 6 } == Key{ ls, HeuristcFuncs{}.at("manhattan"), { 39, 39 } });
+            Assert::IsTrue(Key{ 6, 6 } == Key{ ls, HeuristcFuncs{}.at("manhattan"), { 4, 4 } });
         }
 
         TEST_METHOD(lp_state)
@@ -101,45 +100,13 @@ namespace UnitTests
             }
         }
 
-        TEST_METHOD(lp_less)
+        TEST_METHOD(lp_astar)
         {
-            //LpLess<LpManhattanDistance> less{ { 9, 9 } };
-            //LpState l{ { 3, 4 }, 8, 7 }, r{ { 0, 0 }, 6, 6 };
-            //Assert::IsTrue(less(r, l));
-        }
-
-        TEST_METHOD(priority_queue_with_lp_state)
-        {
-            //LpLess<LpManhattanDistance> less{ { 9, 9 } };
-
-            //{//test : push pop and size
-            //    PriorityQueue<LpState, LpLess<LpManhattanDistance>> q{ less };
-            //    q.push({ { 3, 4 }, 6, 7 });
-            //    q.push({ { 1, 2 }, 4, 3 });
-            //    q.push({ { 4, 5 }, 0, 0 });
-            //    Assert::AreEqual(3u, q.size());
-            //    Assert::IsTrue(LpState{ { 4, 5 }, 0, 0 } == q.top()); q.pop();
-            //    Assert::AreEqual(2u, q.size());
-            //    Assert::IsTrue(LpState{ { 1, 2 }, 4, 3 } == q.top()); q.pop();
-            //    Assert::AreEqual(1u, q.size());
-            //    Assert::IsTrue(LpState{ { 3, 4 }, 6, 7 } == q.top()); q.pop();
-            //    Assert::AreEqual(0u, q.size());
-            //    Assert::IsTrue(q.empty());
-            //}
-
-        //    {//test : remove
-        //        PriorityQueue<LpState, decltype(less)> q{ less };
-        //        q.push({ { 3, 4 }, 6, 7 });
-        //        q.push({ { 1, 2 }, 4, 3 });
-        //        q.push({ { 4, 5 }, 0, 0 });
-        //        Assert::AreEqual(3u, q.size());
-        //        
-        //        q.remove({ { 1, 2 }, 4, 3 });
-        //        Assert::AreEqual(2u, q.size());
-
-        //        q.pop();
-        //        Assert::IsTrue(LpState{ { 3, 4 }, 6, 7 } == q.top()); q.pop();
-        //    }
+            LpAstar lpastar{ 40, 40, { 19, 29 }, "manhattan" };
+            
+            {//test priority queue
+                Assert::AreEqual(2u, lpastar.heuristics.size());
+            }
         }
     };
 }
