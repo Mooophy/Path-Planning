@@ -19,6 +19,8 @@ using std::map;
 using std::function;
 using std::unordered_map;
 using std::string;
+using std::to_string;
+using std::hash;
 
 namespace search
 {
@@ -47,6 +49,15 @@ namespace search
             friend auto operator!= (Coordinate l, Coordinate r)
             {
                 return !(l == r);
+            }
+
+            auto as_string() const
+            {
+                return string{ "[x = " + to_string(x) + ", y = " + to_string(y) + "]" };
+            }
+            auto as_hash() const
+            {
+                return hash<string>{}(as_string());
             }
 
             auto neighbours() const
@@ -196,7 +207,9 @@ namespace search
                 goal{ goal },
                 h{ heuristics.at(heuristic) },
                 q{ [&](LpState const& lft, LpState const& rht) { return Key{ lft, h, goal } < Key{ rht, h, goal }; } }
-            {   }
+            {
+
+            }
 
             auto operator()()
             {
@@ -210,4 +223,18 @@ namespace search
             PriorityQueue < LpState, function<bool(LpState, LpState)>> q;
         };
     }
+}//end of namespace search
+
+namespace std
+{
+    using namespace search::lp;
+    template<>
+    struct hash<Coordinate>
+    {
+        //[start.to_string][path][goal.to_string]
+        auto operator()(Coordinate c) const -> size_t
+        {
+            return c.as_hash();
+        }
+    };
 }

@@ -37,6 +37,9 @@ namespace UnitTests
             Assert::AreEqual(99, c.y);
             Assert::IsTrue(Coordinate{ 1, 1 } == Coordinate{ 1, 1 });
             Assert::IsTrue(Coordinate{ 1, 2 } != Coordinate{ 1, 1 });
+            Assert::AreEqual(string{ "[x = 42, y = 99]" }, c.as_string());
+            Assert::AreEqual(2044121234u, c.as_hash());
+            Assert::AreEqual(2044121234u, std::hash<Coordinate>{}(c));
 
             //test neighbour
             {
