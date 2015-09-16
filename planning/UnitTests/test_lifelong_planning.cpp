@@ -10,8 +10,6 @@ namespace UnitTests
     TEST_CLASS(test_lifelong_planning)
     {
     public:
-        using Key = LpAstarCore::Key;
-
         TEST_METHOD(cost_function)
         {
             Assert::AreEqual(1, cost());

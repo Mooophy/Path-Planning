@@ -127,33 +127,32 @@ namespace search
             }
         };
 
+        struct Key
+        {
+            const int first, second;
+
+            Key(int fst, int snd)
+                : first{ fst }, second{ snd }
+            {   }
+
+            Key(LpState s, function<int(Coordinate, Coordinate)> h, Coordinate g)
+                : Key{ min(s.g, s.r + h(s.coordinate, g)), min(s.g, s.r) }
+            {   }
+
+            friend auto operator== (Key l, Key r)
+            {
+                return l.first == r.first && l.second == r.second;
+            }
+            friend auto operator < (Key l, Key r)
+            {
+                return (l.first < r.first) || (l.first == r.first && l.second < r.second);
+            }
+        };
         //
         //  Lifelong A*
         //
         struct LpAstarCore
         {
-            struct Key
-            {
-                const int first, second;
-
-                Key(int fst, int snd)
-                    : first{ fst }, second{ snd }
-                {   }
-
-                Key(LpState s, function<int(Coordinate, Coordinate)> h, Coordinate g)
-                    : Key{ min(s.g, s.r + h(s.coordinate, g)), min(s.g, s.r) }
-                {   }
-
-                friend auto operator== (Key l, Key r)
-                {
-                    return l.first == r.first && l.second == r.second;
-                }
-                friend auto operator < (Key l, Key r)
-                {
-                    return (l.first < r.first) || (l.first == r.first && l.second < r.second);
-                }
-            };
-
             //
             //  Constructor
             //
