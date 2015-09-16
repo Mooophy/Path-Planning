@@ -249,5 +249,3 @@ namespace search
         };
     }
 }//end of namespace search
-
-
