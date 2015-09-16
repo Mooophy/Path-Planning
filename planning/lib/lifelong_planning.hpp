@@ -103,6 +103,16 @@ namespace search
                 return{ _data[c.y][c.x] };
             }
 
+            auto rows() const
+            {
+                return _data.size();
+            }
+
+            auto cols() const
+            {
+                return _data.front().size();
+            }
+
         private:
             vector<vector<LpState>> _data;
         };
@@ -152,20 +162,28 @@ namespace search
             //
             //  Constructor
             //
-            LpAstarCore(unsigned height, unsigned width, Coordinate start, Coordinate goal, string heuristic):
+            LpAstarCore(unsigned rows, unsigned cols, Coordinate start, Coordinate goal, string heuristic):
                 heuristics{},
-                matrix{ height, width },
+                matrix{ rows, cols },
                 start{ start }, 
                 goal{ goal },
                 h{ heuristics.at(heuristic) },
                 q{ [&](LpState const& lft, LpState const& rht) { return Key{ lft, h, goal } < Key{ rht, h, goal }; } }
-            {   }
+            {
+
+            }
 
             HeuristcFuncs const heuristics;
             Matrix matrix;
             Coordinate const start, goal;
             function<int(Coordinate, Coordinate)> const h;
             PriorityQueue < LpState, function<bool(LpState, LpState)>> q;
+
+        private:
+            //auto initialize()
+            //{
+            //    q.reset();
+            //}
         };
     }
 }

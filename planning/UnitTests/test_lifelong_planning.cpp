@@ -81,8 +81,10 @@ namespace UnitTests
 
         TEST_METHOD(matrix_class)
         {
-            Matrix matrix{ 10, 10 };
-            
+            Matrix matrix{ 9, 8 };
+            Assert::AreEqual(9u, matrix.rows());
+            Assert::AreEqual(8u, matrix.cols());
+
             {
                 Coordinate c = { 0, 0 };
                 Assert::AreEqual(0, matrix.at(c).g);
