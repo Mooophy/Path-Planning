@@ -130,9 +130,8 @@ namespace search
         //
         //  Lifelong A*
         //
-        class LpAstar
+        struct LpAstarCore
         {
-        public: 
             struct Key
             {
                 const int first, second;
@@ -158,7 +157,7 @@ namespace search
             //
             //  Constructor
             //
-            LpAstar(unsigned height, unsigned width, Coordinate goal, string heuristic): 
+            LpAstarCore(unsigned height, unsigned width, Coordinate goal, string heuristic):
                 heuristics{},
                 matrix{ height, width },
                 goal{ goal }, 
