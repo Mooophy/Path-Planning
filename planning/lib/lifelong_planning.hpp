@@ -84,6 +84,11 @@ namespace search
                 }
             };
 
+            friend auto operator==(LpState const& l, LpState const& r)
+            {
+                return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r;
+            }
+
             Coordinate coordinate;
             int g, r;
 
