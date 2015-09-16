@@ -6,6 +6,7 @@
 #include <map>
 #include <functional>
 #include <unordered_map>
+#include <unordered_set>
 #include <string>
 #include "priority_queue.hpp"
 
@@ -18,6 +19,7 @@ using std::vector;
 using std::map;
 using std::function;
 using std::unordered_map;
+using std::unordered_set;
 using std::string;
 using std::to_string;
 using std::hash;
@@ -29,9 +31,9 @@ namespace search
     //
     namespace lp
     {
-        constexpr auto infinity() 
-        { 
-            return std::numeric_limits<int>::max(); 
+        constexpr auto infinity()
+        {
+            return std::numeric_limits<int>::max();
         }
         constexpr auto cost()
         {
@@ -41,7 +43,7 @@ namespace search
         struct Coordinate
         {
             int x, y;
-            
+
             friend auto operator== (Coordinate l, Coordinate r)
             {
                 return l.x == r.x && l.y == r.y;
@@ -51,13 +53,14 @@ namespace search
                 return !(l == r);
             }
 
-            auto as_string() const
+            auto to_string() const
             {
+                using std::to_string;
                 return string{ "[x = " + to_string(x) + ", y = " + to_string(y) + "]" };
             }
-            auto as_hash() const
+            auto to_hash() const
             {
-                return hash<string>{}(as_string());
+                return hash<string>{}(to_string());
             }
 
             auto neighbours() const
@@ -83,15 +86,36 @@ namespace search
                 return result;
             }
         };
+    }
+}
 
+
+namespace std
+{
+    using namespace search::lp;
+    template<>
+    struct hash<Coordinate>
+    {
+        auto operator()(Coordinate c) const
+        {
+            return c.to_hash();
+        }
+    };
+}
+
+
+namespace search
+{
+    namespace lp
+    {
         struct LpState
         {
             Coordinate coordinate;
             int g, r;
-            bool blocked;
+            bool is_blocked;
             friend auto operator==(LpState const& l, LpState const& r)
             {
-                return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r && l.blocked == r.blocked;
+                return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r && l.is_blocked == r.is_blocked;
             }
         };
 
@@ -200,7 +224,7 @@ namespace search
             //
             //  Constructor
             //
-            LpAstarCore(unsigned rows, unsigned cols, Coordinate start, Coordinate goal, string heuristic):
+            LpAstarCore(unsigned rows, unsigned cols, Coordinate start, Coordinate goal, string heuristic, unordered_set<Coordinate> const& blockeds):
                 heuristics{},
                 matrix{ rows, cols },
                 start{ start }, 
@@ -208,7 +232,8 @@ namespace search
                 h{ heuristics.at(heuristic) },
                 q{ [&](LpState const& lft, LpState const& rht) { return Key{ lft, h, goal } < Key{ rht, h, goal }; } }
             {
-
+                for (auto blocked : blockeds)
+                    matrix.at(blocked).is_blocked = true;
             }
 
             auto operator()()
@@ -225,16 +250,4 @@ namespace search
     }
 }//end of namespace search
 
-namespace std
-{
-    using namespace search::lp;
-    template<>
-    struct hash<Coordinate>
-    {
-        //[start.to_string][path][goal.to_string]
-        auto operator()(Coordinate c) const -> size_t
-        {
-            return c.as_hash();
-        }
-    };
-}
+

@@ -37,8 +37,8 @@ namespace UnitTests
             Assert::AreEqual(99, c.y);
             Assert::IsTrue(Coordinate{ 1, 1 } == Coordinate{ 1, 1 });
             Assert::IsTrue(Coordinate{ 1, 2 } != Coordinate{ 1, 1 });
-            Assert::AreEqual(string{ "[x = 42, y = 99]" }, c.as_string());
-            Assert::AreEqual(2044121234u, c.as_hash());
+            Assert::AreEqual(string{ "[x = 42, y = 99]" }, c.to_string());
+            Assert::AreEqual(2044121234u, c.to_hash());
             Assert::AreEqual(2044121234u, std::hash<Coordinate>{}(c));
 
             //test neighbour
@@ -53,6 +53,14 @@ namespace UnitTests
 
                 for (auto i = 1; i != expect.size(); ++i)
                     Assert::IsTrue(expect[i] == c.neighbours()[i]);
+            }
+
+            {
+                unordered_set<Coordinate> blockeds;
+                blockeds.insert({ 1, 2 });
+                blockeds.insert({ 1, 2 });
+                blockeds.insert({ 1, 3 });
+                Assert::AreEqual(2u, blockeds.size());
             }
         }
 
@@ -81,7 +89,7 @@ namespace UnitTests
             Assert::AreEqual(7, ls.r);
             Assert::IsTrue(ls == LpState{ { 3, 4 }, 6, 7 });
             Assert::IsTrue(ls == LpState{ { 3, 4 }, 6, 7, false });
-            Assert::IsFalse(ls.blocked);
+            Assert::IsFalse(ls.is_blocked);
         }
 
         TEST_METHOD(matrix_class)
@@ -115,10 +123,18 @@ namespace UnitTests
 
         TEST_METHOD(lp_astar)
         {
-            LpAstarCore lpastar{ 40, 40, { 0, 0 }, { 19, 29 }, "manhattan" };
+            unordered_set<Coordinate> blockeds{ { 3, 2 }, { 14, 5 } };
+            LpAstarCore lpastar{ 40, 40, { 0, 0 }, { 19, 29 }, "manhattan", blockeds };
             Assert::AreEqual(2u, lpastar.heuristics.size());
             Assert::IsTrue(Coordinate{ 19, 29 } == lpastar.goal);
-            
+
+            {//test blockeds
+                Assert::AreEqual(true, lpastar.matrix.at({ 3, 2 }).is_blocked);
+                Assert::AreEqual(true, lpastar.matrix.at({ 3, 2 }).is_blocked);
+                Assert::AreEqual(false, lpastar.matrix.at({ 13, 22 }).is_blocked);
+                Assert::AreEqual(false, lpastar.matrix.at({ 13, 32 }).is_blocked);
+            }
+
             {//test matrix
                 Assert::IsTrue(Coordinate{ 0, 0 } == lpastar.matrix.at(Coordinate{ 0, 0 }).coordinate);
                 {
@@ -149,7 +165,7 @@ namespace UnitTests
                 }
 
                 {
-                    LpAstarCore lpastar{ 40, 40, { 0, 0 }, { 19, 29 }, "euclidean" };
+                    LpAstarCore lpastar{ 40, 40, { 0, 0 }, { 19, 29 }, "euclidean", blockeds };
                     lpastar.q.push(LpState{ { 3, 4 }, 6, 7 });
                     lpastar.q.push(LpState{ { 0, 1 }, 1, 2 });
                     lpastar.q.push(LpState{ { 3, 4 }, 5, 3 });
