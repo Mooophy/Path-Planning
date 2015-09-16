@@ -82,17 +82,6 @@ namespace search
             Coordinate coordinate;
             int g, r;
         };
-        //
-        //  For ordering in priority queue
-        //
-        //struct LpLess
-        //{
-        //    function<int(Coordinate)> const h;
-        //    auto operator()(LpState const& l, LpState const& r) const
-        //    {
-        //        return l.key(h) < r.key(h);
-        //    }
-        //};
 
         class Matrix
         {
