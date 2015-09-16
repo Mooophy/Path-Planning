@@ -77,7 +77,6 @@ namespace search
         {
             Coordinate coordinate;
             int g, r;
-
             friend auto operator==(LpState const& l, LpState const& r)
             {
                 return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r;
@@ -99,7 +98,6 @@ namespace search
             {
                 return{ _data[c.y][c.x] };
             }
-
             auto at(Coordinate c) const -> LpState const&
             {
                 return{ _data[c.y][c.x] };
@@ -118,7 +116,6 @@ namespace search
                 {
                     return max(abs(goal.x - curr.x), abs(goal.y - curr.y));
                 };
-
                 (*this)["euclidean"] =
                     [](Coordinate curr, Coordinate goal)
                 {
@@ -134,7 +131,6 @@ namespace search
             Key(int fst, int snd)
                 : first{ fst }, second{ snd }
             {   }
-
             Key(LpState s, function<int(Coordinate, Coordinate)> h, Coordinate g)
                 : Key{ min(s.g, s.r + h(s.coordinate, g)), min(s.g, s.r) }
             {   }
