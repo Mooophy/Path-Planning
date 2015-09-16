@@ -5,6 +5,8 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include <unordered_map>
+#include <string>
 
 using std::max;
 using std::make_pair;
@@ -14,6 +16,8 @@ using std::hypot;
 using std::vector;
 using std::map;
 using std::function;
+using std::unordered_map;
+using std::string;
 
 namespace search
 {
@@ -70,20 +74,6 @@ namespace search
 
         struct LpState
         {
-            struct Key
-            {
-                const int first, second;
-
-                friend auto operator== (Key l, Key r)
-                {
-                    return l.first == r.first && l.second == r.second;
-                }
-                friend auto operator < (Key l, Key r)
-                {
-                    return (l.first < r.first) || (l.first == r.first && l.second < r.second);
-                }
-            };
-
             friend auto operator==(LpState const& l, LpState const& r)
             {
                 return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r;
@@ -91,53 +81,24 @@ namespace search
 
             Coordinate coordinate;
             int g, r;
-
-            template<typename Hfunc>
-            auto key(Hfunc h) const
-            {
-                return Key{ min(g, r + h(coordinate)), min(g, r) };
-            }
         };
-
-        template<typename Hfunc>
-        struct LpLess
-        {
-            LpLess() = delete;
-            LpLess(Coordinate goal): _goal(goal){   }
-
-            auto operator()(LpState const& l, LpState const& r) const
-            {
-                return l.key(Hfunc{ _goal }) < r.key(Hfunc{ _goal });
-            }
-
-        private:
-            Coordinate _goal;
-        };
-
-        struct LpManhattanDistance
-        {
-            const Coordinate goal;
-            auto operator()(Coordinate c) const
-            {
-                return max(abs(goal.x - c.x), abs(goal.y - c.y));
-            }
-        };
-
-        struct LpEuclideanDistance
-        {
-            const Coordinate goal;
-            auto operator()(Coordinate c) const
-            {
-                auto result = hypot(abs(goal.x - c.x), abs(goal.y - c.y));
-                return static_cast<int>(round(result));
-            }
-        };
+        //
+        //  For ordering in priority queue
+        //
+        //struct LpLess
+        //{
+        //    function<int(Coordinate)> const h;
+        //    auto operator()(LpState const& l, LpState const& r) const
+        //    {
+        //        return l.key(h) < r.key(h);
+        //    }
+        //};
 
         class Matrix
         {
         public:
             Matrix(unsigned height, unsigned width)
-                : _data{ height, vector<LpState>(width)}
+                : _data{ height, vector<LpState>(width) }
             {   }
 
             auto at(Coordinate c) -> LpState&
@@ -152,6 +113,63 @@ namespace search
 
         private:
             vector<vector<LpState>> _data;
+        };
+        //
+        //  Lifelong A*
+        //
+        class LpAstar
+        {
+        public: 
+            struct HeuristcFuncs : public unordered_map < string, function<int(Coordinate, Coordinate)> >
+            {
+                HeuristcFuncs()
+                {
+                    (*this)["manhattan"] = 
+                        [](Coordinate curr, Coordinate goal) 
+                    {
+                        return max(abs(goal.x - curr.x), abs(goal.y - curr.y));
+                    };
+
+                    (*this)["euclidean"] = 
+                        [](Coordinate curr, Coordinate goal) 
+                    {
+                        return static_cast<int>(round(hypot(abs(goal.x - curr.x), abs(goal.y - curr.y))));
+                    };
+                }
+            } const static heuristic_table;
+
+            struct Key
+            {
+                Key(int fst, int snd)
+                    : first{ fst }, second{ snd }
+                {   }
+
+                Key(LpState s, function<int(Coordinate, Coordinate)> h, Coordinate g)
+                    : Key{ min(s.g, s.r + h(s.coordinate, g)), min(s.g, s.r) }
+                {   }
+
+                const int first, second;
+
+                friend auto operator== (Key l, Key r)
+                {
+                    return l.first == r.first && l.second == r.second;
+                }
+                friend auto operator < (Key l, Key r)
+                {
+                    return (l.first < r.first) || (l.first == r.first && l.second < r.second);
+                }
+            };
+
+            LpAstar(unsigned height, unsigned width, Coordinate goal, string heuristic)
+                : _matrix{ height, width }, goal{ goal }, h{ heuristic_table.at(heuristic) }
+            {   }
+
+        private:
+            Matrix _matrix;
+
+        public: 
+            Coordinate const goal;
+            function<int(Coordinate, Coordinate)> h;
         };
     }
 }
