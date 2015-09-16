@@ -84,25 +84,26 @@ namespace UnitTests
             Matrix matrix{ 9, 8 };
             Assert::AreEqual(9u, matrix.rows());
             Assert::AreEqual(8u, matrix.cols());
+            Assert::AreEqual(2'147'483'647, infinity());
 
             {
                 Coordinate c = { 0, 0 };
-                Assert::AreEqual(0, matrix.at(c).g);
-                Assert::AreEqual(0, matrix.at(c).r);
+                Assert::AreEqual(infinity(), matrix.at(c).g);
+                Assert::AreEqual(infinity(), matrix.at(c).r);
                 Assert::IsTrue(Coordinate{ 0, 0 } == matrix.at(c).coordinate);
             }
 
             {
                 Coordinate c = { 2, 4 };
-                Assert::AreEqual(0, matrix.at(c).g);
-                Assert::AreEqual(0, matrix.at(c).r);
+                Assert::AreEqual(infinity(), matrix.at(c).g);
+                Assert::AreEqual(infinity(), matrix.at(c).r);
                 Assert::IsTrue(c == matrix.at(c).coordinate);
             }
 
             {
                 Coordinate c = { 4, 2 };
-                Assert::AreEqual(0, matrix.at(c).g);
-                Assert::AreEqual(0, matrix.at(c).r);
+                Assert::AreEqual(infinity(), matrix.at(c).g);
+                Assert::AreEqual(infinity(), matrix.at(c).r);
                 Assert::IsTrue(c == matrix.at(c).coordinate);
             }
         }
