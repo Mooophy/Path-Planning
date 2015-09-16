@@ -113,14 +113,25 @@ namespace search
             }
         };
 
-        //class Matrix
-        //{
-        //public:
-        //    Matrix(unsigned width, unsigned height)
-        //        : _data{ height, vector<LpState>(width)}
-        //    {   }
-        //private:
-        //    vector<vector<LpState>> _data;
-        //};
+        class Matrix
+        {
+        public:
+            Matrix(unsigned height, unsigned width)
+                : _data{ height, vector<LpState>(width)}
+            {   }
+
+            auto at(Coordinate c) -> LpState&
+            {
+                return{ _data[c.y][c.x] };
+            }
+
+            auto at(Coordinate c) const -> LpState const&
+            {
+                return{ _data[c.y][c.x] };
+            }
+
+        private:
+            vector<vector<LpState>> _data;
+        };
     }
 }
