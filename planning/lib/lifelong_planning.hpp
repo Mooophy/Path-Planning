@@ -99,6 +99,21 @@ namespace search
             }
         };
 
+        template<typename Hfunc>
+        struct LpLess
+        {
+            LpLess() = delete;
+            LpLess(Coordinate goal): _goal(goal){   }
+
+            auto operator()(LpState const& l, LpState const& r) const
+            {
+                return l.key(Hfunc{ _goal }) < r.key(Hfunc{ _goal });
+            }
+
+        private:
+            Coordinate _goal;
+        };
+
         struct LpManhattanDistance
         {
             const Coordinate goal;
