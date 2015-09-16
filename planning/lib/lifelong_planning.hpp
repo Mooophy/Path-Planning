@@ -152,17 +152,18 @@ namespace search
             //
             //  Constructor
             //
-            LpAstarCore(unsigned height, unsigned width, Coordinate goal, string heuristic):
+            LpAstarCore(unsigned height, unsigned width, Coordinate start, Coordinate goal, string heuristic):
                 heuristics{},
                 matrix{ height, width },
-                goal{ goal }, 
+                start{ start }, 
+                goal{ goal },
                 h{ heuristics.at(heuristic) },
                 q{ [&](LpState const& lft, LpState const& rht) { return Key{ lft, h, goal } < Key{ rht, h, goal }; } }
             {   }
 
             HeuristcFuncs const heuristics;
             Matrix matrix;
-            Coordinate const goal;
+            Coordinate const start, goal;
             function<int(Coordinate, Coordinate)> const h;
             PriorityQueue < LpState, function<bool(LpState, LpState)>> q;
         };

@@ -107,7 +107,7 @@ namespace UnitTests
 
         TEST_METHOD(lp_astar)
         {
-            LpAstarCore lpastar{ 40, 40, { 19, 29 }, "manhattan" };
+            LpAstarCore lpastar{ 40, 40, { 0, 0 }, { 19, 29 }, "manhattan" };
             Assert::AreEqual(2u, lpastar.heuristics.size());
             Assert::IsTrue(Coordinate{ 19, 29 } == lpastar.goal);
             
@@ -141,7 +141,7 @@ namespace UnitTests
                 }
 
                 {
-                    LpAstarCore lpastar{ 40, 40,{ 19, 29 }, "euclidean" };
+                    LpAstarCore lpastar{ 40, 40, { 0, 0 }, { 19, 29 }, "euclidean" };
                     lpastar.q.push(LpState{ { 3, 4 }, 6, 7 });
                     lpastar.q.push(LpState{ { 0, 1 }, 1, 2 });
                     lpastar.q.push(LpState{ { 3, 4 }, 5, 3 });
