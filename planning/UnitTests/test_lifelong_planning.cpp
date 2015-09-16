@@ -10,6 +10,7 @@ namespace UnitTests
     TEST_CLASS(test_lifelong_planning)
     {
     public:
+        using Key = LpState::Key;
 
         TEST_METHOD(cost_function)
         {
@@ -23,7 +24,6 @@ namespace UnitTests
 
         TEST_METHOD(key)
         {
-            using Key = LpState::Key;
             Key key{ 42, 99 };
             Assert::AreEqual(42, key.first);
             Assert::AreEqual(99, key.second);
@@ -77,12 +77,33 @@ namespace UnitTests
             Assert::AreEqual(6, ls.g);
             Assert::AreEqual(7, ls.r);
 
-            using Key = LpState::Key;
             Assert::IsTrue(Key{ 6, 6 } == ls.key(LpManhattanDistance{ { 39, 29 } }));
             Assert::IsTrue(Key{ 6, 6 } == ls.key(LpManhattanDistance{ { 6, 7 } }));
-
             Assert::IsTrue(Key{ 6, 6 } == ls.key(LpEuclideanDistance{ { 39, 29 } }));
             Assert::IsTrue(Key{ 6, 6 } == ls.key(LpEuclideanDistance{ { 6, 7 } }));
+        }
+
+        TEST_METHOD(matrix_class)
+        {
+            Matrix matrix{ 10, 10 };
+
+            //for x = 0, y = 0
+            {
+                Coordinate c = { 0, 0 };
+                Assert::AreEqual(0, matrix.at(c).g);
+                Assert::AreEqual(0, matrix.at(c).r);
+                Assert::IsTrue(Coordinate{ 0, 0 } == matrix.at(c).coordinate);
+                Assert::IsTrue(Key{ 0, 0 } == matrix.at(c).key(LpEuclideanDistance{ { 6, 7 } }));
+            }
+
+            //for x = 2, y = 4
+            {
+                Coordinate c = { 2, 4 };
+                Assert::AreEqual(0, matrix.at(c).g);
+                Assert::AreEqual(0, matrix.at(c).r);
+                Assert::IsTrue(Coordinate{ 0, 0 } == matrix.at(c).coordinate);
+                Assert::IsTrue(Key{ 0, 0 } == matrix.at(c).key(LpEuclideanDistance{ { 6, 7 } }));
+            }
         }
     };
 }
