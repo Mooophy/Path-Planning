@@ -89,7 +89,11 @@ namespace search
         public:
             Matrix(unsigned height, unsigned width)
                 : _data{ height, vector<LpState>(width) }
-            {   }
+            {
+                for (auto y = 0; y != height; ++y)
+                    for (auto x = 0; x != width; ++x)
+                        at({ x, y }).coordinate = { x, y };
+            }
 
             auto at(Coordinate c) -> LpState&
             {
@@ -162,10 +166,10 @@ namespace search
                 q{ [&](LpState const& lft, LpState const& rht) { return Key{ lft, h, goal } < Key{ rht, h, goal }; } }
             {   }
 
-            HeuristcFuncs heuristics;
+            HeuristcFuncs const heuristics;
             Matrix matrix;
             Coordinate const goal;
-            function<int(Coordinate, Coordinate)> h;
+            function<int(Coordinate, Coordinate)> const h;
             PriorityQueue < LpState, function<bool(LpState, LpState)>> q;
         };
     }

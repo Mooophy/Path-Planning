@@ -85,27 +85,43 @@ namespace UnitTests
         {
             Matrix matrix{ 10, 10 };
             
-            {//x = 0, y = 0
+            {
                 Coordinate c = { 0, 0 };
                 Assert::AreEqual(0, matrix.at(c).g);
                 Assert::AreEqual(0, matrix.at(c).r);
                 Assert::IsTrue(Coordinate{ 0, 0 } == matrix.at(c).coordinate);
             }
 
-            {//x = 2, y = 4
+            {
                 Coordinate c = { 2, 4 };
                 Assert::AreEqual(0, matrix.at(c).g);
                 Assert::AreEqual(0, matrix.at(c).r);
-                Assert::IsTrue(Coordinate{ 0, 0 } == matrix.at(c).coordinate);
+                Assert::IsTrue(c == matrix.at(c).coordinate);
+            }
+
+            {
+                Coordinate c = { 4, 2 };
+                Assert::AreEqual(0, matrix.at(c).g);
+                Assert::AreEqual(0, matrix.at(c).r);
+                Assert::IsTrue(c == matrix.at(c).coordinate);
             }
         }
 
         TEST_METHOD(lp_astar)
         {
             LpAstar lpastar{ 40, 40, { 19, 29 }, "manhattan" };
+            Assert::AreEqual(2u, lpastar.heuristics.size());
             
-            {//test priority queue
-                Assert::AreEqual(2u, lpastar.heuristics.size());
+            {//test matrix
+                Assert::IsTrue(Coordinate{ 0, 0 } == lpastar.matrix.at(Coordinate{ 0, 0 }).coordinate);
+                {
+                    auto actual = lpastar.matrix.at(Coordinate{ 9, 9 }).coordinate;
+                    Assert::IsTrue(Coordinate{ 9, 9 } == actual);
+                }
+                {
+                    auto actual = lpastar.matrix.at(Coordinate{ 1, 9 }).coordinate;
+                    Assert::IsTrue(Coordinate{ 1, 9 } == actual);
+                }
             }
         }
     };
