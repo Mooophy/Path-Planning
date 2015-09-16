@@ -77,9 +77,10 @@ namespace search
         {
             Coordinate coordinate;
             int g, r;
+            bool blocked;
             friend auto operator==(LpState const& l, LpState const& r)
             {
-                return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r;
+                return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r && l.blocked == r.blocked;
             }
         };
 
@@ -169,6 +170,14 @@ namespace search
                 q.reset();
                 matrix.at(start).r = 0;
                 q.push(matrix.at(start));
+            }
+
+            auto update_vetex(LpState state)
+            {
+                //if (state.coordinate != start)
+                //{
+
+                //}
             }
 
             auto run()

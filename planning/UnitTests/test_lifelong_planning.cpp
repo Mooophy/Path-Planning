@@ -64,19 +64,21 @@ namespace UnitTests
 
         TEST_METHOD(lp_key)
         {
-            auto ls = LpState{ { 3, 4 }, 6, 7 };
+            auto ls = LpState{ { 3, 4 }, 6, 7, true };
             Assert::IsTrue(Key{ 6, 6 } == Key{ ls, HeuristcFuncs{}.at("manhattan"), { 39, 39 } });
             Assert::IsTrue(Key{ 6, 6 } == Key{ ls, HeuristcFuncs{}.at("manhattan"), { 4, 4 } });
         }
 
         TEST_METHOD(lp_state)
         {
-            auto ls = LpState{ { 3, 4 }, 6, 7 };
+            auto ls = LpState{ { 3, 4 }, 6, 7, false };
             Assert::AreEqual(3, ls.coordinate.x);
             Assert::AreEqual(4, ls.coordinate.y);
             Assert::AreEqual(6, ls.g);
             Assert::AreEqual(7, ls.r);
             Assert::IsTrue(ls == LpState{ { 3, 4 }, 6, 7 });
+            Assert::IsTrue(ls == LpState{ { 3, 4 }, 6, 7, false });
+            Assert::IsFalse(ls.blocked);
         }
 
         TEST_METHOD(matrix_class)
@@ -129,16 +131,16 @@ namespace UnitTests
             {// test priority queue
                 {
                     Assert::AreEqual(0u, lpastar.q.size());
-                    lpastar.q.push(LpState{ { 3, 4 }, 6, 7 });
-                    lpastar.q.push(LpState{ { 0, 1 }, 1, 2 });
-                    lpastar.q.push(LpState{ { 3, 4 }, 5, 3 });
+                    lpastar.q.push(LpState{ { 3, 4 }, 6, 7, true });
+                    lpastar.q.push(LpState{ { 0, 1 }, 1, 2, false });
+                    lpastar.q.push(LpState{ { 3, 4 }, 5, 3, false });
 
                     Assert::AreEqual(3u, lpastar.q.size());
-                    Assert::IsTrue(LpState{ { 0, 1 }, 1, 2 } == lpastar.q.top()); lpastar.q.pop();
+                    Assert::IsTrue(LpState{ { 0, 1 }, 1, 2, false } == lpastar.q.top()); lpastar.q.pop();
                     Assert::AreEqual(2u, lpastar.q.size());
-                    Assert::IsTrue(LpState{ { 3, 4 }, 5, 3 } == lpastar.q.top()); lpastar.q.pop();
+                    Assert::IsTrue(LpState{ { 3, 4 }, 5, 3, false } == lpastar.q.top()); lpastar.q.pop();
                     Assert::AreEqual(1u, lpastar.q.size());
-                    Assert::IsTrue(LpState{ { 3, 4 }, 6, 7 } == lpastar.q.top()); lpastar.q.pop();
+                    Assert::IsTrue(LpState{ { 3, 4 }, 6, 7, true } == lpastar.q.top()); lpastar.q.pop();
                     Assert::AreEqual(0u, lpastar.q.size());
                     Assert::AreEqual(true, lpastar.q.empty());
                 }
