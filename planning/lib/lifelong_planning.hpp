@@ -90,8 +90,14 @@ namespace search
                 : _data{ height, vector<LpState>(width) }
             {
                 for (auto y = 0; y != height; ++y)
+                {
                     for (auto x = 0; x != width; ++x)
-                        at({ x, y }).coordinate = { x, y };
+                    {
+                        Coordinate curr{ x, y };
+                        at(curr).coordinate = curr;
+                        at(curr).g = at(curr).r = infinity();
+                    }
+                }
             }
 
             auto at(Coordinate c) -> LpState&
@@ -157,8 +163,21 @@ namespace search
         //
         //  Lifelong A*
         //
-        struct LpAstarCore
+        class LpAstarCore
         {
+            auto initialize()
+            {
+                q.reset();
+                matrix.at(start).r = 0;
+                q.push(matrix.at(start));
+            }
+
+            auto run()
+            {
+                initialize();
+            }
+
+        public:
             //
             //  Constructor
             //
@@ -169,8 +188,11 @@ namespace search
                 goal{ goal },
                 h{ heuristics.at(heuristic) },
                 q{ [&](LpState const& lft, LpState const& rht) { return Key{ lft, h, goal } < Key{ rht, h, goal }; } }
-            {
+            {   }
 
+            auto operator()()
+            {
+                run();
             }
 
             HeuristcFuncs const heuristics;
@@ -178,12 +200,6 @@ namespace search
             Coordinate const start, goal;
             function<int(Coordinate, Coordinate)> const h;
             PriorityQueue < LpState, function<bool(LpState, LpState)>> q;
-
-        private:
-            //auto initialize()
-            //{
-            //    q.reset();
-            //}
         };
     }
 }
