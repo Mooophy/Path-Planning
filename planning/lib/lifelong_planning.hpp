@@ -74,13 +74,13 @@ namespace search
 
         struct LpState
         {
+            Coordinate coordinate;
+            int g, r;
+
             friend auto operator==(LpState const& l, LpState const& r)
             {
                 return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r;
             }
-
-            Coordinate coordinate;
-            int g, r;
         };
 
         class Matrix
@@ -129,6 +129,8 @@ namespace search
 
             struct Key
             {
+                const int first, second;
+
                 Key(int fst, int snd)
                     : first{ fst }, second{ snd }
                 {   }
@@ -136,8 +138,6 @@ namespace search
                 Key(LpState s, function<int(Coordinate, Coordinate)> h, Coordinate g)
                     : Key{ min(s.g, s.r + h(s.coordinate, g)), min(s.g, s.r) }
                 {   }
-
-                const int first, second;
 
                 friend auto operator== (Key l, Key r)
                 {
