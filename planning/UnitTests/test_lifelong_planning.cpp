@@ -190,15 +190,34 @@ namespace UnitTests
             }
         }
 
-        TEST_METHOD(lp_astar_algorithm)
+        TEST_METHOD(lp_astar_algorithm_case0)
         {
-            {//case 0
-                unordered_set<Coordinate> blockeds{};
-                LpAstarCore lpastar{ 3, 3, { 0, 0 },{ 2, 2 }, "manhattan", blockeds };
-                lpastar();
-                string expect = "{[x=0,y=0]|g:0|r:0|b:f}{[x=1,y=0]|g:1|r:1|b:f}{[x=2,y=0]|g:2|r:2|b:f}+++{[x=0,y=1]|g:1|r:1|b:f}{[x=1,y=1]|g:1|r:1|b:f}{[x=2,y=1]|g:2|r:2|b:f}+++{[x=0,y=2]|g:2|r:2|b:f}{[x=1,y=2]|g:2|r:2|b:f}{[x=2,y=2]|g:2|r:2|b:f}+++";
-                Assert::AreEqual(expect, lpastar.matrix.to_string());
-            }
+            //case 0 3x3 no blocked
+            unordered_set<Coordinate> blockeds{};
+            LpAstarCore lpastar{ 3, 3, { 0, 0 },{ 2, 2 }, "manhattan", blockeds };
+            lpastar();
+            string expect = "{[x=0,y=0]|g:0|r:0|b:f}{[x=1,y=0]|g:1|r:1|b:f}{[x=2,y=0]|g:2|r:2|b:f}+++{[x=0,y=1]|g:1|r:1|b:f}{[x=1,y=1]|g:1|r:1|b:f}{[x=2,y=1]|g:2|r:2|b:f}+++{[x=0,y=2]|g:2|r:2|b:f}{[x=1,y=2]|g:2|r:2|b:f}{[x=2,y=2]|g:2|r:2|b:f}+++";
+            Assert::AreEqual(expect, lpastar.matrix.to_string());
+        }
+
+        TEST_METHOD(lp_astar_algorithm_case1)
+        {
+            //case1 4x4 no blocked 
+            unordered_set<Coordinate> blockeds{};
+            LpAstarCore lpastar{ 4, 4, { 0, 0 },{ 3, 2 }, "manhattan", blockeds };
+            lpastar();
+            string expect = "{[x=0,y=0]|g:0|r:0|b:f}{[x=1,y=0]|g:1|r:1|b:f}{[x=2,y=0]|g:2|r:2|b:f}{[x=3,y=0]|g:3|r:3|b:f}+++{[x=0,y=1]|g:1|r:1|b:f}{[x=1,y=1]|g:1|r:1|b:f}{[x=2,y=1]|g:2|r:2|b:f}{[x=3,y=1]|g:3|r:3|b:f}+++{[x=0,y=2]|g:2|r:2|b:f}{[x=1,y=2]|g:2|r:2|b:f}{[x=2,y=2]|g:2|r:2|b:f}{[x=3,y=2]|g:3|r:3|b:f}+++{[x=0,y=3]|g:10000|r:3|b:f}{[x=1,y=3]|g:10000|r:3|b:f}{[x=2,y=3]|g:10000|r:3|b:f}{[x=3,y=3]|g:10000|r:3|b:f}+++";
+            Assert::AreEqual(expect, lpastar.matrix.to_string());
+        }
+
+        TEST_METHOD(lp_astar_algorithm_case2)
+        {
+            //case2 6x4 as given in pdf
+            unordered_set<Coordinate> blockeds{ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 2, 1 },{ 0, 2 },{ 2, 2 }, { 0, 3 }, { 2, 3 }, { 0, 4 }, { 2, 4 } };
+            LpAstarCore lpastar{ 6, 4,{ 3, 0 },{ 0, 5 }, "manhattan", blockeds };
+            lpastar();
+            string expect{ "{[x=0,y=0]|g:10000|r:10000|b:t}{[x=1,y=0]|g:10000|r:10000|b:t}{[x=2,y=0]|g:1|r:1|b:f}{[x=3,y=0]|g:0|r:0|b:f}+++{[x=0,y=1]|g:10000|r:10000|b:t}{[x=1,y=1]|g:2|r:2|b:f}{[x=2,y=1]|g:10000|r:10000|b:t}{[x=3,y=1]|g:1|r:1|b:f}+++{[x=0,y=2]|g:10000|r:10000|b:t}{[x=1,y=2]|g:3|r:3|b:f}{[x=2,y=2]|g:10000|r:10000|b:t}{[x=3,y=2]|g:2|r:2|b:f}+++{[x=0,y=3]|g:10000|r:10000|b:t}{[x=1,y=3]|g:4|r:4|b:f}{[x=2,y=3]|g:10000|r:10000|b:t}{[x=3,y=3]|g:3|r:3|b:f}+++{[x=0,y=4]|g:10000|r:10000|b:t}{[x=1,y=4]|g:5|r:5|b:f}{[x=2,y=4]|g:10000|r:10000|b:t}{[x=3,y=4]|g:4|r:4|b:f}+++{[x=0,y=5]|g:6|r:6|b:f}{[x=1,y=5]|g:10000|r:6|b:f}{[x=2,y=5]|g:5|r:5|b:f}{[x=3,y=5]|g:5|r:5|b:f}+++" };
+            Assert::AreEqual(expect, lpastar.matrix.to_string());
         }
     };
 }
