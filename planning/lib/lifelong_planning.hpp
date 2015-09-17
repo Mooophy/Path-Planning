@@ -224,9 +224,29 @@ namespace search
                 if (s.g != s.r) q.push(s);
             }
 
-            auto run()
+            auto compute_shortest_path()
             {
-                initialize();
+                auto top_key = [this] { return q.empty() ? Key{ infinity(), infinity() } : Key{ q.top(), h, goal };  };
+
+                while (top_key() < Key{ matrix.at(goal), h, goal } || matrix.at(goal).r != matrix.at(goal).g)
+                {
+                    auto c = q.pop().coordinate;
+                    if (matrix.at(c).g > matrix.at(c).r)
+                    {
+                        matrix.at(c).g = matrix.at(c).r;
+                        for (auto n : c.neighbours())
+                            if (!matrix.at(n).is_blocked)
+                                update_vertex(matrix.at(n));
+                    }
+                    else
+                    {
+                        matrix.at(c).g = infinity();
+                        for (auto n : c.neighbours())
+                            if (!matrix.at(n).is_blocked)
+                                update_vertex(matrix.at(n));
+                        update_vertex(matrix.at(c));
+                    }
+                }
             }
 
         public:
@@ -247,7 +267,8 @@ namespace search
 
             auto operator()()
             {
-                run();
+                initialize();
+                compute_shortest_path();
             }
 
             HeuristcFuncs const heuristics;
