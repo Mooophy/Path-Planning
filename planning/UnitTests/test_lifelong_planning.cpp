@@ -128,7 +128,7 @@ namespace UnitTests
             }
         }
 
-        TEST_METHOD(lp_astar)
+        TEST_METHOD(lp_astar_syntax)
         {
             unordered_set<Coordinate> blockeds{ { 3, 2 }, { 14, 5 } };
             LpAstarCore lpastar{ 40, 40, { 0, 0 }, { 19, 29 }, "manhattan", blockeds };
@@ -187,6 +187,15 @@ namespace UnitTests
                     Assert::AreEqual(0u, lpastar.q.size());
                     Assert::AreEqual(true, lpastar.q.empty());
                 }
+            }
+        }
+
+        TEST_METHOD(lp_astar_algorithm)
+        {
+            {//case 0
+                unordered_set<Coordinate> blockeds{};
+                LpAstarCore lpastar{ 2, 2, { 0, 0 },{ 1, 1 }, "manhattan", blockeds };
+                lpastar();
             }
         }
     };

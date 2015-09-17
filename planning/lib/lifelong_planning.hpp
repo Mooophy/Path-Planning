@@ -218,6 +218,15 @@ namespace search
         //
         class LpAstarCore
         {
+            auto filter(vector<Coordinate> && cs)
+            {
+                vector<Coordinate> result;
+                for (auto && c : cs)
+                    if (c.x >= 0 && c.x < matrix.cols() && c.y >= 0 && c.y < matrix.rows())
+                        result.push_back(move(c));
+                return result;
+            }
+
             auto initialize()
             {
                 q.reset();
@@ -230,7 +239,7 @@ namespace search
                 if (s.coordinate != start)
                 {
                     auto minimum = infinity();
-                    for (auto n : s.coordinate.neighbours())
+                    for (auto n : filter(s.coordinate.neighbours()))
                     {
                         auto& vertex = matrix.at(n);
                         if (!vertex.is_blocked)
@@ -252,14 +261,14 @@ namespace search
                     if (matrix.at(c).g > matrix.at(c).r)
                     {
                         matrix.at(c).g = matrix.at(c).r;
-                        for (auto n : c.neighbours())
+                        for (auto n : filter(c.neighbours()))
                             if (!matrix.at(n).is_blocked)
                                 update_vertex(matrix.at(n));
                     }
                     else
                     {
                         matrix.at(c).g = infinity();
-                        for (auto n : c.neighbours())
+                        for (auto n : filter(c.neighbours()))
                             if (!matrix.at(n).is_blocked)
                                 update_vertex(matrix.at(n));
                         update_vertex(matrix.at(c));
