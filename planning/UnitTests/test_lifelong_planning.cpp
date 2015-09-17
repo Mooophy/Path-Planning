@@ -94,37 +94,30 @@ namespace UnitTests
 
         TEST_METHOD(matrix_class)
         {
-            //Matrix matrix{ 9, 8 };
-            //Assert::AreEqual(9u, matrix.rows());
-            //Assert::AreEqual(8u, matrix.cols());
-            //Assert::AreEqual(1'0000, infinity());
+            Matrix matrix{ 9, 8 };
+            Assert::AreEqual(9u, matrix.rows());
+            Assert::AreEqual(8u, matrix.cols());
+            Assert::AreEqual(1'0000, infinity());
 
-            //{
-            //    Coordinate c = { 0, 0 };
-            //    Assert::AreEqual(infinity(), matrix.at(c).g);
-            //    Assert::AreEqual(infinity(), matrix.at(c).r);
-            //    Assert::IsTrue(Coordinate{ 0, 0 } == matrix.at(c).coordinate);
-            //}
+            {
+                Cell c = { 2, 4 };
+                Assert::AreEqual(infinity(), matrix.at(c).g);
+                Assert::AreEqual(infinity(), matrix.at(c).r);
+                Assert::IsTrue(c == matrix.at(c).cell);
+            }
 
-            //{
-            //    Coordinate c = { 2, 4 };
-            //    Assert::AreEqual(infinity(), matrix.at(c).g);
-            //    Assert::AreEqual(infinity(), matrix.at(c).r);
-            //    Assert::IsTrue(c == matrix.at(c).coordinate);
-            //}
+            {
+                Cell c = { 4, 2 };
+                Assert::AreEqual(infinity(), matrix.at(c).g);
+                Assert::AreEqual(infinity(), matrix.at(c).r);
+                Assert::IsTrue(c == matrix.at(c).cell);
+            }
 
-            //{
-            //    Coordinate c = { 4, 2 };
-            //    Assert::AreEqual(infinity(), matrix.at(c).g);
-            //    Assert::AreEqual(infinity(), matrix.at(c).r);
-            //    Assert::IsTrue(c == matrix.at(c).coordinate);
-            //}
-
-            //{//for testing to_string
-            //    Matrix matrix{ 2, 2 };
-            //    string expect = "{[x=0,y=0]|g:10000|r:10000|b:f}{[x=1,y=0]|g:10000|r:10000|b:f}+++{[x=0,y=1]|g:10000|r:10000|b:f}{[x=1,y=1]|g:10000|r:10000|b:f}+++";
-            //    Assert::AreEqual(expect, matrix.to_string());
-            //}
+            {//for testing to_string
+                Matrix matrix{ 2, 2 };
+                string expect = "{[r=0,c=0]|g:10000|r:10000|h:0|b:f}{[r=1,c=0]|g:10000|r:10000|h:0|b:f}+++{[r=0,c=1]|g:10000|r:10000|h:0|b:f}{[r=1,c=1]|g:10000|r:10000|h:0|b:f}+++";
+                Assert::AreEqual(expect, matrix.to_string());
+            }
         }
     };
 }

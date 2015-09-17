@@ -42,7 +42,7 @@ namespace search
 
         struct Cell
         {
-            const int row, col;
+            int row, col;
 
             friend auto operator== (Cell l, Cell r)
             {
@@ -111,7 +111,7 @@ namespace search
         struct LpState
         {
             Cell cell;
-            int g, r, const h;
+            int g, r, h;
             bool bad;
 
             auto to_string() const
@@ -125,56 +125,56 @@ namespace search
             }
         };
 
-        //class Matrix
-        //{
-        //public:
-        //    Matrix(unsigned rows, unsigned cols)
-        //        : _data{ rows, vector<LpState>(cols) }
-        //    {
-        //        for (auto y = 0; y != rows; ++y)
-        //        {
-        //            for (auto x = 0; x != cols; ++x)
-        //            {
-        //                Coordinate curr{ x, y };
-        //                at(curr).coordinate = curr;
-        //                at(curr).g = at(curr).r = infinity();
-        //            }
-        //        }
-        //    }
+        class Matrix
+        {
+        public:
+            Matrix(unsigned rows, unsigned cols)
+                : _data{ rows, vector<LpState>(cols) }
+            {
+                for (auto r = 0; r != rows; ++r)
+                {
+                    for (auto c = 0; c != cols; ++c)
+                    {
+                        Cell curr{ r, c };
+                        at(curr).cell = curr;
+                        at(curr).g = at(curr).r = infinity();
+                    }
+                }
+            }
 
-        //    auto at(Coordinate c) -> LpState&
-        //    {
-        //        return{ _data[c.y][c.x] };
-        //    }
-        //    auto at(Coordinate c) const -> LpState const&
-        //    {
-        //        return{ _data[c.y][c.x] };
-        //    }
+            auto at(Cell c) -> LpState&
+            {
+                return{ _data[c.row][c.col] };
+            }
+            auto at(Cell c) const -> LpState const&
+            {
+                return{ _data[c.row][c.col] };
+            }
 
-        //    auto rows() const
-        //    {
-        //        return _data.size();
-        //    }
-        //    auto cols() const
-        //    {
-        //        return _data.front().size();
-        //    }
+            auto rows() const
+            {
+                return _data.size();
+            }
+            auto cols() const
+            {
+                return _data.front().size();
+            }
 
-        //    auto to_string() const
-        //    {
-        //        string result;
-        //        for (auto r = 0; r != rows(); ++r)
-        //        {
-        //            for (auto c = 0; c != cols(); ++c)
-        //                result += at({ c, r }).to_string();
-        //            result += "+++";
-        //        }
-        //        return result;
-        //    }
+            auto to_string() const
+            {
+                string result;
+                for (auto r = 0; r != rows(); ++r)
+                {
+                    for (auto c = 0; c != cols(); ++c)
+                        result += at({ c, r }).to_string();
+                    result += "+++";
+                }
+                return result;
+            }
 
-        //private:
-        //    vector<vector<LpState>> _data;
-        //};
+        private:
+            vector<vector<LpState>> _data;
+        };
 
         struct HeuristcFuncs : public unordered_map < string, function<int(Cell, Cell)> >
         {
