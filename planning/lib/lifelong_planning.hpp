@@ -303,21 +303,19 @@ namespace search
                 compute_shortest_path();
             }
 
-    //        auto run_with_changes(vector<Coordinate> const& coordinates_to_toggle)
-    //        {
-    //            for (auto c : coordinates_to_toggle)
-    //            {
-    //                auto& s = matrix.at(c);
-    //                s.is_blocked = !s.is_blocked;
-    //                if (!s.is_blocked)
-    //                    update_vertex(s);
-    //                else
-    //                    s.r = s.g = infinity();
-    //                for (auto neighbour : filter(s.coordinate.neighbours()))
-    //                    update_vertex(matrix.at(neighbour));
-    //            }
-    //            compute_shortest_path();
-    //        }
+            auto rerun(vector<Cell> const& cells_to_toggle = {})
+            {
+                for (auto cell : cells_to_toggle)
+                {
+                    auto& s = matrix.at(cell);
+                    s.bad = !s.bad;
+                    if (!s.bad)
+                        update_vertex(s);
+                    for (auto n : filter(s.cell.neighbours()))
+                        update_vertex(matrix.at(n));
+                }
+                compute_shortest_path();
+            }
 
             Matrix matrix;
             Cell const start, goal;
