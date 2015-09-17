@@ -56,7 +56,7 @@ namespace search
             auto to_string() const
             {
                 using std::to_string;
-                return string{ "[x = " + to_string(x) + ", y = " + to_string(y) + "]" };
+                return string{ "[x=" + to_string(x) + ",y=" + to_string(y) + "]" };
             }
             auto to_hash() const
             {
@@ -113,6 +113,12 @@ namespace search
             Coordinate coordinate;
             int g, r;
             bool is_blocked;
+
+            auto to_string() const
+            {
+                using std::to_string;
+                return "{" + coordinate.to_string() + "|g:" + to_string(g) + "|r:" + to_string(r) + "|b:" + (is_blocked ? "t" : "f") + "}";
+            }
             friend auto operator==(LpState const& l, LpState const& r)
             {
                 return l.coordinate == r.coordinate && l.g == r.g && l.r == r.r && l.is_blocked == r.is_blocked;

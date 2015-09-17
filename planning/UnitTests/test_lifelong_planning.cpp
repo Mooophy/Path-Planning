@@ -37,9 +37,9 @@ namespace UnitTests
             Assert::AreEqual(99, c.y);
             Assert::IsTrue(Coordinate{ 1, 1 } == Coordinate{ 1, 1 });
             Assert::IsTrue(Coordinate{ 1, 2 } != Coordinate{ 1, 1 });
-            Assert::AreEqual(string{ "[x = 42, y = 99]" }, c.to_string());
-            Assert::AreEqual(2044121234u, c.to_hash());
-            Assert::AreEqual(2044121234u, std::hash<Coordinate>{}(c));
+            Assert::AreEqual(string{ "[x=42,y=99]" }, c.to_string());
+            Assert::AreEqual(1703787076u, c.to_hash());
+            Assert::AreEqual(1703787076u, std::hash<Coordinate>{}(c));
 
             //test neighbour
             {
@@ -90,6 +90,7 @@ namespace UnitTests
             Assert::IsTrue(ls == LpState{ { 3, 4 }, 6, 7 });
             Assert::IsTrue(ls == LpState{ { 3, 4 }, 6, 7, false });
             Assert::IsFalse(ls.is_blocked);
+            Assert::AreEqual(string{ "{[x=3,y=4]|g:6|r:7|b:f}" }, ls.to_string());
         }
 
         TEST_METHOD(matrix_class)
