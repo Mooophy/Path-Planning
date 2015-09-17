@@ -307,11 +307,11 @@ namespace search
             {
                 for (auto cell : cells_to_toggle)
                 {
-                    auto& s = matrix.at(cell);
-                    s.bad = !s.bad;
-                    if (!s.bad)
-                        update_vertex(s);
-                    for (auto n : filter(s.cell.neighbours()))
+                    auto& state = matrix.at(cell);
+                    state.bad = !state.bad;
+                    if (!state.bad)
+                        update_vertex(state);
+                    for (auto n : filter(state.cell.neighbours()))
                         update_vertex(matrix.at(n));
                 }
                 compute_shortest_path();
