@@ -150,5 +150,13 @@ namespace UnitTests
                 Assert::IsTrue(Cell{ 1, 3 } == lpa.q.top());
             }
         }
+
+        TEST_METHOD(run_of_lpastar)
+        {
+            unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
+            LpAstarCore lpa{ 6, 4, { 0, 3 }, { 5, 0 }, "manhattan", bad_cells };
+            lpa.run();
+            Assert::AreEqual(string{}, lpa.matrix.to_string());
+        }
     };
 }

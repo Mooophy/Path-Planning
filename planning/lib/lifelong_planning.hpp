@@ -166,7 +166,7 @@ namespace search
                 for (auto r = 0; r != rows(); ++r)
                 {
                     for (auto c = 0; c != cols(); ++c)
-                        result += at({ c, r }).to_string();
+                        result += at({ r, c }).to_string();
                     result += "+++";
                 }
                 return result;
@@ -220,64 +220,60 @@ namespace search
         //
         class LpAstarCore
         {
-    //        auto filter(vector<Coordinate> && cs)
-    //        {
-    //            vector<Coordinate> result;
-    //            for (auto && c : cs)
-    //                if (c.x >= 0 && c.x < (int)matrix.cols() && c.y >= 0 && c.y < (int)matrix.rows())
-    //                    result.push_back(move(c));
-    //            return result;
-    //        }
+            auto filter(vector<Cell> && cells)
+            {
+                vector<Cell> result;
+                for (auto && c : cells)
+                    if (c.row >= 0 && c.row < (int)matrix.rows() && c.col >= 0 && c.col < (int)matrix.cols())
+                        result.push_back(move(c));
+                return result;
+            }
 
-    //        auto initialize()
-    //        {
-    //            q.reset();
-    //            matrix.at(start).r = 0;
-    //            q.push(matrix.at(start));
-    //        }
+            auto initialize()
+            {
+                q.reset();
+                matrix.at(start).r = 0;
+                q.push(start);
+            }
 
-    //        auto update_vertex(LpState& s)
-    //        {
-    //            if (s.coordinate != start)
-    //            {
-    //                auto minimum = infinity();
-    //                for (auto n : filter(s.coordinate.neighbours()))
-    //                {
-    //                    auto& vertex = matrix.at(n);
-    //                    //if (!vertex.is_blocked)
-    //                    minimum = min(minimum, (vertex.g + cost()));
-    //                }
-    //                s.r = minimum;
-    //            }
-    //            q.remove(s);
-    //            if (s.g != s.r) q.push(s);
-    //        }
+            auto update_vertex(LpState& s)
+            {
+                if (s.cell != start)
+                {
+                    auto minimum = infinity();
+                    for (auto neighbour : filter(s.cell.neighbours()))
+                        minimum = min(minimum, (matrix.at(neighbour).g + cost()));
+                    s.r = minimum;
+                }
+                q.remove(s.cell);
+                if (s.g != s.r) q.push(s.cell);
+            }
 
-    //        auto compute_shortest_path()
-    //        {
-    //            auto top_key = [this] { return q.empty() ? Key{ infinity(), infinity() } : Key{ matrix.at(q.top().coordinate), h, goal };  };
+            auto compute_shortest_path()
+            {
+                auto top_key = [this] { return q.empty() ? Key{ infinity(), infinity() } : Key{ matrix.at(q.top()) }; };
 
-    //            while (top_key() < Key{ matrix.at(goal), h, goal } || matrix.at(goal).r != matrix.at(goal).g)
-    //            {
-    //                auto c = q.pop().coordinate;
+                while (top_key() < Key{ matrix.at(goal) } || matrix.at(goal).r != matrix.at(goal).g)
+                {
+                    auto c = q.pop();
 
-    //                if (matrix.at(c).g > matrix.at(c).r)
-    //                {
-    //                    matrix.at(c).g = matrix.at(c).r;
-    //                    for (auto n : filter(c.neighbours()))
-    //                        if (!matrix.at(n).is_blocked)
-    //                            update_vertex(matrix.at(n));
-    //                }
-    //                else
-    //                {
-    //                    matrix.at(c).g = infinity();
-    //                    for (auto n : filter(c.neighbours()))
-    //                        if (!matrix.at(n).is_blocked)
-    //                            update_vertex(matrix.at(n));
-    //                    update_vertex(matrix.at(c));
-    //                }
-    //            }
-    //        }
+                    if (matrix.at(c).g > matrix.at(c).r)
+                    {
+                        matrix.at(c).g = matrix.at(c).r;
+                        for (auto neighbour : filter(c.neighbours()))
+                            if (!matrix.at(neighbour).bad)
+                                update_vertex(matrix.at(neighbour));
+                    }
+                    else
+                    {
+                        matrix.at(c).g = infinity();
+                        for (auto neighbour : filter(c.neighbours()))
+                            if (!matrix.at(neighbour).bad)
+                                update_vertex(matrix.at(neighbour));
+                        update_vertex(matrix.at(c));
+                    }
+                }
+            }
 
         public:
 
@@ -301,11 +297,11 @@ namespace search
                         matrix.at({ r, c }).h = hfunc({ r, c }, goal);
             }
 
-    //        auto run()
-    //        {
-    //            initialize();
-    //            compute_shortest_path();
-    //        }
+            auto run()
+            {
+                initialize();
+                compute_shortest_path();
+            }
 
     //        auto run_with_changes(vector<Coordinate> const& coordinates_to_toggle)
     //        {
