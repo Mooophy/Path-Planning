@@ -207,12 +207,21 @@ namespace search
                 q.push(matrix.at(start));
             }
 
-            auto update_vetex(LpState state)
+            auto update_vertex(LpState& s)
             {
-                //if (state.coordinate != start)
-                //{
-
-                //}
+                if (s.coordinate != start)
+                {
+                    auto minimum = infinity();
+                    for (auto n : s.coordinate.neighbours())
+                    {
+                        auto& vertex = matrix.at(n);
+                        if (!vertex.is_blocked)
+                            minimum = min(minimum, (vertex.g + cost()));
+                    }
+                    s.r = minimum;
+                }
+                q.remove(s);
+                if (s.g != s.r) q.push(s);
             }
 
             auto run()
