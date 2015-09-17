@@ -253,10 +253,10 @@ namespace search
             //
             //  Constructor
             //
-            LpAstarCore(unsigned rows, unsigned cols, Coordinate start, Coordinate goal, string heuristic, unordered_set<Coordinate> const& blockeds):
+            LpAstarCore(unsigned rows, unsigned cols, Coordinate start, Coordinate goal, string heuristic, unordered_set<Coordinate> const& blockeds) :
                 heuristics{},
                 matrix{ rows, cols },
-                start{ start }, 
+                start{ start },
                 goal{ goal },
                 h{ heuristics.at(heuristic) },
                 q{ [&](LpState const& lft, LpState const& rht) { return Key{ lft, h, goal } < Key{ rht, h, goal }; } }
@@ -275,7 +275,7 @@ namespace search
             Matrix matrix;
             Coordinate const start, goal;
             function<int(Coordinate, Coordinate)> const h;
-            PriorityQueue < LpState, function<bool(LpState, LpState)>> q;
+            PriorityQueue < LpState, function<bool(LpState, LpState)> > q;
         };
     }
 }//end of namespace search
