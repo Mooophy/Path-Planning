@@ -153,10 +153,12 @@ namespace UnitTests
 
         TEST_METHOD(run_of_lpastar)
         {
+            //initial planning
             unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
             LpAstarCore lpa{ 6, 4, { 0, 3 }, { 5, 0 }, "manhattan", bad_cells };
             lpa.run();
-            Assert::AreEqual(string{}, lpa.matrix.to_string());
+            string expect{ "{[r=0,c=0]|g:10000|r:3|h:5|b:f}{[r=0,c=1]|g:10000|r:2|h:5|b:f}{[r=0,c=2]|g:1|r:1|h:5|b:f}{[r=0,c=3]|g:0|r:0|h:5|b:f}+++{[r=1,c=0]|g:10000|r:10000|h:4|b:t}{[r=1,c=1]|g:2|r:2|h:4|b:f}{[r=1,c=2]|g:10000|r:10000|h:4|b:t}{[r=1,c=3]|g:1|r:1|h:4|b:f}+++{[r=2,c=0]|g:10000|r:10000|h:3|b:t}{[r=2,c=1]|g:3|r:3|h:3|b:f}{[r=2,c=2]|g:10000|r:10000|h:3|b:t}{[r=2,c=3]|g:2|r:2|h:3|b:f}+++{[r=3,c=0]|g:10000|r:10000|h:2|b:t}{[r=3,c=1]|g:4|r:4|h:2|b:f}{[r=3,c=2]|g:10000|r:10000|h:2|b:t}{[r=3,c=3]|g:3|r:3|h:3|b:f}+++{[r=4,c=0]|g:10000|r:10000|h:1|b:t}{[r=4,c=1]|g:5|r:5|h:1|b:f}{[r=4,c=2]|g:10000|r:10000|h:2|b:t}{[r=4,c=3]|g:10000|r:4|h:3|b:f}+++{[r=5,c=0]|g:6|r:6|h:0|b:f}{[r=5,c=1]|g:10000|r:6|h:1|b:f}{[r=5,c=2]|g:10000|r:6|h:2|b:f}{[r=5,c=3]|g:10000|r:10000|h:3|b:f}+++" };
+            Assert::AreEqual(expect, lpa.matrix.to_string());
         }
     };
 }
