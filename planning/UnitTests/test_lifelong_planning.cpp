@@ -17,7 +17,7 @@ namespace UnitTests
 
         TEST_METHOD(infinity_function)
         {
-            Assert::AreEqual(2147483647, infinity());
+            Assert::AreEqual(10000, infinity());
         }
 
         TEST_METHOD(key)
@@ -98,7 +98,7 @@ namespace UnitTests
             Matrix matrix{ 9, 8 };
             Assert::AreEqual(9u, matrix.rows());
             Assert::AreEqual(8u, matrix.cols());
-            Assert::AreEqual(2'147'483'647, infinity());
+            Assert::AreEqual(1'0000, infinity());
 
             {
                 Coordinate c = { 0, 0 };
@@ -123,7 +123,7 @@ namespace UnitTests
 
             {//for testing to_string
                 Matrix matrix{ 2, 2 };
-                string expect = "{[x=0,y=0]|g:2147483647|r:2147483647|b:f}{[x=1,y=0]|g:2147483647|r:2147483647|b:f}\n{[x=0,y=1]|g:2147483647|r:2147483647|b:f}{[x=1,y=1]|g:2147483647|r:2147483647|b:f}\n";
+                string expect = "{[x=0,y=0]|g:10000|r:10000|b:f}{[x=1,y=0]|g:10000|r:10000|b:f}+++{[x=0,y=1]|g:10000|r:10000|b:f}{[x=1,y=1]|g:10000|r:10000|b:f}+++";
                 Assert::AreEqual(expect, matrix.to_string());
             }
         }
@@ -194,8 +194,10 @@ namespace UnitTests
         {
             {//case 0
                 unordered_set<Coordinate> blockeds{};
-                LpAstarCore lpastar{ 2, 2, { 0, 0 },{ 1, 1 }, "manhattan", blockeds };
+                LpAstarCore lpastar{ 3, 3, { 0, 0 },{ 2, 2 }, "manhattan", blockeds };
                 lpastar();
+                string expect = "{[x=0,y=0]|g:0|r:0|b:f}{[x=1,y=0]|g:1|r:1|b:f}{[x=2,y=0]|g:2|r:2|b:f}+++{[x=0,y=1]|g:1|r:1|b:f}{[x=1,y=1]|g:1|r:1|b:f}{[x=2,y=1]|g:2|r:2|b:f}+++{[x=0,y=2]|g:2|r:2|b:f}{[x=1,y=2]|g:2|r:2|b:f}{[x=2,y=2]|g:2|r:2|b:f}+++";
+                Assert::AreEqual(expect, lpastar.matrix.to_string());
             }
         }
     };

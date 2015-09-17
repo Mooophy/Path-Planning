@@ -33,7 +33,7 @@ namespace search
     {
         constexpr auto infinity()
         {
-            return std::numeric_limits<int>::max();
+            return 10000;
         }
         constexpr auto cost()
         {
@@ -167,7 +167,7 @@ namespace search
                 {
                     for (auto c = 0; c != cols(); ++c)
                         result += at({ c, r }).to_string();
-                    result.push_back('\n');
+                    result += "+++";
                 }
                 return result;
             }
