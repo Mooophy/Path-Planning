@@ -120,6 +120,12 @@ namespace UnitTests
                 Assert::AreEqual(infinity(), matrix.at(c).r);
                 Assert::IsTrue(c == matrix.at(c).coordinate);
             }
+
+            {//for testing to_string
+                Matrix matrix{ 2, 2 };
+                string expect = "{[x=0,y=0]|g:2147483647|r:2147483647|b:f}{[x=1,y=0]|g:2147483647|r:2147483647|b:f}\n{[x=0,y=1]|g:2147483647|r:2147483647|b:f}{[x=1,y=1]|g:2147483647|r:2147483647|b:f}\n";
+                Assert::AreEqual(expect, matrix.to_string());
+            }
         }
 
         TEST_METHOD(lp_astar)

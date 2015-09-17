@@ -160,6 +160,18 @@ namespace search
                 return _data.front().size();
             }
 
+            auto to_string() const
+            {
+                string result;
+                for (auto r = 0; r != rows(); ++r)
+                {
+                    for (auto c = 0; c != cols(); ++c)
+                        result += at({ c, r }).to_string();
+                    result.push_back('\n');
+                }
+                return result;
+            }
+
         private:
             vector<vector<LpState>> _data;
         };
