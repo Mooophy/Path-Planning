@@ -176,9 +176,9 @@ namespace search
             vector<vector<LpState>> _data;
         };
 
-        struct HeuristcFuncs : public unordered_map < string, function<int(Cell, Cell)> >
+        struct Heuristics : public unordered_map < string, function<int(Cell, Cell)> >
         {
-            HeuristcFuncs()
+            Heuristics()
             {
                 (*this)["manhattan"] =
                     [](Cell curr, Cell goal)
@@ -193,31 +193,33 @@ namespace search
             }
         };
 
-    //    struct Key
-    //    {
-    //        const int first, second;
+        const static Heuristics HEURISTICS;
 
-    //        Key(int fst, int snd)
-    //            : first{ fst }, second{ snd }
-    //        {   }
-    //        Key(LpState const& s)
-    //            : Key{ min(s.g, s.r + s.h), min(s.g, s.r) }
-    //        {   }
+        struct Key
+        {
+            const int fst, snd;
 
-    //        friend auto operator== (Key l, Key r)
-    //        {
-    //            return l.first == r.first && l.second == r.second;
-    //        }
-    //        friend auto operator < (Key l, Key r)
-    //        {
-    //            return (l.first < r.first) || (l.first == r.first && l.second < r.second);
-    //        }
-    //    };
-    //    //
-    //    //  Lifelong A*
-    //    //
-    //    class LpAstarCore
-    //    {
+            Key(int fst, int snd)
+                : fst{ fst }, snd{ snd }
+            {   }
+            Key(LpState const& s)
+                : Key{ min(s.g, s.r) + s.h, min(s.g, s.r) }// i.e. CalculateKey in paper
+            {   }
+
+            friend auto operator== (Key l, Key r)
+            {
+                return l.fst == r.fst && l.snd == r.snd;
+            }
+            friend auto operator < (Key l, Key r)
+            {
+                return (l.fst < r.fst) || (l.fst == r.fst && l.snd < r.snd);
+            }
+        };
+        //
+        //  Lifelong A*
+        //
+        class LpAstarCore
+        {
     //        auto filter(vector<Coordinate> && cs)
     //        {
     //            vector<Coordinate> result;
@@ -277,21 +279,27 @@ namespace search
     //            }
     //        }
 
-    //    public:
-    //        //
-    //        //  Constructor
-    //        //
-    //        LpAstarCore(unsigned rows, unsigned cols, Coordinate start, Coordinate goal, string heuristic, unordered_set<Coordinate> const& blockeds) :
-    //            heuristics{},
-    //            matrix{ rows, cols },
-    //            start{ start },
-    //            goal{ goal },
-    //            h{ heuristics.at(heuristic) }/*,*/
-    //            //q{ [&](Coordinate lft, Coordinate rht) { return Key{ matrix.at(lft.coordinate), h, goal } < Key{ matrix.at(rht.coordinate), h, goal }; } }
-    //        {
-    //            for (auto blocked : blockeds)
-    //                matrix.at(blocked).is_blocked = true;
-    //        }
+        public:
+
+            //
+            //  Constructor
+            //
+            LpAstarCore(unsigned rows, unsigned cols, Cell start, Cell goal, string heuristic, unordered_set<Cell> const& bad_cells) :
+                matrix{ rows, cols },
+                start{ start },
+                goal{ goal },
+                hfunc{ HEURISTICS.at(heuristic) },
+                q{ [this](Cell lft, Cell rht) { return Key{ matrix.at(lft) } < Key{ matrix.at(rht) }; } }
+            {
+                //mark all bad cells
+                for (auto cell : bad_cells)
+                    matrix.at(cell).bad = true;
+
+                //mark all h value
+                for (auto r = 0; r != matrix.rows(); ++r)
+                    for (auto c = 0; c != matrix.cols(); ++c)
+                        matrix.at({ r, c }).h = hfunc({ r, c }, goal);
+            }
 
     //        auto run()
     //        {
@@ -315,11 +323,10 @@ namespace search
     //            compute_shortest_path();
     //        }
 
-    //        HeuristcFuncs const heuristics;
-    //        Matrix matrix;
-    //        Coordinate const start, goal;
-    //        function<int(Coordinate, Coordinate)> const h;
-    //        PriorityQueue < Coordinate, function<bool(Coordinate, Coordinate)> > q;
-    //    };
+            Matrix matrix;
+            Cell const start, goal;
+            function<int(Cell, Cell)> const hfunc;
+            PriorityQueue < Cell, function<bool(Cell, Cell)> > q;
+        };
     }
 }//end of namespace search

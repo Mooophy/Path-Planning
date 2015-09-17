@@ -22,12 +22,12 @@ namespace UnitTests
 
         TEST_METHOD(key)
         {
-            //Key key{ 42, 99 };
-            //Assert::AreEqual(42, key.first);
-            //Assert::AreEqual(99, key.second);
-            //Assert::IsTrue(Key{ 1, 2 } < Key{ 2, 1 });
-            //Assert::IsTrue(Key{ 2, 1 } < Key{ 2, 2 });
-            //Assert::IsTrue(Key{ 2, 2 } == Key{ 2, 2 });
+            Key key{ 42, 99 };
+            Assert::AreEqual(42, key.fst);
+            Assert::AreEqual(99, key.snd);
+            Assert::IsTrue(Key{ 1, 2 } < Key{ 2, 1 });
+            Assert::IsTrue(Key{ 2, 1 } < Key{ 2, 2 });
+            Assert::IsTrue(Key{ 2, 2 } == Key{ 2, 2 });
         }
 
         TEST_METHOD(lp_cell)
@@ -65,18 +65,11 @@ namespace UnitTests
 
         TEST_METHOD(lp_heuristics)
         {
-            Assert::AreEqual(4, HeuristcFuncs{}.at("manhattan")({ 1, 3 }, { 5, 0 }));
-            Assert::AreEqual(5, HeuristcFuncs{}.at("manhattan")({ 0, 2 }, { 5, 0 }));
+            Assert::AreEqual(4, HEURISTICS.at("manhattan")({ 1, 3 }, { 5, 0 }));
+            Assert::AreEqual(5, HEURISTICS.at("manhattan")({ 0, 2 }, { 5, 0 }));
 
-            Assert::AreEqual(5, HeuristcFuncs{}.at("euclidean")({ 6, 5 }, { 9, 9 }));
-            Assert::AreEqual(1, HeuristcFuncs{}.at("euclidean")({ 8, 8 }, { 9, 9 }));
-        }
-
-        TEST_METHOD(lp_key)
-        {
-            //auto ls = LpState{ { 3, 4 }, 6, 7, true };
-            //Assert::IsTrue(Key{ 6, 6 } == Key{ ls, HeuristcFuncs{}.at("manhattan"), { 39, 39 } });
-            //Assert::IsTrue(Key{ 6, 6 } == Key{ ls, HeuristcFuncs{}.at("manhattan"), { 4, 4 } });
+            Assert::AreEqual(5, HEURISTICS.at("euclidean")({ 6, 5 }, { 9, 9 }));
+            Assert::AreEqual(1, HEURISTICS.at("euclidean")({ 8, 8 }, { 9, 9 }));
         }
 
         TEST_METHOD(lp_state)
@@ -117,6 +110,44 @@ namespace UnitTests
                 Matrix matrix{ 2, 2 };
                 string expect = "{[r=0,c=0]|g:10000|r:10000|h:0|b:f}{[r=1,c=0]|g:10000|r:10000|h:0|b:f}+++{[r=0,c=1]|g:10000|r:10000|h:0|b:f}{[r=1,c=1]|g:10000|r:10000|h:0|b:f}+++";
                 Assert::AreEqual(expect, matrix.to_string());
+            }
+        }
+
+        TEST_METHOD(matrix_of_lpastar)
+        {
+            //case from pdf file
+            unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
+            LpAstarCore lpa{ 6, 4, { 0, 3 }, { 5, 0 }, "manhattan", bad_cells };
+
+            //test bad marking
+            for (auto cell : bad_cells)
+                Assert::AreEqual(true, lpa.matrix.at(cell).bad);
+            for (auto r = 0; r != lpa.matrix.rows(); ++r)
+                for (auto c = 0; c != lpa.matrix.cols(); ++c)
+                    if(bad_cells.count({ r, c }) == 0)
+                        Assert::AreEqual(false, lpa.matrix.at({ r, c }).bad);
+
+            //test h value marking
+            Assert::AreEqual(5, lpa.matrix.at({ 0, 2 }).h);
+            Assert::AreEqual(4, lpa.matrix.at({ 1, 3 }).h);
+        }
+
+        TEST_METHOD(priority_queue_of_lpastar)
+        {
+            {//pushing order 1
+                unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
+                LpAstarCore lpa{ 6, 4, { 0, 3 }, { 5, 0 }, "manhattan", bad_cells };
+                lpa.q.push({ 0, 2 });
+                lpa.q.push({ 1, 3 });
+                Assert::IsTrue(Cell{ 1, 3 } == lpa.q.top());
+            }
+
+            {//pushing order 2
+                unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
+                LpAstarCore lpa{ 6, 4,{ 0, 3 },{ 5, 0 }, "manhattan", bad_cells };
+                lpa.q.push({ 1, 3 });
+                lpa.q.push({ 0, 2 });
+                Assert::IsTrue(Cell{ 1, 3 } == lpa.q.top());
             }
         }
     };
