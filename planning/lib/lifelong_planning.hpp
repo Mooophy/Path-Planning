@@ -110,10 +110,7 @@ namespace search
     {
         struct LpState
         {
-            Cell cell;
-            int g, r, h;
-            bool bad;
-
+            Cell cell; int g, r, h; bool bad;
             auto to_string() const
             {
                 using std::to_string;
@@ -250,29 +247,22 @@ namespace search
                 q.remove(s.cell);
                 if (s.g != s.r) q.push(s.cell);
             }
+            auto update_neighbours_of(Cell cell)
+            {
+                for (auto neighbour : filter(cell.neighbours()))
+                    if (!at(neighbour).bad)
+                        update_vertex(at(neighbour));
+            }
             auto compute_shortest_path()
             {
-                auto top_key = [this] { return q.empty() ? Key{ huge(), huge() } : Key{ at(q.top()) }; };
-
-                while (top_key() < Key{ at(goal) } || at(goal).r != at(goal).g)
+                while ( !q.empty() && (Key{ at(q.top()) } < Key{ at(goal) } || at(goal).r != at(goal).g))
                 {
                     auto c = q.pop();
-
                     if (at(c).g > at(c).r)
-                    {
                         at(c).g = at(c).r;
-                        for (auto neighbour : filter(c.neighbours()))
-                            if (!at(neighbour).bad)
-                                update_vertex(at(neighbour));
-                    }
                     else
-                    {
-                        at(c).g = huge();
-                        for (auto neighbour : filter(c.neighbours()))
-                            if (!at(neighbour).bad)
-                                update_vertex(at(neighbour));
-                        update_vertex(at(c));
-                    }
+                        at(c).g = huge(), update_vertex(at(c));
+                    update_neighbours_of(c);
                 }
             }
 
@@ -290,8 +280,7 @@ namespace search
             }
             auto mark_bad_cells(unordered_set<Cell> const& bad_cells)
             {
-                for (auto cell : bad_cells)
-                    at(cell).bad = true;
+                for (auto cell : bad_cells) at(cell).bad = true;
             }
             auto mark_h_values()
             {
@@ -323,16 +312,14 @@ namespace search
             }
             auto replan(unordered_set<Cell> const& cells_to_toggle = {})
             {
-                for (auto cell : cells_to_toggle)
+                for (auto c : cells_to_toggle)
                 {
-                    at(cell).bad = !at(cell).bad;
-                    if (!at(cell).bad)
-                        update_vertex(at(cell));
+                    at(c).bad = !at(c).bad;
+                    if (!at(c).bad)
+                        update_vertex(at(c));
                     else
-                        at(cell).g = at(cell).r = huge();
-                    for (auto n : filter(cell.neighbours()))
-                        if(!at(n).bad)
-                            update_vertex(at(n));
+                        at(c).g = at(c).r = huge();
+                    update_neighbours_of(c);
                 }
                 compute_shortest_path();
             }
