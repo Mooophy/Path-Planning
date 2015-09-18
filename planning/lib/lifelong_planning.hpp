@@ -173,24 +173,18 @@ namespace search
             vector<vector<LpState>> _data;
         };
 
-        struct Heuristics : public unordered_map < string, function<int(Cell, Cell)> >
+        unordered_map < string, function<int(Cell, Cell)> > const static HEURISTICS
         {
-            Heuristics()
             {
-                (*this)["manhattan"] =
-                    [](Cell curr, Cell goal)
-                {
-                    return max(abs(goal.row - curr.row), abs(goal.col - curr.col));
-                };
-                (*this)["euclidean"] =
-                    [](Cell curr, Cell goal)
-                {
-                    return static_cast<int>(round(hypot(abs(goal.row - curr.row), abs(goal.col - curr.col))));
-                };
+                "manhattan",
+                    [](Cell l, Cell r) { return max(abs(l.row - r.row), abs(l.col - r.col)); }
+            },
+
+            {
+                "euclidean",
+                    [](Cell l, Cell r) { return static_cast<int>(round(hypot(abs(l.row - r.row), abs(l.col - r.col)))); }
             }
         };
-
-        const static Heuristics HEURISTICS;
 
         struct Key
         {
@@ -255,7 +249,7 @@ namespace search
             }
             auto compute_shortest_path()
             {
-                while ( !q.empty() && (Key{ at(q.top()) } < Key{ at(goal) } || at(goal).r != at(goal).g))
+                while (!q.empty() && (Key{ at(q.top()) } < Key{ at(goal) } || at(goal).r != at(goal).g))
                 {
                     auto c = q.pop();
                     if (at(c).g > at(c).r)
@@ -323,7 +317,7 @@ namespace search
                 }
                 compute_shortest_path();
             }
-            
+
             //
             //  data members
             //
