@@ -221,7 +221,7 @@ namespace search
         class LpAstarCore
         {
             //
-            //  Algorithm part
+            //  Algorithm
             //
 
             auto filter(vector<Cell> && cells)
@@ -232,49 +232,46 @@ namespace search
                         result.push_back(move(c));
                 return result;
             }
-
             auto initialize()
             {
                 q.reset();
-                matrix.at(start).r = 0;
+                at(start).r = 0;
                 q.push(start);
             }
-
             auto update_vertex(LpState& s)
             {
                 if (s.cell != start)
                 {
                     auto minimum = huge();
                     for (auto neighbour : filter(s.cell.neighbours()))
-                        minimum = min(minimum, (matrix.at(neighbour).g + cost()));
+                        minimum = min(minimum, (at(neighbour).g + cost()));
                     s.r = minimum;
                 }
                 q.remove(s.cell);
                 if (s.g != s.r) q.push(s.cell);
             }
-
             auto compute_shortest_path()
             {
-                auto top_key = [this] { return q.empty() ? Key{ huge(), huge() } : Key{ matrix.at(q.top()) }; };
+                auto top_key = [this] { return q.empty() ? Key{ huge(), huge() } : Key{ at(q.top()) }; };
 
-                while (top_key() < Key{ matrix.at(goal) } || matrix.at(goal).r != matrix.at(goal).g)
+                while (top_key() < Key{ at(goal) } || at(goal).r != at(goal).g)
                 {
                     auto c = q.pop();
 
-                    if (matrix.at(c).g > matrix.at(c).r)
+                    if (at(c).g > at(c).r)
                     {
-                        matrix.at(c).g = matrix.at(c).r;
+                        at(c).g = at(c).r;
                         for (auto neighbour : filter(c.neighbours()))
-                            if (!matrix.at(neighbour).bad)
-                                update_vertex(matrix.at(neighbour));
+                            if (!at(neighbour).bad)
+                                update_vertex(at(neighbour));
                     }
                     else
                     {
-                        matrix.at(c).g = huge();
+                        at(c).g = huge();
                         for (auto neighbour : filter(c.neighbours()))
-                            if (!matrix.at(neighbour).bad)
-                                update_vertex(matrix.at(neighbour));
-                        update_vertex(matrix.at(c));
+                            if (!at(neighbour).bad)
+                                update_vertex(at(neighbour));
+                        update_vertex(at(c));
                     }
                 }
             }
@@ -282,6 +279,7 @@ namespace search
             //
             //  helpers
             //
+
             auto at(Cell c) const -> LpState const&
             {
                 return matrix.at(c);
@@ -289,6 +287,17 @@ namespace search
             auto at(Cell c) -> LpState&
             {
                 return matrix.at(c);
+            }
+            auto mark_bad_cells(unordered_set<Cell> const& bad_cells)
+            {
+                for (auto cell : bad_cells)
+                    at(cell).bad = true;
+            }
+            auto mark_h_values()
+            {
+                for (auto r = 0; r != matrix.rows(); ++r)
+                    for (auto c = 0; c != matrix.cols(); ++c)
+                        at({ r, c }).h = hfunc({ r, c }, goal);
             }
 
         public:
@@ -303,14 +312,8 @@ namespace search
                 hfunc{ HEURISTICS.at(heuristic) },
                 q{ [this](Cell lft, Cell rht) { return Key{ at(lft) } < Key{ at(rht) }; } }
             {
-                //mark all bad cells
-                for (auto cell : bad_cells)
-                    at(cell).bad = true;
-
-                //mark all h value
-                for (auto r = 0; r != matrix.rows(); ++r)
-                    for (auto c = 0; c != matrix.cols(); ++c)
-                        at({ r, c }).h = hfunc({ r, c }, goal);
+                mark_bad_cells(bad_cells);
+                mark_h_values();
             }
 
             auto plan()
@@ -318,7 +321,6 @@ namespace search
                 initialize();
                 compute_shortest_path();
             }
-
             auto replan(unordered_set<Cell> const& cells_to_toggle = {})
             {
                 for (auto cell : cells_to_toggle)
@@ -330,10 +332,14 @@ namespace search
                         at(cell).g = at(cell).r = huge();
                     for (auto n : filter(cell.neighbours()))
                         if(!at(n).bad)
-                            update_vertex(matrix.at(n));
+                            update_vertex(at(n));
                 }
                 compute_shortest_path();
             }
+            
+            //
+            //  data members
+            //
 
             Matrix matrix;
             Cell const start, goal;
