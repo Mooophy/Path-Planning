@@ -303,7 +303,7 @@ namespace search
                 compute_shortest_path();
             }
 
-            auto rerun(vector<Cell> const& cells_to_toggle = {})
+            auto rerun(unordered_set<Cell> const& cells_to_toggle = {})
             {
                 for (auto cell : cells_to_toggle)
                 {
@@ -311,8 +311,11 @@ namespace search
                     state.bad = !state.bad;
                     if (!state.bad)
                         update_vertex(state);
+                    else
+                        state.g = state.r = infinity();
                     for (auto n : filter(state.cell.neighbours()))
-                        update_vertex(matrix.at(n));
+                        if(!matrix.at(n).bad)
+                            update_vertex(matrix.at(n));
                 }
                 compute_shortest_path();
             }
