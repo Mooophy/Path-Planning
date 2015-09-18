@@ -31,7 +31,7 @@ namespace search
     //
     namespace lp
     {
-        constexpr auto infinity()
+        constexpr auto huge()
         {
             return 10'000;
         }
@@ -137,7 +137,7 @@ namespace search
                     {
                         Cell curr{ r, c };
                         at(curr).cell = curr;
-                        at(curr).g = at(curr).r = infinity();
+                        at(curr).g = at(curr).r = huge();
                     }
                 }
             }
@@ -220,6 +220,10 @@ namespace search
         //
         class LpAstarCore
         {
+            //
+            //  Algorithm part
+            //
+
             auto filter(vector<Cell> && cells)
             {
                 vector<Cell> result;
@@ -240,7 +244,7 @@ namespace search
             {
                 if (s.cell != start)
                 {
-                    auto minimum = infinity();
+                    auto minimum = huge();
                     for (auto neighbour : filter(s.cell.neighbours()))
                         minimum = min(minimum, (matrix.at(neighbour).g + cost()));
                     s.r = minimum;
@@ -251,7 +255,7 @@ namespace search
 
             auto compute_shortest_path()
             {
-                auto top_key = [this] { return q.empty() ? Key{ infinity(), infinity() } : Key{ matrix.at(q.top()) }; };
+                auto top_key = [this] { return q.empty() ? Key{ huge(), huge() } : Key{ matrix.at(q.top()) }; };
 
                 while (top_key() < Key{ matrix.at(goal) } || matrix.at(goal).r != matrix.at(goal).g)
                 {
@@ -266,13 +270,25 @@ namespace search
                     }
                     else
                     {
-                        matrix.at(c).g = infinity();
+                        matrix.at(c).g = huge();
                         for (auto neighbour : filter(c.neighbours()))
                             if (!matrix.at(neighbour).bad)
                                 update_vertex(matrix.at(neighbour));
                         update_vertex(matrix.at(c));
                     }
                 }
+            }
+
+            //
+            //  helpers
+            //
+            auto at(Cell c) const -> LpState const&
+            {
+                return matrix.at(c);
+            }
+            auto at(Cell c) -> LpState&
+            {
+                return matrix.at(c);
             }
 
         public:
@@ -285,36 +301,35 @@ namespace search
                 start{ start },
                 goal{ goal },
                 hfunc{ HEURISTICS.at(heuristic) },
-                q{ [this](Cell lft, Cell rht) { return Key{ matrix.at(lft) } < Key{ matrix.at(rht) }; } }
+                q{ [this](Cell lft, Cell rht) { return Key{ at(lft) } < Key{ at(rht) }; } }
             {
                 //mark all bad cells
                 for (auto cell : bad_cells)
-                    matrix.at(cell).bad = true;
+                    at(cell).bad = true;
 
                 //mark all h value
                 for (auto r = 0; r != matrix.rows(); ++r)
                     for (auto c = 0; c != matrix.cols(); ++c)
-                        matrix.at({ r, c }).h = hfunc({ r, c }, goal);
+                        at({ r, c }).h = hfunc({ r, c }, goal);
             }
 
-            auto run()
+            auto plan()
             {
                 initialize();
                 compute_shortest_path();
             }
 
-            auto rerun(unordered_set<Cell> const& cells_to_toggle = {})
+            auto replan(unordered_set<Cell> const& cells_to_toggle = {})
             {
                 for (auto cell : cells_to_toggle)
                 {
-                    auto& state = matrix.at(cell);
-                    state.bad = !state.bad;
-                    if (!state.bad)
-                        update_vertex(state);
+                    at(cell).bad = !at(cell).bad;
+                    if (!at(cell).bad)
+                        update_vertex(at(cell));
                     else
-                        state.g = state.r = infinity();
-                    for (auto n : filter(state.cell.neighbours()))
-                        if(!matrix.at(n).bad)
+                        at(cell).g = at(cell).r = huge();
+                    for (auto n : filter(cell.neighbours()))
+                        if(!at(n).bad)
                             update_vertex(matrix.at(n));
                 }
                 compute_shortest_path();
