@@ -76,7 +76,6 @@ namespace search
                     { '7', [](Cell c) { return Cell{ c.row + 1, c.col + 0 }; } },
                     { '8', [](Cell c) { return Cell{ c.row + 1, c.col + 1 }; } }
                 };
-
                 vector<Cell> result;
                 for (auto n = '1'; n != '9'; ++n)
                     result.push_back(directions.at(n)(*this));
@@ -122,18 +121,28 @@ namespace search
         class Matrix
         {
         public:
-            Matrix(unsigned rows, unsigned cols)
-                : _data{ rows, vector<LpState>(cols) }
+            auto rows() const
             {
-                for (auto r = 0; r != rows; ++r)
-                {
-                    for (auto c = 0; c != cols; ++c)
-                    {
-                        Cell curr{ r, c };
-                        at(curr).cell = curr;
-                        at(curr).g = at(curr).r = huge();
-                    }
-                }
+                return _data.size();
+            }
+            auto cols() const
+            {
+                return _data.front().size();
+            }
+
+            template<typename Func>
+            auto each_cell(Func && func)
+            {
+                for (auto r = 0; r != rows(); ++r) 
+                    for (auto c = 0; c != cols(); ++c) 
+                        func(Cell{ r, c });
+            }
+            template<typename Func>
+            auto each_cell(Func && func) const
+            {
+                for (auto r = 0; r != rows(); ++r)
+                    for (auto c = 0; c != cols(); ++c)
+                        func(Cell{ r, c });
             }
 
             auto at(Cell c) -> LpState&
@@ -143,15 +152,6 @@ namespace search
             auto at(Cell c) const -> LpState const&
             {
                 return{ _data[c.row][c.col] };
-            }
-
-            auto rows() const
-            {
-                return _data.size();
-            }
-            auto cols() const
-            {
-                return _data.front().size();
             }
 
             auto to_string() const
@@ -164,6 +164,15 @@ namespace search
                     result += "+++";
                 }
                 return result;
+            }
+            //
+            //  Ctor
+            //
+            Matrix(unsigned rows, unsigned cols)
+                : _data{ rows, vector<LpState>(cols) }
+            {
+                auto init_state = [this](Cell c) { at(c).cell = c, at(c).g = at(c).r = huge(); };
+                each_cell(init_state);
             }
 
         private:
@@ -191,7 +200,7 @@ namespace search
                 : fst{ fst }, snd{ snd }
             {   }
             Key(LpState const& s)
-                : Key{ min(s.g, s.r) + s.h, min(s.g, s.r) }// i.e. CalculateKey in paper
+                : Key{ min(s.g, s.r) + s.h, min(s.g, s.r) } // i.e. CalculateKey in paper
             {   }
 
             friend auto operator== (Key l, Key r)
@@ -271,13 +280,12 @@ namespace search
             }
             auto mark_bad_cells(unordered_set<Cell> const& bad_cells)
             {
-                for (auto cell : bad_cells) at(cell).bad = true;
+                for (auto c : bad_cells) at(c).bad = true;
             }
             auto mark_h_values()
             {
-                for (auto r = 0; r != matrix.rows(); ++r)
-                    for (auto c = 0; c != matrix.cols(); ++c)
-                        at({ r, c }).h = hfunc({ r, c }, goal);
+                auto mark_h = [this](Cell c) { at(c).h = hfunc(c, goal); };
+                matrix.each_cell(mark_h);
             }
 
         public:
