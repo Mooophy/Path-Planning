@@ -65,20 +65,17 @@ namespace search
 
             auto neighbours() const
             {
-                struct Directions : public map< char, function< Cell(Cell) >>
+                const static map< char, function< Cell(Cell) >> directions
                 {
-                    Directions()
-                    {
-                        (*this)['1'] = [](Cell c) { return Cell{ c.row - 1, c.col - 1 }; };
-                        (*this)['2'] = [](Cell c) { return Cell{ c.row - 1, c.col - 0 }; };
-                        (*this)['3'] = [](Cell c) { return Cell{ c.row - 1, c.col + 1 }; };
-                        (*this)['4'] = [](Cell c) { return Cell{ c.row - 0, c.col - 1 }; };
-                        (*this)['5'] = [](Cell c) { return Cell{ c.row + 0, c.col + 1 }; };
-                        (*this)['6'] = [](Cell c) { return Cell{ c.row + 1, c.col - 1 }; };
-                        (*this)['7'] = [](Cell c) { return Cell{ c.row + 1, c.col + 0 }; };
-                        (*this)['8'] = [](Cell c) { return Cell{ c.row + 1, c.col + 1 }; };
-                    }
-                } static const directions;
+                    { '1', [](Cell c) { return Cell{ c.row - 1, c.col - 1 }; } },
+                    { '2', [](Cell c) { return Cell{ c.row - 1, c.col - 0 }; } },
+                    { '3', [](Cell c) { return Cell{ c.row - 1, c.col + 1 }; } },
+                    { '4', [](Cell c) { return Cell{ c.row - 0, c.col - 1 }; } },
+                    { '5', [](Cell c) { return Cell{ c.row + 0, c.col + 1 }; } },
+                    { '6', [](Cell c) { return Cell{ c.row + 1, c.col - 1 }; } },
+                    { '7', [](Cell c) { return Cell{ c.row + 1, c.col + 0 }; } },
+                    { '8', [](Cell c) { return Cell{ c.row + 1, c.col + 1 }; } }
+                };
 
                 vector<Cell> result;
                 for (auto n = '1'; n != '9'; ++n)
@@ -173,7 +170,7 @@ namespace search
             vector<vector<LpState>> _data;
         };
 
-        unordered_map < string, function<int(Cell, Cell)> > const static HEURISTICS
+        const static unordered_map < string, function<int(Cell, Cell)> > HEURISTICS
         {
             {
                 "manhattan",
