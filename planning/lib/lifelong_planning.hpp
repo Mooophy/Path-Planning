@@ -298,7 +298,7 @@ namespace search
                 start{ start },
                 goal{ goal },
                 hfunc{ HEURISTICS.at(heuristic) },
-                q{ [this](Cell lft, Cell rht) { return Key{ at(lft) } < Key{ at(rht) }; } }
+                q{ [this](Cell l, Cell r) { return Key{ at(l) } < Key{ at(r) }; } }
             {
                 mark_bad_cells(bad_cells);
                 mark_h_values();
