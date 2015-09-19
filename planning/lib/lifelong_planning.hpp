@@ -255,15 +255,17 @@ namespace search
             }
             auto compute_shortest_path()
             {
+                unordered_set<Cell> expansions;
                 while (!q.empty() && (Key{ at(q.top()) } < Key{ at(goal) } || at(goal).r != at(goal).g))
                 {
-                    auto c = q.pop();
+                    auto c = q.pop(); expansions.insert(c);
                     if (at(c).g > at(c).r)
                         at(c).g = at(c).r;
                     else
                         at(c).g = huge(), update_vertex(at(c));
                     update_neighbours_of(c);
                 }
+                return expansions;
             }
 
             //
@@ -307,7 +309,7 @@ namespace search
             auto plan()
             {
                 initialize();
-                compute_shortest_path();
+                return compute_shortest_path();
             }
             auto replan(unordered_set<Cell> const& cells_to_toggle = {})
             {
@@ -320,7 +322,7 @@ namespace search
                         at(c).g = at(c).r = huge();
                     update_neighbours_of(c);
                 }
-                compute_shortest_path();
+                return compute_shortest_path();
             }
 
             //
