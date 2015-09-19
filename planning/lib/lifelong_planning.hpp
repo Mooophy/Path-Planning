@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <string>
 #include "priority_queue.hpp"
+#include "timing.hpp"
 
 using std::max;
 using std::make_pair;
@@ -133,8 +134,8 @@ namespace search
             template<typename Func>
             auto each_cell(Func && func)
             {
-                for (auto r = 0; r != rows(); ++r) 
-                    for (auto c = 0; c != cols(); ++c) 
+                for (auto r = 0; r != rows(); ++r)
+                    for (auto c = 0; c != cols(); ++c)
                         func(Cell{ r, c });
             }
             template<typename Func>
@@ -255,23 +256,24 @@ namespace search
             }
             auto compute_shortest_path()
             {
-                unordered_set<Cell> expansions;
-                while (!q.empty() && (Key{ at(q.top()) } < Key{ at(goal) } || at(goal).r != at(goal).g))
+                for (Timing t{ run_time }; !q.empty() && (Key{ at(q.top()) } < Key{ at(goal) } || at(goal).r != at(goal).g);)
                 {
-                    auto c = q.pop(); expansions.insert(c);
+                    auto c = q.pop();
                     if (at(c).g > at(c).r)
                         at(c).g = at(c).r;
                     else
                         at(c).g = huge(), update_vertex(at(c));
                     update_neighbours_of(c);
+                    
+                    {
+                        max_q_size = max(max_q_size, q.size());
+                        expansions.insert(c);
+                    }
                 }
-                return expansions;
             }
-
             //
             //  helpers
             //
-
             auto at(Cell c) const -> LpState const&
             {
                 return matrix.at(c);
@@ -289,9 +291,13 @@ namespace search
                 auto mark_h = [this](Cell c) { at(c).h = hfunc(c, goal); };
                 matrix.each_cell(mark_h);
             }
+            auto reset_statistics()
+            {
+                run_time = max_q_size = 0;
+                expansions.clear(), path.clear();
+            }
 
         public:
-
             //
             //  Constructor
             //
@@ -304,15 +310,18 @@ namespace search
             {
                 mark_bad_cells(bad_cells);
                 mark_h_values();
+                reset_statistics();
             }
 
             auto plan()
             {
+                reset_statistics();
                 initialize();
-                return compute_shortest_path();
+                compute_shortest_path();
             }
             auto replan(unordered_set<Cell> const& cells_to_toggle = {})
             {
+                reset_statistics();
                 for (auto c : cells_to_toggle)
                 {
                     at(c).bad = !at(c).bad;
@@ -322,17 +331,22 @@ namespace search
                         at(c).g = at(c).r = huge();
                     update_neighbours_of(c);
                 }
-                return compute_shortest_path();
+                compute_shortest_path();
             }
-
             //
             //  data members
             //
-
             Matrix matrix;
             Cell const start, goal;
             function<int(Cell, Cell)> const hfunc;
             PriorityQueue < Cell, function<bool(Cell, Cell)> > q;
+            //
+            //  statistics
+            //
+            size_t max_q_size;
+            unordered_set<Cell> expansions;
+            string path;
+            long long run_time;
         };
     }
 }//end of namespace search
