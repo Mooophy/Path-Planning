@@ -256,7 +256,8 @@ namespace search
             }
             auto compute_shortest_path()
             {
-                for (Timing t{ run_time }; !q.empty() && (Key{ at(q.top()) } < Key{ at(goal) } || at(goal).r != at(goal).g);)
+                Timing t{ run_time };
+                while (!q.empty() && (Key{ at(q.top()) } < Key{ at(goal) } || at(goal).r != at(goal).g))
                 {
                     auto c = q.pop();
                     if (at(c).g > at(c).r)
@@ -264,7 +265,6 @@ namespace search
                     else
                         at(c).g = huge(), update_vertex(at(c));
                     update_neighbours_of(c);
-                    
                     {
                         max_q_size = max(max_q_size, q.size());
                         expansions.insert(c);
