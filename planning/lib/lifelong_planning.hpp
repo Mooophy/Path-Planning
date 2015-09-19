@@ -64,6 +64,16 @@ namespace search
                 return hash<string>{}(to_string());
             }
 
+            struct Hasher
+            {
+                auto operator()(Cell c) const
+                {
+                    return c.to_hash();
+                }
+            };
+
+            using Cells = unordered_set<Cell, Hasher>;
+
             auto neighbours() const
             {
                 const static map< char, function< Cell(Cell) >> directions
@@ -77,34 +87,15 @@ namespace search
                     { '7', [](Cell c) { return Cell{ c.row + 1, c.col + 0 }; } },
                     { '8', [](Cell c) { return Cell{ c.row + 1, c.col + 1 }; } }
                 };
-                vector<Cell> result;
+                Cells result;
                 for (auto n = '1'; n != '9'; ++n)
-                    result.push_back(directions.at(n)(*this));
+                    result.insert(directions.at(n)(*this));
                 return result;
             }
         };
-    }
-}
 
+        using Cells = Cell::Cells;
 
-namespace std
-{
-    using namespace search::lp;
-    template<>
-    struct hash<Cell>
-    {
-        auto operator()(Cell c) const
-        {
-            return c.to_hash();
-        }
-    };
-}
-
-
-namespace search
-{
-    namespace lp
-    {
         struct LpState
         {
             Cell cell; int g, r, h; bool bad;
@@ -222,12 +213,12 @@ namespace search
             //  Algorithm
             //
 
-            auto filter(vector<Cell> && cells)
+            auto filter(Cells && cells)
             {
-                vector<Cell> result;
+                Cells result;
                 for (auto && c : cells)
                     if (c.row >= 0 && c.row < (int)matrix.rows() && c.col >= 0 && c.col < (int)matrix.cols())
-                        result.push_back(move(c));
+                        result.insert(c);
                 return result;
             }
             auto initialize()
@@ -282,7 +273,7 @@ namespace search
             {
                 return matrix.at(c);
             }
-            auto mark_bad_cells(unordered_set<Cell> const& bad_cells)
+            auto mark_bad_cells(Cells const& bad_cells)
             {
                 for (auto c : bad_cells) at(c).bad = true;
             }
@@ -301,7 +292,7 @@ namespace search
             //
             //  Constructor
             //
-            LpAstarCore(unsigned rows, unsigned cols, Cell start, Cell goal, string heuristic, unordered_set<Cell> const& bad_cells) :
+            LpAstarCore(unsigned rows, unsigned cols, Cell start, Cell goal, string heuristic, Cells const& bad_cells) :
                 matrix{ rows, cols },
                 start{ start },
                 goal{ goal },
@@ -319,7 +310,7 @@ namespace search
                 initialize();
                 compute_shortest_path();
             }
-            auto replan(unordered_set<Cell> const& cells_to_toggle = {})
+            auto replan(Cells const& cells_to_toggle = {})
             {
                 reset_statistics();
                 for (auto c : cells_to_toggle)
@@ -344,7 +335,7 @@ namespace search
             //  statistics
             //
             size_t max_q_size;
-            unordered_set<Cell> expansions;
+            Cells expansions;
             string path;
             long long run_time;
         };

@@ -39,7 +39,6 @@ namespace UnitTests
             Assert::IsTrue(Cell{ 1, 2 } != Cell{ 1, 1 });
             Assert::AreEqual(string{ "[r=42,c=99]" }, c.to_string());
             Assert::AreEqual(69382224u, c.to_hash());
-            Assert::AreEqual(69382224u, std::hash<Cell>{}(c));
 
             {//test neighbour
                 Cell c{ 1, 1 };
@@ -50,12 +49,12 @@ namespace UnitTests
                     { 2, 0 }, { 2, 1 }, { 2, 2 }
                 };
 
-                for (auto i = 1; i != expect.size(); ++i)
-                    Assert::IsTrue(expect[i] == c.neighbours()[i]);
+                for (auto e : expect)
+                    Assert::IsTrue(c.neighbours().count(e) > 0);
             }
 
             {//to confirm hash works
-                unordered_set<Cell> blockeds;
+                Cells blockeds;
                 blockeds.insert({ 1, 2 });
                 blockeds.insert({ 1, 2 });
                 blockeds.insert({ 1, 3 });
@@ -116,7 +115,7 @@ namespace UnitTests
         TEST_METHOD(matrix_of_lpastar)
         {
             //case from pdf file
-            unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
+            Cells bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
             LpAstarCore lpa{ 6, 4, { 0, 3 }, { 5, 0 }, "manhattan", bad_cells };
 
             //test bad marking
@@ -135,7 +134,7 @@ namespace UnitTests
         TEST_METHOD(priority_queue_of_lpastar)
         {
             {//pushing order 1
-                unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
+                Cells bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
                 LpAstarCore lpa{ 6, 4, { 0, 3 }, { 5, 0 }, "manhattan", bad_cells };
                 lpa.q.push({ 0, 2 });
                 lpa.q.push({ 1, 3 });
@@ -143,7 +142,7 @@ namespace UnitTests
             }
 
             {//pushing order 2
-                unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
+                Cells bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
                 LpAstarCore lpa{ 6, 4,{ 0, 3 },{ 5, 0 }, "manhattan", bad_cells };
                 lpa.q.push({ 1, 3 });
                 lpa.q.push({ 0, 2 });
@@ -154,7 +153,7 @@ namespace UnitTests
         TEST_METHOD(run_of_lpastar)
         {
             //initial planning
-            unordered_set<Cell> bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
+            Cells bad_cells{ { 1, 0 },{ 2, 0 },{ 3, 0 },{ 4, 0 },{ 1, 2 },{ 2, 2 },{ 3, 2 },{ 4, 2 } };
             LpAstarCore lpa{ 6, 4, { 0, 3 }, { 5, 0 }, "manhattan", bad_cells };
 
             Assert::AreEqual(0u, lpa.max_q_size);
@@ -168,11 +167,11 @@ namespace UnitTests
 
             Assert::AreEqual(6u, lpa.max_q_size);
             Assert::AreEqual(10u, lpa.expansions.size());
-            Assert::IsTrue(0 < lpa.run_time && lpa.run_time < 10);
-            //Assert::AreEqual(string{}, lpa.path);
+            Assert::IsTrue(0 < lpa.run_time && lpa.run_time < 30);
+            //Assert::AreEqual(string{}, lpa.path); // working here
 
             //replanning
-            unordered_set<Cell> cells_to_toggle{ { 3, 1 } };
+            Cells cells_to_toggle{ { 3, 1 } };
             lpa.replan(cells_to_toggle);
             Assert::AreEqual(true, lpa.matrix.at({ 3, 1 }).bad);
             {
@@ -181,7 +180,7 @@ namespace UnitTests
 
                 Assert::AreEqual(6u, lpa.max_q_size);
                 Assert::AreEqual(6u, lpa.expansions.size());
-                Assert::IsTrue(0 < lpa.run_time && lpa.run_time < 10);
+                Assert::IsTrue(0 < lpa.run_time && lpa.run_time < 30);
             }
         }
     };
