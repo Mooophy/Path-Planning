@@ -71,30 +71,21 @@ namespace search
                     return c.to_hash();
                 }
             };
-
-            using Cells = unordered_set<Cell, Hasher>;
-
-            auto neighbours() const
-            {
-                const static map< char, function< Cell(Cell) >> directions
-                {
-                    { '1', [](Cell c) { return Cell{ c.row - 1, c.col - 1 }; } },
-                    { '2', [](Cell c) { return Cell{ c.row - 1, c.col - 0 }; } },
-                    { '3', [](Cell c) { return Cell{ c.row - 1, c.col + 1 }; } },
-                    { '4', [](Cell c) { return Cell{ c.row - 0, c.col - 1 }; } },
-                    { '5', [](Cell c) { return Cell{ c.row + 0, c.col + 1 }; } },
-                    { '6', [](Cell c) { return Cell{ c.row + 1, c.col - 1 }; } },
-                    { '7', [](Cell c) { return Cell{ c.row + 1, c.col + 0 }; } },
-                    { '8', [](Cell c) { return Cell{ c.row + 1, c.col + 1 }; } }
-                };
-                Cells result;
-                for (auto n = '1'; n != '9'; ++n)
-                    result.insert(directions.at(n)(*this));
-                return result;
-            }
         };
 
-        using Cells = Cell::Cells;
+        const static map< char, function< Cell(Cell) >> DIRECTIONS
+        {
+            { '1', [](Cell c) { return Cell{ c.row - 1, c.col - 1 }; } },
+            { '2', [](Cell c) { return Cell{ c.row - 1, c.col - 0 }; } },
+            { '3', [](Cell c) { return Cell{ c.row - 1, c.col + 1 }; } },
+            { '4', [](Cell c) { return Cell{ c.row - 0, c.col - 1 }; } },
+            { '5', [](Cell c) { return Cell{ c.row + 0, c.col + 1 }; } },
+            { '6', [](Cell c) { return Cell{ c.row + 1, c.col - 1 }; } },
+            { '7', [](Cell c) { return Cell{ c.row + 1, c.col + 0 }; } },
+            { '8', [](Cell c) { return Cell{ c.row + 1, c.col + 1 }; } }
+        };
+
+        using Cells = unordered_set<Cell, Cell::Hasher>;
 
         struct LpState
         {
@@ -213,14 +204,45 @@ namespace search
             //  Algorithm
             //
 
-            auto filter(Cells && cells)
+            auto build_path() const
             {
-                Cells result;
-                for (auto && c : cells)
-                    if (c.row >= 0 && c.row < (int)matrix.rows() && c.col >= 0 && c.col < (int)matrix.cols())
-                        result.insert(c);
-                return result;
+                string inverse_path;
+                for (auto c = goal; c != start; )
+                {
+                    for (auto direction = '1'; direction != '9'; ++direction)
+                    {
+                        auto n = DIRECTIONS.at(direction)(c);
+                        if (n.row >= 0 && n.row < (int)matrix.rows() && n.col >= 0 && n.col < (int)matrix.cols())
+                        {
+                            if (at(n).g + cost() == at(goal).g)
+                            {
+                                inverse_path.push_back(direction);
+                                c = n;
+                            }
+                        }
+                    }
+                }
+                string path;
+                for (auto i = inverse_path.crbegin(); i != inverse_path.crend(); ++i)
+                    path.push_back(*i);
+                for (auto& ch : path)
+                    ch = 2 * '0' + 9 - ch;
+
+                return path;
             }
+
+            auto valid_neighbours_of(Cell c) const
+            {
+                Cells neighbours;
+                for (auto direction = '1'; direction != '9'; ++direction)
+                {
+                    auto n = DIRECTIONS.at(direction)(c);
+                    if (n.row >= 0 && n.row < (int)matrix.rows() && n.col >= 0 && n.col < (int)matrix.cols())
+                        neighbours.insert(n);
+                }
+                return neighbours;
+            }
+
             auto initialize()
             {
                 q.reset();
@@ -232,7 +254,7 @@ namespace search
                 if (s.cell != start)
                 {
                     auto minimum = huge();
-                    for (auto neighbour : filter(s.cell.neighbours()))
+                    for (auto neighbour : valid_neighbours_of(s.cell))
                         minimum = min(minimum, (at(neighbour).g + cost()));
                     s.r = minimum;
                 }
@@ -241,7 +263,7 @@ namespace search
             }
             auto update_neighbours_of(Cell cell)
             {
-                for (auto neighbour : filter(cell.neighbours()))
+                for (auto neighbour : valid_neighbours_of(cell))
                     if (!at(neighbour).bad)
                         update_vertex(at(neighbour));
             }
@@ -259,6 +281,7 @@ namespace search
                     {
                         max_q_size = max(max_q_size, q.size());
                         expansions.insert(c);
+                        path = build_path();
                     }
                 }
             }

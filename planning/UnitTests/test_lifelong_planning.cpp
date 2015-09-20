@@ -40,19 +40,6 @@ namespace UnitTests
             Assert::AreEqual(string{ "[r=42,c=99]" }, c.to_string());
             Assert::AreEqual(69382224u, c.to_hash());
 
-            {//test neighbour
-                Cell c{ 1, 1 };
-                decltype(c.neighbours()) expect = 
-                {
-                    { 0, 0 }, { 0, 1 }, { 0, 2 },
-                    { 1, 0 },   /* */   { 1, 2 },
-                    { 2, 0 }, { 2, 1 }, { 2, 2 }
-                };
-
-                for (auto e : expect)
-                    Assert::IsTrue(c.neighbours().count(e) > 0);
-            }
-
             {//to confirm hash works
                 Cells blockeds;
                 blockeds.insert({ 1, 2 });
