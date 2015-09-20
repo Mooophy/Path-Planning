@@ -204,6 +204,11 @@ namespace search
             //  Algorithm
             //
 
+            auto validate(Cell c) const
+            {
+                return c.row >= 0 && c.row < (int)matrix.rows() && c.col >= 0 && c.col < (int)matrix.cols();
+            }
+
             auto build_path() const
             {
                 string inverse_path;
@@ -211,14 +216,12 @@ namespace search
                 {
                     for (auto direction = '1'; direction != '9'; ++direction)
                     {
-                        auto n = DIRECTIONS.at(direction)(c);
-                        if (n.row >= 0 && n.row < (int)matrix.rows() && n.col >= 0 && n.col < (int)matrix.cols())
+                        auto neighbour = DIRECTIONS.at(direction)(c);
+                        if (validate(neighbour) && (at(neighbour).g + cost() == at(c).g))
                         {
-                            if (at(n).g + cost() == at(goal).g)
-                            {
-                                inverse_path.push_back(direction);
-                                c = n;
-                            }
+                            inverse_path.push_back(direction);
+                            c = neighbour;
+                            break;
                         }
                     }
                 }
@@ -237,7 +240,7 @@ namespace search
                 for (auto direction = '1'; direction != '9'; ++direction)
                 {
                     auto n = DIRECTIONS.at(direction)(c);
-                    if (n.row >= 0 && n.row < (int)matrix.rows() && n.col >= 0 && n.col < (int)matrix.cols())
+                    if (validate(n))
                         neighbours.insert(n);
                 }
                 return neighbours;
@@ -281,9 +284,9 @@ namespace search
                     {
                         max_q_size = max(max_q_size, q.size());
                         expansions.insert(c);
-                        path = build_path();
                     }
                 }
+                path = build_path();
             }
             //
             //  helpers
