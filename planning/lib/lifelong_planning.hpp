@@ -208,7 +208,6 @@ namespace search
             {
                 return c.row >= 0 && c.row < (int)matrix.rows() && c.col >= 0 && c.col < (int)matrix.cols();
             }
-
             auto build_path() const
             {
                 string inverse_path;
@@ -233,7 +232,6 @@ namespace search
 
                 return path;
             }
-
             auto valid_neighbours_of(Cell c) const
             {
                 Cells neighbours;
