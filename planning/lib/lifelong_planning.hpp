@@ -137,9 +137,9 @@ namespace search
             {
                 for (auto c : bad_cells) at(c).bad = true;
             }
-            auto mark_h_values()
+            auto mark_h_values_with(Cell terminal)
             {
-                auto mark_h = [this](Cell c) { at(c).h = hfunc(c, goal); };
+                auto mark_h = [=](Cell c) { at(c).h = hfunc(c, terminal); };
                 matrix.each_cell(mark_h);
             }
             auto reset_statistics()
@@ -160,7 +160,7 @@ namespace search
                 q{ [this](Cell l, Cell r) { return Key{ at(l) } < Key{ at(r) }; } }
             {
                 mark_bad_cells(bad_cells);
-                mark_h_values();
+                mark_h_values_with(goal);   //h value : goal to current
                 reset_statistics();
             }
 

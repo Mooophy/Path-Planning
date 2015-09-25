@@ -7,9 +7,49 @@ namespace search
 {
     namespace ds
     {
-        class Dstar
+        class DstarCore
         {
+            //
+            //  helpers
+            //
+            auto at(Cell c) const -> LpState const&
+            {
+                return matrix.at(c);
+            }
+            auto at(Cell c) -> LpState&
+            {
+                return matrix.at(c);
+            }
+            auto mark_bad_cells(Cells const& bad_cells)
+            {
+                for (auto c : bad_cells) at(c).bad = true;
+            }
+            auto mark_h_values_with(Cell terminal)
+            {
+                auto mark_h = [=](Cell c) { at(c).h = hfunc(c, terminal); };
+                matrix.each_cell(mark_h);
+            }
+            auto reset_statistics()
+            {
+                run_time = max_q_size = 0;
+                expansions.clear(), path.clear();
+            }
+
         public:
+            //
+            //  Constructor
+            //
+            DstarCore(unsigned rows, unsigned cols, Cell start, Cell goal, string heuristic, Cells const& bad_cells) :
+                matrix{ rows, cols },
+                start{ start },
+                goal{ goal },
+                hfunc{ HEURISTICS.at(heuristic) },
+                q{ [this](Cell l, Cell r) { return Key{ at(l) } < Key{ at(r) }; } }
+            {
+                mark_bad_cells(bad_cells);
+                mark_h_values_with(start);  //h value : start to current
+                reset_statistics();
+            }
             //
             //  data members
             //
