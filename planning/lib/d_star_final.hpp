@@ -31,8 +31,7 @@ namespace search
             auto initialize()
             {
                 q.reset();
-                km = 0;
-                at(goal).r = 0;
+                km = at(goal).r = 0;
                 q.push(goal);
             }
 
