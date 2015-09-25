@@ -17,6 +17,17 @@ namespace search
             {
                 return c.row >= 0 && c.row < (int)matrix.rows() && c.col >= 0 && c.col < (int)matrix.cols();
             }
+            auto valid_neighbours_of(Cell c) const
+            {
+                Cells neighbours;
+                for (auto direction = '1'; direction != '9'; ++direction)
+                {
+                    auto n = DIRECTIONS.at(direction)(c);
+                    if (validate(n))
+                        neighbours.insert(n);
+                }
+                return neighbours;
+            }
 
             //
             //  helpers
