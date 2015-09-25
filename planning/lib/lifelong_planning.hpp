@@ -59,7 +59,6 @@ namespace search
                 }
                 return neighbours;
             }
-
             auto initialize()
             {
                 q.reset();
