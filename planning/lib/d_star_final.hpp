@@ -34,6 +34,18 @@ namespace search
                 km = at(goal).r = 0;
                 q.push(goal);
             }
+            auto update_vertex(LpState& s)
+            {
+                if (s.cell != goal)
+                {
+                    auto minimum = huge();
+                    for (auto neighbour : valid_neighbours_of(s.cell))
+                        minimum = min(minimum, (at(neighbour).g + cost()));
+                    s.r = minimum;
+                }
+                q.remove(s.cell);
+                if (s.g != s.r) q.push(s.cell);
+            }
 
             //
             //  helpers
