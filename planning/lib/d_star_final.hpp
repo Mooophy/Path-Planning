@@ -65,7 +65,8 @@ namespace search
                 start{ start },
                 goal{ goal },
                 hfunc{ HEURISTICS.at(heuristic) },
-                q{ [this](Cell l, Cell r) { return Key{ at(l) } < Key{ at(r) }; } }
+                q{ [this](Cell l, Cell r) { return Key{ at(l) } < Key{ at(r) }; } },
+                km{ 0 }
             {
                 mark_bad_cells(bad_cells);
                 mark_h_values_with(start);  //h value : start to current
