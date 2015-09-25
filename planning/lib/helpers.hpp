@@ -155,12 +155,12 @@ namespace search
     {
         {
             "manhattan",
-            [](Cell l, Cell r) { return max(abs(l.row - r.row), abs(l.col - r.col)); }
+                [](Cell l, Cell r) { return max(abs(l.row - r.row), abs(l.col - r.col)); }
         },
 
         {
             "euclidean",
-            [](Cell l, Cell r) { return static_cast<int>(round(hypot(abs(l.row - r.row), abs(l.col - r.col)))); }
+                [](Cell l, Cell r) { return static_cast<int>(round(hypot(abs(l.row - r.row), abs(l.col - r.col)))); }
         }
     };
 }
