@@ -121,6 +121,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="a_star_sel.hpp" />
+    <ClInclude Include="d_star_final.hpp" />
     <ClInclude Include="func.hpp" />
     <ClInclude Include="helpers.hpp" />
     <ClInclude Include="lifelong_planning.hpp" />

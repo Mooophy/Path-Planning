@@ -25,14 +25,8 @@ using std::hash;
 
 namespace search
 {
-    constexpr auto huge()
-    {
-        return 10'000;
-    }
-    constexpr auto cost()
-    {
-        return 1;
-    }
+    constexpr auto huge() { return 10'000; }
+    constexpr auto cost() { return 1; }
 
     struct Cell
     {
