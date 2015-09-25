@@ -10,6 +10,15 @@ namespace search
         class DstarCore
         {
             //
+            //  Algorithm
+            //
+
+            auto validate(Cell c) const
+            {
+                return c.row >= 0 && c.row < (int)matrix.rows() && c.col >= 0 && c.col < (int)matrix.cols();
+            }
+
+            //
             //  helpers
             //
             auto at(Cell c) const -> LpState const&
