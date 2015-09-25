@@ -102,9 +102,11 @@ namespace search
                 }
                 path = build_path();
             }
+
             //
             //  helpers
             //
+
             auto at(Cell c) const -> LpState const&
             {
                 return matrix.at(c);

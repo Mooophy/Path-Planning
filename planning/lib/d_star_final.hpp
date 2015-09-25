@@ -21,6 +21,7 @@ namespace search
             //
             //  helpers
             //
+
             auto at(Cell c) const -> LpState const&
             {
                 return matrix.at(c);
