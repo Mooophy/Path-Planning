@@ -157,4 +157,28 @@ namespace search
                 [](Cell l, Cell r) { return static_cast<int>(round(hypot(abs(l.row - r.row), abs(l.col - r.col)))); }
         }
     };
+
+    struct Key
+    {
+        const int fst, snd;
+
+        Key(int fst, int snd)
+            : fst{ fst }, snd{ snd }
+        {   }
+        Key(LpState const& s)
+            : Key{ min(s.g, s.r) + s.h,      min(s.g, s.r) }    // CalculateKey for LPA
+        {   }
+        Key(LpState const& s, int km)
+            : Key{ min(s.g, s.r) + s.h + km, min(s.g, s.r) }    // CalculateKey for Dstar
+        {   }
+
+        friend auto operator== (Key l, Key r)
+        {
+            return l.fst == r.fst && l.snd == r.snd;
+        }
+        friend auto operator < (Key l, Key r)
+        {
+            return (l.fst < r.fst) || (l.fst == r.fst && l.snd < r.snd);
+        }
+    };
 }

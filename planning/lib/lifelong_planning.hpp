@@ -11,26 +11,26 @@ namespace search
     //
     namespace lp
     {
-        struct Key
-        {
-            const int fst, snd;
+        //struct Key
+        //{
+        //    const int fst, snd;
 
-            Key(int fst, int snd)
-                : fst{ fst }, snd{ snd }
-            {   }
-            Key(LpState const& s)
-                : Key{ min(s.g, s.r) + s.h, min(s.g, s.r) } // i.e. CalculateKey in paper
-            {   }
+        //    Key(int fst, int snd)
+        //        : fst{ fst }, snd{ snd }
+        //    {   }
+        //    Key(LpState const& s)
+        //        : Key{ min(s.g, s.r) + s.h, min(s.g, s.r) } // i.e. CalculateKey in paper
+        //    {   }
 
-            friend auto operator== (Key l, Key r)
-            {
-                return l.fst == r.fst && l.snd == r.snd;
-            }
-            friend auto operator < (Key l, Key r)
-            {
-                return (l.fst < r.fst) || (l.fst == r.fst && l.snd < r.snd);
-            }
-        };
+        //    friend auto operator== (Key l, Key r)
+        //    {
+        //        return l.fst == r.fst && l.snd == r.snd;
+        //    }
+        //    friend auto operator < (Key l, Key r)
+        //    {
+        //        return (l.fst < r.fst) || (l.fst == r.fst && l.snd < r.snd);
+        //    }
+        //};
         //
         //  Lifelong A*
         //

@@ -26,6 +26,5 @@ namespace search
             string path;
             long long run_time;
         };
-
     }
 }
