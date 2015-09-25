@@ -7,7 +7,7 @@ namespace search
 {
     namespace ds
     {
-        class DstarCore
+        class DStarCore
         {
             //
             //  Algorithm
@@ -78,7 +78,7 @@ namespace search
             //
             //  Constructor
             //
-            DstarCore(unsigned rows, unsigned cols, Cell start, Cell goal, string heuristic, Cells const& bad_cells) :
+            DStarCore(unsigned rows, unsigned cols, Cell start, Cell goal, string heuristic, Cells const& bad_cells) :
                 matrix{ rows, cols },
                 start{ start },
                 goal{ goal },
