@@ -59,16 +59,12 @@ namespace search
                 using std::to_string;
                 return string{ "[r=" + to_string(row) + ",c=" + to_string(col) + "]" };
             }
-            auto to_hash() const
-            {
-                return hash<string>{}(to_string());
-            }
 
             struct Hasher
             {
                 auto operator()(Cell c) const
                 {
-                    return c.to_hash();
+                    return hash<string>{}(c.to_string());
                 }
             };
         };

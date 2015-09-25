@@ -38,7 +38,7 @@ namespace UnitTests
             Assert::IsTrue(Cell{ 1, 1 } == Cell{ 1, 1 });
             Assert::IsTrue(Cell{ 1, 2 } != Cell{ 1, 1 });
             Assert::AreEqual(string{ "[r=42,c=99]" }, c.to_string());
-            Assert::AreEqual(69382224u, c.to_hash());
+            Assert::AreEqual(69382224u, Cell::Hasher{}(c));
 
             {//to confirm hash works
                 Cells blockeds;
