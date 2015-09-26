@@ -171,7 +171,6 @@ namespace search
                     {
                         km += hfunc(this_loop.last, this_loop.curr);
                         this_loop.last = this_loop.curr;
-
                         for (auto cell : *this_loop.changes_iterator)
                         {
                             at(cell).bad = !at(cell).bad;
@@ -182,14 +181,8 @@ namespace search
                             update_neighbours_of(cell);
                         } 
                         ++this_loop.changes_iterator;
-
                         compute_shortest_path();
                     }
-
-
-                    //
-                    //  still working
-                    //
                 }
             }
 
