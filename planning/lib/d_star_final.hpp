@@ -6,6 +6,7 @@
 
 using std::pair;
 using std::make_pair;
+using std::min_element;
 
 namespace search
 {
@@ -138,11 +139,29 @@ namespace search
                 reset_statistics();
             }
 
-            auto plan()
+            //
+            //  Interfaces
+            //
+
+            auto initial_plan()
             {
-                auto last = start;
                 initialize();
                 compute_shortest_path();
+            }
+
+            auto plan(function<void(Cell)> && move_to)
+            {
+                initial_plan();
+                for (auto last = start, curr = start; curr != goal;)
+                {
+                    auto less = [this](Cell l, Cell r) { return at(l).g + cost() < at(r).g + cost(); };
+                    auto ns = valid_neighbours_of(curr);
+                    curr = *min_element(ns.cbegin(), ns.cend(), less);
+                    move_to(curr);
+                    //
+                    //  still working
+                    //
+                }
             }
 
             //
