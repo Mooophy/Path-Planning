@@ -149,15 +149,44 @@ namespace search
                 compute_shortest_path();
             }
 
-            auto plan(function<void(Cell)> && move_to)
+            auto plan(function<void(Cell)> && move_to, vector<Cells> && changes)
             {
+
                 initial_plan();
-                for (auto last = start, curr = start; curr != goal;)
+                
+                struct Variables 
+                { 
+                    Cell last, curr; 
+                    decltype(changes.cbegin()) changes_iterator; 
+                };
+
+                for (Variables this_loop = { start, start, changes.cbegin() }; this_loop.curr != goal;)
                 {
                     auto less = [this](Cell l, Cell r) { return at(l).g + cost() < at(r).g + cost(); };
-                    auto ns = valid_neighbours_of(curr);
-                    curr = *min_element(ns.cbegin(), ns.cend(), less);
-                    move_to(curr);
+                    auto ns = valid_neighbours_of(this_loop.curr);
+                    this_loop.curr = *min_element(ns.cbegin(), ns.cend(), less);
+
+                    move_to(this_loop.curr);
+                    if (this_loop.changes_iterator != changes.cend())
+                    {
+                        km += hfunc(this_loop.last, this_loop.curr);
+                        this_loop.last = this_loop.curr;
+
+                        for (auto cell : *this_loop.changes_iterator)
+                        {
+                            at(cell).bad = !at(cell).bad;
+                            if (!at(cell).bad)
+                                update_vertex(at(cell));
+                            else
+                                at(cell).g = at(cell).r = huge();
+                            update_neighbours_of(cell);
+                        } 
+                        ++this_loop.changes_iterator;
+
+                        compute_shortest_path();
+                    }
+
+
                     //
                     //  still working
                     //
