@@ -46,6 +46,7 @@ namespace search
                 q.reset();
                 km = at(goal).r = 0;
                 q.push(goal);
+                old_keys.insert({ goal, { at(goal), km } });
             }
             auto update_vertex(LpState& s)
             {
@@ -136,18 +137,29 @@ namespace search
                 mark_h_values_with(start);  //h value : start to current
                 reset_statistics();
             }
+
+            auto plan()
+            {
+                auto last = start;
+                initialize();
+                compute_shortest_path();
+            }
+
             //
             //  data members
             //
+
             Matrix matrix;
             Cell const start, goal;
             function<int(Cell, Cell)> const hfunc;
             int km;
             PriorityQueue < Cell, function<bool(Cell, Cell)> > q;
             OldKeys old_keys;
+            
             //
             //  statistics
             //
+            
             size_t max_q_size;
             Cells expansions;
             string path;
