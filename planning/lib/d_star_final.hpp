@@ -58,7 +58,7 @@ namespace search
                 }
                 q.remove(s.cell);
                 if (s.g != s.r)
-                    q.push(s.cell), old_keys.update_with(make_pair(s.cell, Key{ s, km }));
+                    q.push(s.cell), old_keys.update_with( { s.cell, Key{ s, km } } );
             }
             
             //
