@@ -6,7 +6,6 @@
 using std::pair;
 using std::make_pair;
 
-
 namespace search
 {
     namespace ds
@@ -59,6 +58,12 @@ namespace search
                 q.remove(s.cell);
                 if (s.g != s.r)
                     q.push(s.cell), old_keys.update_with( { s.cell, Key{ s, km } } );
+            }
+            auto update_neighbours_of(Cell cell)
+            {
+                for (auto neighbour : valid_neighbours_of(cell))
+                    if (!at(neighbour).bad)
+                        update_vertex(at(neighbour));
             }
             
             //
