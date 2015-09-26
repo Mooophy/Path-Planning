@@ -19,3 +19,4 @@
 #include "../lib/a_star_sel.hpp"
 #include "../lib/lifelong_planning.hpp"
 #include "../lib/helpers.hpp"
+#include "../lib/d_star_final.hpp"

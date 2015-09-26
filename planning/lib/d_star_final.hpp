@@ -3,10 +3,23 @@
 #include "helpers.hpp"
 #include "priority_queue.hpp"
 
+using std::pair;
+using std::make_pair;
+
+
 namespace search
 {
     namespace ds
     {
+        struct OldKeys : public unordered_map<Cell, Key, Cell::Hasher>
+        {
+            auto update_with(pair<Cell, Key> cell_key_pair)
+            {
+                erase(cell_key_pair.first);
+                insert(cell_key_pair);
+            }
+        };
+
         class DStarCore
         {
             //
@@ -44,9 +57,10 @@ namespace search
                     s.r = minimum;
                 }
                 q.remove(s.cell);
-                if (s.g != s.r) q.push(s.cell);
+                if (s.g != s.r)
+                    q.push(s.cell), old_keys.update_with(make_pair(s.cell, Key{ s, km }));
             }
-
+            
             //
             //  helpers
             //
@@ -84,7 +98,8 @@ namespace search
                 goal{ goal },
                 hfunc{ HEURISTICS.at(heuristic) },
                 km{ 0 },
-                q{ [this](Cell l, Cell r) { return Key{ at(l), km } < Key{ at(r), km }; } }
+                q{ [this](Cell l, Cell r) { return Key{ at(l), km } < Key{ at(r), km }; } },
+                old_keys { }
             {
                 mark_bad_cells(bad_cells);
                 mark_h_values_with(start);  //h value : start to current
@@ -98,6 +113,7 @@ namespace search
             function<int(Cell, Cell)> const hfunc;
             int km;
             PriorityQueue < Cell, function<bool(Cell, Cell)> > q;
+            OldKeys old_keys;
             //
             //  statistics
             //
