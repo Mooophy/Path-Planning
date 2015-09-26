@@ -2,6 +2,7 @@
 
 #include "helpers.hpp"
 #include "priority_queue.hpp"
+#include "timing.hpp"
 
 using std::pair;
 using std::make_pair;
@@ -57,13 +58,38 @@ namespace search
                 }
                 q.remove(s.cell);
                 if (s.g != s.r)
-                    q.push(s.cell), old_keys.update_with( { s.cell, Key{ s, km } } );
+                    q.push(s.cell), 
+                    old_keys.update_with( { s.cell, Key{ s, km } } );
             }
             auto update_neighbours_of(Cell cell)
             {
                 for (auto neighbour : valid_neighbours_of(cell))
                     if (!at(neighbour).bad)
                         update_vertex(at(neighbour));
+            }
+            auto compute_shortest_path()
+            {
+                Timing t{ run_time };
+                while (!q.empty() && (Key{ at(q.top()) } < Key{ at(start) } || at(start).r != at(start).g))
+                {
+                    auto c = q.pop();
+
+                    if (old_keys.at(c) < Key{ at(c), km })
+                        q.push(c), 
+                        old_keys.update_with({ c, Key{ at(c), km } });
+                    else if (at(c).g > at(c).r)
+                        at(c).g = at(c).r,
+                        update_neighbours_of(c);
+                    else
+                        at(c).g = huge(), 
+                        update_vertex(at(c)),
+                        update_neighbours_of(c);
+
+                    {
+                        max_q_size = max(max_q_size, q.size());
+                        expansions.insert(c);
+                    }
+                }
             }
             
             //

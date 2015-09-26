@@ -92,8 +92,10 @@ namespace search
                     if (at(c).g > at(c).r)
                         at(c).g = at(c).r;
                     else
-                        at(c).g = huge(), update_vertex(at(c));
+                        at(c).g = huge(), 
+                        update_vertex(at(c));
                     update_neighbours_of(c);
+
                     {
                         max_q_size = max(max_q_size, q.size());
                         expansions.insert(c);
