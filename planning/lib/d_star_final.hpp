@@ -157,20 +157,14 @@ namespace search
                 reset_statistics();
             }
 
-            //
-            //  Interfaces
-            //
-
             auto initial_plan()
             {
                 initialize();
                 return compute_shortest_path();
             }
 
-            //
-            //  MoveTo : callback with argument (Cell curr)
-            //  OnPathBuilt : callback with argument (string path)
-            //
+            //  MoveTo :        callback with argument (Cell curr)
+            //  OnPathBuilt :   callback with argument (string path)
             template<typename MoveTo, typename OnPathBuilt>
             auto plan(vector<Cells> && changes, MoveTo && move_to, OnPathBuilt && use_path)
             {
@@ -226,7 +220,6 @@ namespace search
             
             size_t max_q_size;
             Cells expansions;
-            //string path;
             long long run_time;
         };
     }
