@@ -109,7 +109,6 @@ namespace search
                         expansions.insert(c);
                     }
                 }
-                return build_path(start, goal);
             }
             
             //
@@ -160,7 +159,8 @@ namespace search
             auto initial_plan()
             {
                 initialize();
-                return compute_shortest_path();
+                compute_shortest_path();
+                return build_path(start, goal);
             }
 
             //  MoveTo :        callback with argument (Cell curr)
@@ -197,9 +197,9 @@ namespace search
                             update_neighbours_of(cell);
                         } 
                         ++this_loop.changes_iterator;
-                        auto path = compute_shortest_path();
-                        use_path(path);
+                        compute_shortest_path();
                     }
+                    use_path(build_path(this_loop.curr, goal));
                 }
             }
 
