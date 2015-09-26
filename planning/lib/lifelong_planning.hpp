@@ -24,6 +24,17 @@ namespace search
             {
                 return c.row >= 0 && c.row < (int)matrix.rows() && c.col >= 0 && c.col < (int)matrix.cols();
             }
+            auto valid_neighbours_of(Cell c) const
+            {
+                Cells neighbours;
+                for (auto direction = '1'; direction != '9'; ++direction)
+                {
+                    auto n = DIRECTIONS.at(direction)(c);
+                    if (validate(n))
+                        neighbours.insert(n);
+                }
+                return neighbours;
+            }
             auto build_path() const
             {
                 string inverse_path;
@@ -47,17 +58,6 @@ namespace search
                     ch = 2 * '0' + 9 - ch;
 
                 return path;
-            }
-            auto valid_neighbours_of(Cell c) const
-            {
-                Cells neighbours;
-                for (auto direction = '1'; direction != '9'; ++direction)
-                {
-                    auto n = DIRECTIONS.at(direction)(c);
-                    if (validate(n))
-                        neighbours.insert(n);
-                }
-                return neighbours;
             }
             auto initialize()
             {

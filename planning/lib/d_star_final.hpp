@@ -42,6 +42,24 @@ namespace search
                 }
                 return neighbours;
             }
+            auto build_path(Cell beg, Cell end) 
+            {
+                string path;
+                for (auto cur = beg; cur != end; )
+                {
+                    for (auto direction = '1'; direction != '9'; ++direction)
+                    {
+                        auto n = DIRECTIONS.at(direction)(cur);
+                        if (validate(n) && !at(n).bad && (at(n).g + cost() == at(cur).g))
+                        {
+                            path += direction;
+                            cur = n;
+                            break;
+                        }
+                    }
+                }
+                return path;
+            }
             auto initialize()
             {
                 q.reset();
@@ -71,8 +89,7 @@ namespace search
             }
             auto compute_shortest_path()
             {
-                Timing t{ run_time };
-                while (!q.empty() && (Key{ at(q.top()) } < Key{ at(start) } || at(start).r != at(start).g))
+                for (Timing t{ run_time }; !q.empty() && (Key{ at(q.top()) } < Key{ at(start) } || at(start).r != at(start).g);)
                 {
                     auto c = q.pop();
 
@@ -92,6 +109,7 @@ namespace search
                         expansions.insert(c);
                     }
                 }
+                return build_path(start, goal);
             }
             
             //
@@ -118,7 +136,7 @@ namespace search
             auto reset_statistics()
             {
                 run_time = max_q_size = 0;
-                expansions.clear(), path.clear();
+                expansions.clear();
             }
 
         public:
@@ -146,12 +164,16 @@ namespace search
             auto initial_plan()
             {
                 initialize();
-                compute_shortest_path();
+                return compute_shortest_path();
             }
 
-            auto plan(function<void(Cell)> && move_to, vector<Cells> && changes)
+            //
+            //  MoveTo : callback with argument (Cell curr)
+            //  OnPathBuilt : callback with argument (string path)
+            //
+            template<typename MoveTo, typename OnPathBuilt>
+            auto plan(vector<Cells> && changes, MoveTo && move_to, OnPathBuilt && use_path)
             {
-
                 initial_plan();
                 
                 struct Variables 
@@ -181,7 +203,8 @@ namespace search
                             update_neighbours_of(cell);
                         } 
                         ++this_loop.changes_iterator;
-                        compute_shortest_path();
+                        auto path = compute_shortest_path();
+                        use_path(path);
                     }
                 }
             }
@@ -203,7 +226,7 @@ namespace search
             
             size_t max_q_size;
             Cells expansions;
-            string path;
+            //string path;
             long long run_time;
         };
     }
