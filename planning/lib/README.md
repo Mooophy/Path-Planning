@@ -151,4 +151,30 @@ compute_shortest_path
       update_neighbours_of c
     max_q_size = max(max_q_size, q.size)
     expansions.insert c
+    
+initial_plan
+  initialize
+  compute_shortest_path
+  
+plan(changes, move_to, use_path)
+  initial_plan
+  last = start
+  curr = start
+  i = 0
+  while curr != goal
+    curr = min(neighbours of curr)
+    move_to curr
+    if i != changes.length
+      km += hfunc(this_loop.last, this_loop.curr)
+      last = curr
+      foreach cell of changes[i]
+        at(cell).bad = !at(cell).bad
+        if !at(cell).bad
+          update_vertex at cell
+        else
+          at(cell).g = at(cell).r = huge
+        update_neighbours_of cell
+      ++i
+      compute_shortest_path
+    use_path build_path(this_loop.curr, goal)
 ```
