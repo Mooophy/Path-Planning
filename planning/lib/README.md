@@ -81,4 +81,18 @@ compute_shortest_path
     max_q_size = max(max_q_size, q.size())
     expansions.insert c
   path = build_path
+  
+plan
+  initialize
+  compute_shortest_path
+  
+replan(cells_to_toggle)
+  foreach cell of cells_to_toggle)
+    at(cell).bad = !at(cell).bad
+    if !at(cell).bad
+      update_vertex at cell
+    else
+      at(cell).g = at(cell).r = huge
+      update_neighbours_of cell;
+ compute_shortest_path();
 ```
