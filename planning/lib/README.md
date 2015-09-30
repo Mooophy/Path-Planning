@@ -54,6 +54,7 @@ initialize
   at(start).r = 0
   q.push start
 
+
 update_vertex(s)
 if s.cell != start
   minimum = huge
@@ -63,4 +64,10 @@ if s.cell != start
 q.remove s.cell
 if s.g != s.r 
   q.push s.cell
+  
+  
+update_neighbours_of(cell)
+  foreach neighbour of cell
+    if !at(neighbour).bad
+      update_vertex(at(neighbour));
 ```
