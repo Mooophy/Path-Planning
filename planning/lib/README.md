@@ -49,8 +49,8 @@ run_time                   long long
 
 #### Pseudocode:
 ```ruby
-initialize()
-q.reset();
-at(start).r = 0;
-q.push(start);
+initialize
+ q.reset
+ at(start).r = 0
+q.push start
 ```
