@@ -94,5 +94,5 @@ replan(cells_to_toggle)
     else
       at(cell).g = at(cell).r = huge
       update_neighbours_of cell;
- compute_shortest_path();
+  compute_shortest_path();
 ```
