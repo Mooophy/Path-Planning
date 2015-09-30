@@ -96,3 +96,19 @@ replan(cells_to_toggle)
       update_neighbours_of cell
   compute_shortest_path
 ```
+
+ D* Lite final version
+------------------
+
+```java
+matrix                     2D dynamic array
+start, goal                tuple
+hfunc                      function object
+km                         int
+q                          priority queue
+old_keys                   hash table
+max_q_size                 unsigned int
+expansions                 hash table
+path                       string
+run_time                   long long
+```
