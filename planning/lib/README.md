@@ -12,7 +12,7 @@
  ```
  
 #### Pseudocode:
-```cpp
+```ruby
 q.push start
 while q is not empty and q.top != goal
   curr = q.pop
