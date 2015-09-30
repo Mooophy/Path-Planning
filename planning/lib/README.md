@@ -59,8 +59,8 @@ if s.cell != start
   minimum = huge
   foreach neighbour of s.cell
     minimum = min(minimum, (at(neighbour).g + cost()))
-    s.r = minimum
-    q.remove s.cell
-    if s.g != s.r 
-      q.push s.cell
+  s.r = minimum
+q.remove s.cell
+if s.g != s.r 
+  q.push s.cell
 ```
