@@ -52,5 +52,15 @@ run_time                   long long
 initialize
  q.reset
  at(start).r = 0
-q.push start
+ q.push start
+
+update_vertex(s)
+if s.cell != start
+ minimum = huge
+ foreach neighbour of s.cell
+ minimum = min(minimum, (at(neighbour).g + cost()))
+ s.r = minimum
+ q.remove s.cell
+ if s.g != s.r 
+  q.push s.cell
 ```
