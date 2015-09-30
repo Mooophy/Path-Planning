@@ -34,6 +34,8 @@ else
 
  Lifelong Planning A*
 ------------------
+
+#### Data structure:
 ```java
 matrix                     2D dynamic array
 start, goal                tuple
@@ -46,7 +48,6 @@ run_time                   long long
 ```
 
 #### Pseudocode:
-----------------------
 ```ruby
 initialize()
 q.reset();
