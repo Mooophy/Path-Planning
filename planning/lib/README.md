@@ -135,4 +135,20 @@ update_neighbours_of(cell)
   foreach neighbour of cell
     if !at(neighbour).bad
       update_vertex(at(neighbour))
+      
+compute_shortest_path
+  while !q.empty() && ((key(at(q.top)) < key(at(start)) || at(start).r != at(start).g))
+    c = q.pop
+    if old_keys.at(c) < key(at(c), km)
+      q.push c
+      old_keys.update_with tuple( c, Key{ at(c), km })
+    else if at(c).g > at(c).r
+      at(c).g = at(c).r
+      update_neighbours_of c
+    else
+      at(c).g = huge
+      update_vertex at c
+      update_neighbours_of c
+    max_q_size = max(max_q_size, q.size)
+    expansions.insert c
 ```
