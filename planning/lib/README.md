@@ -87,7 +87,7 @@ plan
   compute_shortest_path
   
 replan(cells_to_toggle)
-  foreach cell of cells_to_toggle)
+  foreach cell of cells_to_toggle
     at(cell).bad = !at(cell).bad
     if !at(cell).bad
       update_vertex at cell
