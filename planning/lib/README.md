@@ -35,18 +35,12 @@ else
  Lifelong Planning A*
 ------------------
 ```java
-            //
-            //  data members
-            //
-            Matrix matrix;
-            Cell const start, goal;
-            function<int(Cell, Cell)> const hfunc;
-            PriorityQueue < Cell, function<bool(Cell, Cell)> > q;
-            //
-            //  statistics
-            //
-            size_t max_q_size;
-            Cells expansions;
-            string path;
-            long long run_time;
+matrix                     2D dynamic array
+start, goal                tuple
+hfunc                      function object
+q                          priority queue
+max_q_size                 unsigned int
+expansions                 hash table
+path                       string
+run_time                   long long
 ```
