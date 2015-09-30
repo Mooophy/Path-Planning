@@ -99,7 +99,7 @@ replan(cells_to_toggle)
 
  D* Lite final version
 ------------------
-
+#### Data structure:
 ```java
 matrix                     2D dynamic array
 start, goal                tuple
@@ -111,4 +111,28 @@ max_q_size                 unsigned int
 expansions                 hash table
 path                       string
 run_time                   long long
+```
+#### Pseudocode:
+```ruby
+initialize
+  q.reset
+  km = at(goal).r = 0
+  q.push goal
+  old_keys.insert key(goal, { at(goal), km } )
+  
+update_vertex(s)
+  if s.cell != goal
+    minimum = huge
+    foreach neighbour of s.cell
+      minimum = min(minimum, (at(neighbour).g + cost()))
+      s.r = minimum
+  q.remove s.cell
+  if s.g != s.)
+    q.push s.cell 
+    old_keys.update_with tuple({ s.cell, Key{ s, km })
+    
+update_neighbours_of(cell)
+  foreach neighbour of cell
+    if !at(neighbour).bad
+      update_vertex(at(neighbour))
 ```
