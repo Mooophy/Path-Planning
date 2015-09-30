@@ -93,6 +93,6 @@ replan(cells_to_toggle)
       update_vertex at cell
     else
       at(cell).g = at(cell).r = huge
-      update_neighbours_of cell;
-  compute_shortest_path();
+      update_neighbours_of cell
+  compute_shortest_path
 ```
