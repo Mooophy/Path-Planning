@@ -1,5 +1,8 @@
 # Path-Planning
-Robot Path-Planning Algorithms for Fully Dynamic Shortest Path Problems  (Optimal + Incremental + Heuristic Search)
+This repo provides implementation for three Path-Planning Algorithms:
+ * A* with stricted visited list
+ * Lifelong Planning A*
+ * D* Lite final version
 
  A* with stricted visited list
 ------------------
