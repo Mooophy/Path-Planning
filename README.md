@@ -1,6 +1,6 @@
 # Path-Planning
-This repo provides implementation for three Path-Planning Algorithms: A* with stricted visited list, Lifelong Planning A* and D* Lite final version
- A* with stricted visited list
+This repo provides implementation for three Path-Planning Algorithms: A* with strict visited list, Lifelong Planning A* and D* Lite final version
+A* with strict visited list
 ------------------
 
 #### Data structure:
